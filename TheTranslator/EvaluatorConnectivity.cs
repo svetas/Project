@@ -8,14 +8,7 @@ namespace TheTranslator
 {
     class EvaluatorConnectivity : Evaluator
     {
-        //can you see this?!?!? 
-        // now see this
-        //now back to me
-<<<<<<< HEAD
-        //im on a bike
-=======
-        //im on a hourse
->>>>>>> origin/master
+        // i'm the best
         private static double alpha = 0.5;
         public EvaluatorConnectivity(Extractor ex) : base(ex) { }
         public override string GetBestTranslation(List<TranslationOption> transO)

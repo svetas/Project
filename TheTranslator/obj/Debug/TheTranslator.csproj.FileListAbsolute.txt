@@ -31,3 +31,4 @@ C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!
 C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
 C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe
 C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.pdb
+C:\Users\Sagi\Documents\GitHub\Project\TheTranslator\bin\Debug\TheTranslator.exe.config
