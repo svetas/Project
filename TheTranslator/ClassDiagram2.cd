@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="TheTranslator.Combiner" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Combiner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.CombinerNaive">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>CombinerNaive.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.DataHolder" Collapsed="true">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataHolder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Evaluator" Collapsed="true">
+    <Position X="3.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Evaluator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.EvaluatorNaive">
+    <Position X="3.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>EvaluatorNaive.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Extractor" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIABAAAAAAAAAAAAAAAAAAABKAABBAAIAAAAAAAAA=</HashCode>
+      <FileName>Extractor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.ExtractorNaive" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAIAAAAAAAAAACABAAAQAAAAAACAAAQAAAAAAAAAQAA=</HashCode>
+      <FileName>ExtractorNaive.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.OneWordSentence">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>OneWordSentence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Program" Collapsed="true">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Sentence" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAACAAAAAAIAAAAAQQAAAABAAAAAAA=</HashCode>
+      <FileName>Sentence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.TargetSentence" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIQEgAAAAAAAACAQAIAAAAAAAAQBAAA=</HashCode>
+      <FileName>TargetSentence.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TheTranslator.Tester" Collapsed="true">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAACAAQAACBAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Tester.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.TranslationOption" Collapsed="true">
+    <Position X="10.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAIAAAAAQAAAAAAAlAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>TranslationOption.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Word" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAEAAAIABAAAQAAAIAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>WordData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.WordList" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WordDataList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Properties.Resources" Collapsed="true">
+    <Position X="9" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheTranslator.Properties.Settings" Collapsed="true">
+    <Position X="10.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

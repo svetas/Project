@@ -1,0 +1,33 @@
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\bin\Debug\TheTranslator.exe.config
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\bin\Debug\TheTranslator.exe
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\bin\Debug\TheTranslator.pdb
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\obj\Debug\TheTranslator.Form1.resources
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\obj\Debug\TheTranslator.exe
+c:\users\itskovic\documents\visual studio 2015\Projects\TheTranslator\TheTranslator\obj\Debug\TheTranslator.pdb
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe.config
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.pdb
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.exe
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.pdb
+C:\Users\Sagi\Dropbox\JointProject\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+C:\studies\project\s\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe.config
+C:\studies\project\s\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.exe
+C:\studies\project\s\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.pdb
+C:\studies\project\s\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe
+C:\studies\project\s\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.pdb
+C:\studies\project\s\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
+C:\studies\project\s\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
+C:\studies\project\s\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe.config
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.exe
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.pdb
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.exe
+C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TheTranslator\bin\Debug\TheTranslator.pdb
