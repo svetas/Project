@@ -8,16 +8,12 @@ namespace TheTranslator
 {
     class CombinerNaive: Combiner
     {
-
-
         private const int N_FOR_TOPN = 4;
         private const int MINIMUM_TOPN_OPTION_COUNT = 2;
         
 
         public override List<TranslationOption> combine(List<List<Sentence>> transOptions, string source)
         {
-            
-
             List<TranslationOption> ans = new List<TranslationOption>();
             if (transOptions.Count == 0)
                 return ans;

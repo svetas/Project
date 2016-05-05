@@ -14,8 +14,7 @@ namespace TheTranslator
         // do not take the dictionary translations. - sometimes the dictionary is wrong.
         private const int MIN_COMMON_MAKES_SKIP=2;
 
-        //number of words in english in the the db files 
-        public int m_countWordsInDb;
+
 
         // map of a word to its' sentence, 
         protected Dictionary<string, Word> m_wordToSenMap;
@@ -29,12 +28,8 @@ namespace TheTranslator
         //path of the files.
         protected string m_dataPath;
 
-        //the count of all words in DB
-        protected Dictionary<string, int> m_singleWordsCount;
-        //the count of all word pairs in DB
-        protected Dictionary<string, int> m_pairWordsCount;
-        //the cont of all word triple in db
-        protected Dictionary<string, int> m_trippelWordsCount;
+
+        public abstract List<List<Sentence>> extractTransParts(string source);
 
         protected Extractor(string path)
         {
@@ -42,80 +37,72 @@ namespace TheTranslator
             m_allSen = new Dictionary<string, Sentence>();
             m_dataPath = path;
             m_dic = new Dictionary<string, string>();
-            m_pairWordsCount = new Dictionary<string, int>();
-            m_trippelWordsCount = new Dictionary<string, int>();
-            m_singleWordsCount = new Dictionary<string, int>();
-            m_countWordsInDb = 0;
         }
 
+       
 
-        public int getCountTaPair(string w1, string w2)
+        public bool build(ref Statistics stats)
         {
-            int ans=1;
-            if(m_pairWordsCount.TryGetValue(w1 + " " + w2 , out ans))
-                return ans;
-            return 1;
-        }
-        public int getCountTaWord(string w)
-        {
-            int ans = 1;
-            if (m_singleWordsCount.TryGetValue(w, out ans))
-                return ans;
-            return 1;
-
-        }
-        public Sentence getWordTranslation(string word)
-        {
-            if (m_wordToSenMap.ContainsKey(word) && m_wordToSenMap[word].m_translation!=null)
-                return new OneWordSentence(word, m_wordToSenMap[word].m_translation.m_translation);
-            else if (m_dic.ContainsKey(word))
-                return new OneWordSentence(word, m_dic[word]);
-            else return new OneWordSentence(word, word);
-        }
-
-        public bool build()
-        {
+            // check if all needed files exists
+            if (!File.Exists(m_dataPath + @"/DownloadedFullTrain.en-he.low.he") ||
+                !File.Exists(m_dataPath + @"/DownloadedFullTrain.en-he.low.en") ||
+                !File.Exists(m_dataPath + @"/GoogleTranslateWords.txt"))
+                return false;
+            //
             StreamReader soReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.low.he");
             StreamReader taReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.low.en");
             StreamReader dicReader = new StreamReader(m_dataPath + @"/GoogleTranslateWords.txt");
-      
-            int id = 0;
+
+            int linesCounter = 0;
+
             Regex rxRemovePsik = new Regex(",+");
             Regex rxRemoveSpace = new Regex(@"\s\s+");
-            string lineText = null;
-            string lineTextTa = null;
+
+            string sourceLine = null;
+            string targetLine = null;
+
             Sentence sen;
             bool isNew;
             string[] linePartsSo;
-            string[] linePartsTa;
 
             try
             {
                 string[] allWords = dicReader.ReadToEnd().Split(new string[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
-                while ((lineText = soReader.ReadLine()) != null & (lineTextTa = taReader.ReadLine()) != null)
+
+                // Read every line in each file
+                while ((sourceLine = soReader.ReadLine()) != null & (targetLine = taReader.ReadLine()) != null)
                 {
-                    lineText = rxRemovePsik.Replace(lineText, " ");
-                    lineText = rxRemoveSpace.Replace(lineText, " ");
+                    // write progress
+                    if (linesCounter++ % 100000 == 0)
+                        Console.WriteLine(linesCounter);
 
-                    lineTextTa = rxRemovePsik.Replace(lineTextTa, " ");
-                    lineTextTa = rxRemoveSpace.Replace(lineTextTa, " ");
+                    //train language model (statistics for later use)
+                    stats.Insert(targetLine);
 
-                    if (id % 100000 == 0)
-                        Console.WriteLine(id);
-                    isNew = !m_allSen.TryGetValue(lineText, out sen);
+
+                    sourceLine = rxRemovePsik.Replace(sourceLine, " ");
+                    sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
+
+                    targetLine = rxRemovePsik.Replace(targetLine, " ");
+                    targetLine = rxRemoveSpace.Replace(targetLine, " ");
+
+
+
+
+                    isNew = !m_allSen.TryGetValue(sourceLine, out sen);
                     if (isNew)
                     {
-                        sen = new Sentence(lineText, id);
-                        m_allSen.Add(lineText, sen);
+                        sen = new Sentence(sourceLine, linesCounter);
+                        m_allSen.Add(sourceLine, sen);
                     }
 
-                    sen.addTarget(lineTextTa);
-                    linePartsSo = lineText.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
+                    sen.addTarget(targetLine);
+                    linePartsSo = sourceLine.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
                     if (linePartsSo.Length == 0)
                         continue;
+
                     for (int i = 0; i < linePartsSo.Length; i++)
                     {
-
                         string linePart = linePartsSo[i];
                         Word word;
                         bool isNewWord = !m_wordToSenMap.TryGetValue(linePart, out word);
@@ -125,48 +112,13 @@ namespace TheTranslator
                             m_wordToSenMap.Add(linePart, word);
                         }
                         word.addSentence(sen);
-
                     }
-
-                    id++;
-
-
-                    linePartsTa = lineTextTa.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
-                    if (linePartsTa.Length == 0)
-                        continue;
-
-                    m_countWordsInDb += linePartsTa.Length;
-                    string prevWord = linePartsTa[0];
-                    string prevPrevWord = linePartsTa[0];
-                    for (int i = 0; i < linePartsTa.Length; i++)
-                    {
-                        string currWord = linePartsTa[i];
-                        if (!m_singleWordsCount.ContainsKey(currWord))
-                            m_singleWordsCount.Add(currWord, 1);
-                        else m_singleWordsCount[currWord] += 1;
-                        
-                        if (i > 0)
-                        {
-                            string pair = prevWord + " " + currWord;
-                            if (!m_pairWordsCount.ContainsKey(pair))
-                                m_pairWordsCount.Add(pair, 1);
-                            else m_pairWordsCount[pair] += 1;
-                        }
-                        if (i > 1)
-                        {
-                            string pair = prevPrevWord + " " + prevWord + " " + currWord;
-                            if (!m_trippelWordsCount.ContainsKey(pair))
-                                m_trippelWordsCount.Add(pair, 1);
-                            else m_trippelWordsCount[pair] += 1;
-                            prevPrevWord = prevWord;
-                        }
-
-                        prevWord = currWord;
-                    }
+                    // Save all statistics here. (this is the english [[source]] language model)
+                    stats.Insert(targetLine);
 
                 }
 
-                if ((lineText == null && lineTextTa != null) || (lineText != null && lineTextTa == null))
+                if ((sourceLine == null && targetLine != null) || (sourceLine != null && targetLine == null))
                 {
                     Console.WriteLine("!!!!!the DB files have diff length!!!!!");
                 }
@@ -174,7 +126,7 @@ namespace TheTranslator
                 foreach (var item in m_allSen)
                 {
                     item.Value.m_target.Sort();
-                    
+
                 }
                 foreach (var line in allWords)
                 {
@@ -198,17 +150,13 @@ namespace TheTranslator
                             }
 
                         }
-
                         m_wordToSenMap[sWord].m_translation = ts;
-
-
                     }
                 }
-              
             }
             catch (Exception e)
             {
-                Console.WriteLine("failed to load the DB: " + e.InnerException + "id=" + id);
+                Console.WriteLine("failed to load the DB: " + e.InnerException + "id=" + linesCounter);
                 return false;
             }
             finally
@@ -221,8 +169,15 @@ namespace TheTranslator
             return true;
         }
 
-
-        public Boolean Enhance()
+        public Sentence getWordTranslation(string word)
+        {
+            if (m_wordToSenMap.ContainsKey(word) && m_wordToSenMap[word].m_translation!=null)
+                return new OneWordSentence(word, m_wordToSenMap[word].m_translation.m_translation);
+            else if (m_dic.ContainsKey(word))
+                return new OneWordSentence(word, m_dic[word]);
+            else return new OneWordSentence(word, word);
+        }
+        public bool Enhance()
         {
             StreamReader soReader = new StreamReader(m_dataPath + @"\enhancmentSet.he.txt");
             StreamReader taReader = new StreamReader(m_dataPath + @"\enhancmentSet.en.txt");
@@ -286,10 +241,7 @@ namespace TheTranslator
                 Console.WriteLine("Load done!");
             }
             return true;
-        }
-
-        public abstract List<List<Sentence>> extractTransParts(string source);
-
+        }     
         public void printTrans(List<List<Sentence>> trans)
         {
             Console.WriteLine("");

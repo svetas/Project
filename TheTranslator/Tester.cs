@@ -10,12 +10,15 @@ namespace TheTranslator
     public class Tester
     {
         private Extractor m_extractor;
+        private Statistics m_stats;
+
         public bool Init(string path)
         {
             try
             {
+                m_stats = new PermutationsStatistics();
                 m_extractor = new ExtractorNaive(path);
-                m_extractor.build();
+                m_extractor.build(ref m_stats);
                 return true;
             }
             catch
@@ -24,13 +27,18 @@ namespace TheTranslator
             }
         }
 
-
+        public bool InitWithDistance(string path)
+        {
+            m_stats = new DistanceStatistics();
+            m_extractor = new ExtractorNaive(path);
+            m_extractor.build(ref m_stats);
+            return true;
+        }
 
         public void testLenX(string testFilesPath, int x)
         {
-   
             Combiner c = new CombinerNaive();
-            Evaluator EV = new EvaluatorConnectivity(m_extractor);
+            Evaluator EV = new EvaluatorConnectivity((PermutationsStatistics)m_stats);
             string path = testFilesPath + "\\Len" + x;
             StreamReader soReader = new StreamReader(path + @"\Downloaded.he");
             StreamWriter soWrite = new StreamWriter(path + @"\ans.txt");
@@ -93,17 +101,17 @@ namespace TheTranslator
         }
 
 
-        public static bool testExtractor()
+        public bool testExtractor()
         {
             Extractor e = new ExtractorNaive(@"C:\studies\project\DB");
-            return e.build();
+            return e.build(ref m_stats);
 
         }
         public bool testLargeDataBase(string testPath)
         {
             // using sveta's implementations
             Combiner c = new CombinerNaive();
-            Evaluator EV = new EvaluatorNaive(m_extractor);
+            Evaluator EV = new EvaluatorNaive((PermutationsStatistics)m_stats);
             int total = 0;
             int counter = 0;
             StreamReader sr = new StreamReader(testPath);
@@ -127,20 +135,20 @@ namespace TheTranslator
             return true;
         }
 
-        public static void testExtractor2()
+        public void testExtractor2()
         {
             Extractor e = new ExtractorNaive(@"C:\studies\project\DB");
-            e.build();
+            e.build(ref m_stats);
             e.printTrans(e.extractTransParts("לא תודה"));
             e.printTrans(e.extractTransParts("שלום מה נשמע"));
 
 
         }
 
-        public static void testCombiner()
+        public void testCombiner()
         {
             Extractor e = new ExtractorNaive(@"C:\studies\project\DB");
-            e.build();
+            e.build(ref m_stats);
             e.printTrans(e.extractTransParts("לא תודה"));
             e.printTrans(e.extractTransParts("שלום מה נשמע"));
             Combiner c = new CombinerNaive();
@@ -151,14 +159,14 @@ namespace TheTranslator
         }
 
         
-        public static void teastAll2()
+        public void teastAll2()
         {
             string path = @"C:\studies\project\DB";
             Extractor e = new ExtractorNaive(path);
-            e.build();
+            e.build(ref m_stats);
 
             Combiner c = new CombinerNaive();
-            Evaluator EV = new EvaluatorNaive(e);
+            Evaluator EV = new EvaluatorNaive(m_stats);
 
             //שמשיה
             string item = "שמשיה";
@@ -206,14 +214,14 @@ namespace TheTranslator
 
 
 
-        public static void teastAll3()
+        public void teastAll3()
         {
             string path = @"C:\studies\project\DB";
             Extractor e = new ExtractorNaive(path);
-            e.build();
+            e.build(ref m_stats);
 
             Combiner c = new CombinerNaive();
-            Evaluator EV = new EvaluatorNaive(e);
+            Evaluator EV = new EvaluatorNaive(m_stats);
 
             //שמשיה
             string item = "היכן מצאת יופי כזה";
@@ -229,7 +237,7 @@ namespace TheTranslator
             try
             {
                 Combiner c = new CombinerNaive();
-                Evaluator EV = new EvaluatorNaive(m_extractor);
+                Evaluator EV = new EvaluatorNaive(m_stats);
                 List<List<Sentence>> sentences = m_extractor.extractTransParts(item);
                 List<TranslationOption> transOptions = c.combine(sentences, item);
                 string trans = EV.GetBestTranslation(transOptions);

@@ -14,6 +14,7 @@ namespace TheTranslator
         private const int MINIMUM_LIMIT_FOR_DOUBLE_SPLIT = 3;
         private const int MINIMUM_LIMIT_FOR_EVERY_WORD_SPLIT = 3;
         private const int m_MAX_SPLIT_NUM_ALLOWED = 12;
+
         public ExtractorNaive(string path) : base(path) { }
 
         // 

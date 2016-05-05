@@ -8,8 +8,10 @@ namespace TheTranslator
 {
     class EvaluatorNaive:Evaluator
     {
-        private static double alpha = 0.5;
-        public EvaluatorNaive(Extractor ex) : base(ex) { }
+        //private static double alpha = 0.5;
+
+        public EvaluatorNaive(Statistics ex) : base(ex) { }
+
         public override string GetBestTranslation(List<TranslationOption> transO)
         {
             double maxScor = -1;

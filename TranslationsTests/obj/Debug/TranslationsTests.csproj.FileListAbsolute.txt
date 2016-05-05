@@ -23,3 +23,11 @@ C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!
 C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TranslationsTests\obj\Debug\TranslationsTests.csprojResolveAssemblyReference.cache
 C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TranslationsTests\obj\Debug\TranslationsTests.dll
 C:\Users\itskovic\Dropbox\JointProject\TheTranslator!!\afterMerge\TheTranslator!!\TranslationsTests\obj\Debug\TranslationsTests.pdb
+D:\Projects\Project\TranslationsTests\bin\Debug\TranslationsTests.dll
+D:\Projects\Project\TranslationsTests\bin\Debug\TranslationsTests.pdb
+D:\Projects\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+D:\Projects\Project\TranslationsTests\bin\Debug\TheTranslator.exe
+D:\Projects\Project\TranslationsTests\bin\Debug\TheTranslator.pdb
+D:\Projects\Project\TranslationsTests\obj\Debug\TranslationsTests.csprojResolveAssemblyReference.cache
+D:\Projects\Project\TranslationsTests\obj\Debug\TranslationsTests.dll
+D:\Projects\Project\TranslationsTests\obj\Debug\TranslationsTests.pdb

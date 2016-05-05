@@ -17,11 +17,10 @@ namespace TheTranslator
         public static void test()
         {
             Tester t = new Tester();
-            t.Init(@"C:\studies\project\DB\Big\17_new");
-            t.testLenX(@"C:\studies\project\DB\Big\17_new", 4);
-
+            //t.Init(@"C:\studies\project\DB\Big\17_new");
+            //t.testLenX(@"C:\studies\project\DB\Big\17_new", 4);
+            t.Init(@"Z:");
+            t.testLenX(@"Z:", 4);
         }
-
-        
     }
 }
