@@ -8,11 +8,11 @@ namespace TheTranslator
 {
     public abstract class Evaluator
     {
-        protected Extractor m_extct;
+        protected Statistics m_stats;
 
-        protected Evaluator(Extractor eval)
+        protected Evaluator(Statistics stats)
         {
-            m_extct = eval;
+            m_stats = stats;
         }
         abstract public string GetBestTranslation(List<TranslationOption> transO);
      

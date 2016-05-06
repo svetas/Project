@@ -49,22 +49,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Combiner.cs" />
-    <Compile Include="CombinerNaive.cs" />
-    <Compile Include="Evaluator.cs" />
-    <Compile Include="EvaluatorConnectivity.cs" />
-    <Compile Include="EvaluatorNaive.cs" />
-    <Compile Include="Extractor.cs" />
-    <Compile Include="ExtractorNaive.cs" />
-    <Compile Include="OneWordSentence.cs" />
+    <Compile Include="Combiners\Combiner.cs" />
+    <Compile Include="Combiners\CombinerNaive.cs" />
+    <Compile Include="Evaluators\EvaluatorProbability.cs" />
+    <Compile Include="StatisticsCalculators\DistanceStatistics.cs" />
+    <Compile Include="Evaluators\Evaluator.cs" />
+    <Compile Include="Evaluators\EvaluatorConnectivity.cs" />
+    <Compile Include="Evaluators\EvaluatorNaive.cs" />
+    <Compile Include="Extractors\Extractor.cs" />
+    <Compile Include="Extractors\ExtractorNaive.cs" />
+    <Compile Include="Common\OneWordSentence.cs" />
+    <Compile Include="StatisticsCalculators\PermutationsStatistics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sentence.cs" />
-    <Compile Include="TargetSentence.cs" />
+    <Compile Include="Common\Sentence.cs" />
+    <Compile Include="StatisticsCalculators\Statistics.cs" />
+    <Compile Include="Common\TargetSentence.cs" />
     <Compile Include="Tester.cs" />
-    <Compile Include="TranslationOption.cs" />
-    <Compile Include="WordData.cs" />
-    <Compile Include="WordDataList.cs" />
+    <Compile Include="Common\TranslationOption.cs" />
+    <Compile Include="Common\Word.cs" />
+    <Compile Include="Common\WordList.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -88,6 +92,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

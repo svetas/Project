@@ -13,18 +13,19 @@ namespace TranslationsTests
         public void Init()
         {
             test = new Tester();
-            test.Init(@"C:\studies\project\DB\Big\17_new");
+            test.InitWithDistance(@"Z:");
         }
 
         [TestMethod]
         public void TestSetLen10()
         {
-            Assert.IsTrue(test.testLargeDataBase(@"C:\studies\project\DB\Big\17_new\Len10\Downloaded.he"));
+            Assert.IsTrue(test.testLargeDataBase(@"Z:\Len10\Downloaded.he"));
         }
         [TestMethod]
         public void TestTranslation()
         {
-            Assert.IsTrue(test.testSentence("משעמם כאן"));
+            string item = "בפעם הבאה, אל תזמיני רק מנה אחת";
+            Assert.IsTrue(test.testSentenceDistanceAndPermutations(item));
         }
         [TestMethod]
         public void SingleSimpleWords()

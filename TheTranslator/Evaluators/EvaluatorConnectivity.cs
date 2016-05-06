@@ -10,8 +10,10 @@ namespace TheTranslator
     {
         // i'm the best
         //other  way around
-        private static double alpha = 0.5;
-        public EvaluatorConnectivity(Extractor ex) : base(ex) { }
+        //private static double alpha = 0.5;
+
+        public EvaluatorConnectivity(PermutationsStatistics ex) : base(ex) { }
+
         public override string GetBestTranslation(List<TranslationOption> transO)
         {
             double maxScor = -1;
@@ -30,13 +32,9 @@ namespace TheTranslator
                 //find the connection of alll the other parts
                 for (int i = 1; i < transSen.m_targetSenParts.Count; i++)
                 {
-
                     chunkPrevSplited = transSen.m_targetSenParts[i - 1].m_translation.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
                     chunkCurrSplited = transSen.m_targetSenParts[i].m_translation.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
                     connectivity.Add(calconnectivityP(chunkPrevSplited, chunkCurrSplited));
-
-
-
                 }
                 score = calcScoreAvg(connectivity);
                 if (score > maxScor)
@@ -51,13 +49,14 @@ namespace TheTranslator
         //I(X, Y)=LOG2(P(X&Y) / P(Y))
         private double calconnectivityI(string[] chunkPrevSplited, string[] chunkCurrSplited)
         {
+            PermutationsStatistics stat = ((PermutationsStatistics)m_stats);
             string leftW = chunkPrevSplited.Last();
             string rightW = chunkCurrSplited.First();
-            int countLR = m_extct.getCountTaPair(leftW, rightW);
-            int countL = m_extct.getCountTaWord(leftW);
-            int countR = m_extct.getCountTaWord(rightW);
+            int countLR = stat.getCountTaPair(leftW, rightW);
+            int countL = stat.getCountTaWord(leftW);
+            int countR = stat.getCountTaWord(rightW);
             double PXY = countLR / (double)(countL + countR);
-            double PY = countR / (double)m_extct.m_countWordsInDb;
+            double PY = countR / (double)stat.m_countWordsInDb;
             double ans = Math.Log((PXY / PY), 2);
             return ans;
         }
@@ -65,11 +64,12 @@ namespace TheTranslator
         //P(X, Y)=C(X&Y) / (C(Y)+C(X))
         private double calconnectivityP(string[] chunkPrevSplited, string[] chunkCurrSplited)
         {
+            PermutationsStatistics stat = ((PermutationsStatistics)m_stats);
             string leftW = chunkPrevSplited.Last();
             string rightW = chunkCurrSplited.First();
-            int countLR = m_extct.getCountTaPair(leftW, rightW);
-            int countL = m_extct.getCountTaWord(leftW);
-            int countR = m_extct.getCountTaWord(rightW);
+            int countLR = stat.getCountTaPair(leftW, rightW);
+            int countL = stat.getCountTaWord(leftW);
+            int countR = stat.getCountTaWord(rightW);
             double ans = countLR / (double)(countL+ countR);
             return ans;
         }
