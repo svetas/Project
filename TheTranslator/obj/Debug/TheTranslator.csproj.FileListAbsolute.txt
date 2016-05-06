@@ -39,3 +39,4 @@ D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.r
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.exe
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.pdb
+D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache

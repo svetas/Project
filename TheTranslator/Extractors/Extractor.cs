@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -73,8 +74,11 @@ namespace TheTranslator
                 while ((sourceLine = soReader.ReadLine()) != null & (targetLine = taReader.ReadLine()) != null)
                 {
                     // write progress
-                    if (linesCounter++ % 100000 == 0)
+                    if (linesCounter++ % 10000 == 0) { 
                         Console.WriteLine(linesCounter);
+                        Trace.WriteLine(linesCounter);
+                    }
+                    if (linesCounter == 200000) break;
 
                     //train language model (statistics for later use)
                     stats.Insert(targetLine);

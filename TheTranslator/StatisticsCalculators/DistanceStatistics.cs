@@ -9,7 +9,7 @@ namespace TheTranslator
     public class DistanceStatistics : Statistics
     {
         //
-        private const double DEFAULT_RANK = 0.5;
+        private const double DEFAULT_RANK = 0.1;
         //
         Dictionary<string, Dictionary<string, int>[]> m_Statistics = new Dictionary<string, Dictionary<string, int>[]>();
         //      
@@ -24,7 +24,13 @@ namespace TheTranslator
                     var x = m_Statistics[original][range];
                     if (m_Statistics[original][range].ContainsKey(target))
                     {
-                        return m_Statistics[original][range][target]/(double)m_Statistics[original][range].Count;
+                        int totalCount = 0;
+                        foreach (var item in m_Statistics[original][range])
+                        {
+                            totalCount += item.Value;
+                        }
+                        int mone = m_Statistics[original][range][target];
+                        return mone/(double)totalCount;
                     }
                 }
             }
@@ -73,11 +79,10 @@ namespace TheTranslator
                 currentWord = linePartsTa[i];
                 if (!m_Statistics.ContainsKey(currentWord))
                 {
-                    Dictionary<string, int>[] followings = new Dictionary<string, int>[3];
+                    Dictionary<string, int>[] followings = new Dictionary<string, int>[2];
                     m_Statistics.Add(currentWord, followings);
                     m_Statistics[currentWord][0] = new Dictionary<string, int>();
                     m_Statistics[currentWord][1] = new Dictionary<string, int>();
-                    m_Statistics[currentWord][2] = new Dictionary<string, int>();
                 }
                 if (i + 1 < linePartsTa.Length)
                 {
@@ -104,25 +109,13 @@ namespace TheTranslator
                         m_Statistics[currentWord][1][otherWord]++;
                     }
                 }
-                if (i + 3 < linePartsTa.Length)
-                {
-                    otherWord = linePartsTa[i + 3];
-                    if (!m_Statistics[currentWord][2].ContainsKey(otherWord))
-                    {
-                        m_Statistics[currentWord][2].Add(otherWord, 1);
-                    }
-                    else
-                    {
-                        m_Statistics[currentWord][2][otherWord]++;
-                    }
-                }
             }
         }
         public override void Insert(string target)
         {
             string[] chunks = target.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
             List<int[]> sizes = new List<int[]>();
-            int groupsNum = Math.Min(Math.Max(3,chunks.Length),4);
+            int groupsNum = Math.Min(3,chunks.Length);
             int[] arr = new int[groupsNum];
             GetPermutations(chunks.Length, groupsNum, 0, ref arr, ref sizes);
             List<string> chunksArr;

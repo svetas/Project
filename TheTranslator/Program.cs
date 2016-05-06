@@ -11,7 +11,7 @@ namespace TheTranslator
     {
         static void Main()
         {
-            test();
+            test2();
         }
 
         public static void test()
@@ -21,6 +21,12 @@ namespace TheTranslator
             //t.testLenX(@"C:\studies\project\DB\Big\17_new", 4);
             t.Init(@"Z:");
             t.testLenX(@"Z:", 4);
+        }
+        public static void test2()
+        {
+            Tester t = new Tester();
+            t.InitWithDistance("Z:");
+            t.testSentenceDistanceAndPermutations("אם אתה רוצה לחיות פשוט עזוב אותי");
         }
     }
 }

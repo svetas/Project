@@ -18,11 +18,12 @@ namespace TheTranslator.Evaluators
             foreach (var transSen in transO)
             {
                 double rank = 0;
-                double wordRank = 1;
+                
                 TargetSentence[] parts = transSen.m_targetSenParts.ToArray();
                 for (int i = 0; i < parts.Length; i++)
                 {
-                    for (int j = 1; j < 3; j++)
+                    double wordRank = 1;
+                    for (int j = 1; j < 2; j++)
                     {
                         if (j + i >= parts.Length) break;                        
                         wordRank = wordRank * m_dsStats.GetRank(parts[i].m_translation, parts[i+j].m_translation, j);
@@ -31,6 +32,7 @@ namespace TheTranslator.Evaluators
                 }
                 if (rank > bestRank)
                 {
+                    bestRank = rank;
                     answer = transSen.concatParts();
                 }
             }
