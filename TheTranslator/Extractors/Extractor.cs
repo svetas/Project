@@ -129,7 +129,8 @@ namespace TheTranslator
 
                 foreach (var item in m_allSen)
                 {
-                    item.Value.m_target.Sort();
+                    item.Value.sortAmdUpdatePr();
+
 
                 }
                 foreach (var line in allWords)
@@ -143,18 +144,24 @@ namespace TheTranslator
                         continue;
                     else //WORD IS IN THE DB
                     {
-                        TargetSentence ts = new TargetSentence(tWord, 1, OneWordSentence.m_gradeForUnkown);
+                        List<TargetSentence> lts = new List<TargetSentence>();
+                        TargetSentence ts;
                         if (m_allSen.ContainsKey(sWord)) //word apears as a sentence
                         {
                             Sentence oneWordSen = m_allSen[sWord];
-                            int countWordAp = oneWordSen.m_target[0].m_count;
+                            lts = oneWordSen.getTopN();
+                            int countWordAp = lts[0].m_count;
                             if (countWordAp > MIN_COMMON_MAKES_SKIP)
                             {
-                                ts = new TargetSentence(oneWordSen.m_target[0].m_translation, countWordAp, OneWordSentence.m_gradeForUnkown);
+                                m_wordToSenMap[sWord].m_translation = lts;
+                                continue;
                             }
 
                         }
-                        m_wordToSenMap[sWord].m_translation = ts;
+                        ts = new TargetSentence(tWord, 1, Sentence.m_gradeForUnkown, false);
+                        lts.Add(ts);
+
+                        m_wordToSenMap[sWord].m_translation = lts;
                     }
                 }
             }
@@ -175,12 +182,31 @@ namespace TheTranslator
 
         public Sentence getWordTranslation(string word)
         {
-            if (m_wordToSenMap.ContainsKey(word) && m_wordToSenMap[word].m_translation!=null)
-                return new OneWordSentence(word, m_wordToSenMap[word].m_translation.m_translation);
-            else if (m_dic.ContainsKey(word))
-                return new OneWordSentence(word, m_dic[word]);
-            else return new OneWordSentence(word, word);
+            Sentence ans = new Sentence(word, -1);
+            List<TargetSentence> lts;
+            if (m_wordToSenMap.ContainsKey(word))
+            {
+                Word w = m_wordToSenMap[word];
+                if (w.m_translation != null)
+                {
+                    ans.addTargetList(w.m_translation, w.countInDB);
+                    return ans;
+                }
+            }
+            if (m_dic.ContainsKey(word))
+            {
+                string tWord = m_dic[word];
+                lts = new List<TargetSentence>();
+                lts.Add(new TargetSentence(tWord, 1, Sentence.m_gradeForUnkown, true));
+                ans.addTargetList(lts, 1);
+                return ans;
+            }
+            lts = new List<TargetSentence>();
+            lts.Add(new TargetSentence(word, 1, Sentence.m_gradeForUnkown, false));
+            ans.addTargetList(lts, 1);
+            return ans;
         }
+
         public bool Enhance()
         {
             StreamReader soReader = new StreamReader(m_dataPath + @"\enhancmentSet.he.txt");

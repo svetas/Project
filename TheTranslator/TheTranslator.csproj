@@ -58,7 +58,6 @@
     <Compile Include="Evaluators\EvaluatorNaive.cs" />
     <Compile Include="Extractors\Extractor.cs" />
     <Compile Include="Extractors\ExtractorNaive.cs" />
-    <Compile Include="Common\OneWordSentence.cs" />
     <Compile Include="StatisticsCalculators\PermutationsStatistics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

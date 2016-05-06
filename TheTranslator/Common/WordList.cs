@@ -18,7 +18,7 @@ namespace TheTranslator
             m_wordAppearance = new List<Sentence>();
         }
 
-        public WordList(string word, TargetSentence trans) : base(word,trans)
+        public WordList(string word, List<TargetSentence> trans) : base(word,trans)
         {
             m_wordAppearance = new List<Sentence>();
         }

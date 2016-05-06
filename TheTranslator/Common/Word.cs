@@ -11,8 +11,8 @@ namespace TheTranslator
         // one word in Hebrew 
         public string m_word;
 
-        // The selected translation  - the chosen one         
-        public TargetSentence m_translation;
+        // The selected translation  - the chosen ones         
+        public List<TargetSentence> m_translation;
 
         // how many times the word appeared in the training set
         protected int m_countInDB;    
@@ -24,7 +24,7 @@ namespace TheTranslator
             m_countInDB = 0;
         }
 
-        protected Word(string word, TargetSentence trans)
+        protected Word(string word, List<TargetSentence> trans)
         {
             m_word = word;
             m_translation = trans;
@@ -33,7 +33,7 @@ namespace TheTranslator
 
         public void addTranslaion(TargetSentence trans)
         {
-            m_translation = trans;
+            m_translation.Add(trans);
         }
         abstract public void addSentence(Sentence sen);
         abstract public List<Sentence> getItemsInCommon(WordList other);

@@ -26,7 +26,7 @@ namespace TheTranslator
         {
             Tester t = new Tester();
             t.InitWithDistance("Z:");
-            t.testSentenceDistanceAndPermutations("אם אתה רוצה לחיות פשוט עזוב אותי");
+            t.testSentenceDistanceAndPermutations("אאבזר דגעדגעדעדגע");
         }
     }
 }

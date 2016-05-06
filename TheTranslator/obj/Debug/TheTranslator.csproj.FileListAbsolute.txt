@@ -40,3 +40,11 @@ D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResourc
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.exe
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.pdb
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\bin\Debug\TheTranslator.exe.config
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.exe
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.pdb
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\bin\Debug\TheTranslator.exe
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\bin\Debug\TheTranslator.pdb
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
+C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache

@@ -16,8 +16,18 @@ namespace TheTranslator
         // this text
         public double m_pr { get; set; }
 
+        public bool m_isReal;
+
         public TargetSentence(string translation, int count, double pr)
         {
+            m_translation = translation;
+            m_count = count;
+            m_pr = pr;
+            m_isReal = true;
+        }
+        public TargetSentence(string translation, int count, double pr, bool isReal)
+        {
+            m_isReal = isReal;
             m_translation = translation;
             m_count = count;
             m_pr = pr;

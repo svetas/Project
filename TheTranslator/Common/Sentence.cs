@@ -9,6 +9,10 @@ namespace TheTranslator
     public class Sentence
     {
 
+        private const int N_FOR_TOPN = 4;
+        private const int MINIMUM_TOPN_OPTION_COUNT = 2;
+        public const double m_gradeForUnkown = 0.3;
+
         // Source, Hebrew sentence (contains 1-n words)
         public string m_source;
 
@@ -40,8 +44,9 @@ namespace TheTranslator
             m_countInDB = 0;
         }
 
-        public List<TargetSentence> getTopN(int n, int minTransCount)
+        public List<TargetSentence> getTopN()
         {
+            int n = N_FOR_TOPN;
             List<TargetSentence> top = new List<TargetSentence>();
             if(m_target.Count==1)
             {
@@ -50,7 +55,7 @@ namespace TheTranslator
             }
             foreach (var item in m_target) // items sorted by count  
             {                
-                if (top.Count == 0 || (n > 0 && item.m_count > minTransCount))
+                if (top.Count == 0 || (n > 0 && item.m_count > MINIMUM_TOPN_OPTION_COUNT))
                     top.Add(item);
                 else
                     return top;
@@ -74,6 +79,26 @@ namespace TheTranslator
                 }   
             }
             m_target.Add(new TargetSentence(target, 1, (1/(double)m_countInDB)));
+        }
+
+        public void addTargetList(List<TargetSentence> target, int count)
+        {
+            m_target = target;
+            m_countInDB = count;
+        }
+
+
+
+        public void sortAmdUpdatePr()
+        {
+            int countS = m_countInDB;
+            int countT = 0;
+            m_target.Sort();
+            foreach (var t in m_target)
+            {
+                countT = t.m_count;
+                t.m_pr = countT / (double)countS;
+            }
         }
     }
 }

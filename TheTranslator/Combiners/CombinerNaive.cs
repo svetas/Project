@@ -8,9 +8,7 @@ namespace TheTranslator
 {
     class CombinerNaive: Combiner
     {
-        private const int N_FOR_TOPN = 4;
-        private const int MINIMUM_TOPN_OPTION_COUNT = 2;
-        
+               
 
         public override List<TranslationOption> combine(List<List<Sentence>> transOptions, string source)
         {
@@ -26,7 +24,7 @@ namespace TheTranslator
                 foreach (var transPart in transOption)
                 {
                     partialAnsNew = new List<TranslationOption>();
-                    List<TargetSentence> topN = transPart.getTopN(N_FOR_TOPN, MINIMUM_TOPN_OPTION_COUNT);
+                    List<TargetSentence> topN = transPart.getTopN();
                     //no beginings of sentences
                     if (partialAnsOld.Count == 0)
                     {
