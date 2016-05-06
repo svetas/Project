@@ -35,7 +35,6 @@ C:\Users\Sagi\Documents\GitHub\Project\TheTranslator\bin\Debug\TheTranslator.exe
 D:\Projects\Project\TheTranslator\bin\Debug\TheTranslator.exe.config
 D:\Projects\Project\TheTranslator\bin\Debug\TheTranslator.exe
 D:\Projects\Project\TheTranslator\bin\Debug\TheTranslator.pdb
-D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.exe

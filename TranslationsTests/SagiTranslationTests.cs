@@ -13,7 +13,7 @@ namespace TranslationsTests
         public void Init()
         {
             test = new Tester();
-            test.InitWithDistance(@"Z:\");
+            test.InitWithDistance(@"Z:");
         }
 
         [TestMethod]
@@ -24,7 +24,8 @@ namespace TranslationsTests
         [TestMethod]
         public void TestTranslation()
         {
-            Assert.IsTrue(test.testSentence("משעמם כאן"));
+            string item = "בפעם הבאה, אל תזמיני רק מנה אחת";
+            Assert.IsTrue(test.testSentenceDistanceAndPermutations(item));
         }
         [TestMethod]
         public void SingleSimpleWords()

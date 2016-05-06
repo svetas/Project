@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Combiners\Combiner.cs" />
     <Compile Include="Combiners\CombinerNaive.cs" />
+    <Compile Include="Evaluators\EvaluatorProbability.cs" />
     <Compile Include="StatisticsCalculators\DistanceStatistics.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />
     <Compile Include="Evaluators\EvaluatorConnectivity.cs" />

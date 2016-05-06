@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheTranslator.Evaluators;
 
 namespace TheTranslator
 {
@@ -34,7 +35,15 @@ namespace TheTranslator
             m_extractor.build(ref m_stats);
             return true;
         }
-
+        public bool testSentenceDistanceAndPermutations(string item)
+        {
+            Combiner c = new CombinerNaive();
+            Evaluator EV = new EvaluatorProbability((DistanceStatistics)m_stats);
+            List<List<Sentence>> sentences = m_extractor.extractTransParts(item);
+            List<TranslationOption> transOptions = c.combine(sentences, item);
+            string trans = EV.GetBestTranslation(transOptions);
+            return true;
+        }
         public void testLenX(string testFilesPath, int x)
         {
             Combiner c = new CombinerNaive();
