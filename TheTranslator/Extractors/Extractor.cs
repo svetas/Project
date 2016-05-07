@@ -18,36 +18,43 @@ namespace TheTranslator
 
 
         // map of a word to its' sentence, 
-        protected Dictionary<string, Word> m_wordToSenMap;
+        //protected Dictionary<string, Word> m_wordToSenMap;
+
 
         // Every line in the training set is inserted here.
         protected Dictionary<string, Sentence> m_allSen;
 
         // ALL extended dictionary
-        protected Dictionary<string, string> m_dic;
+        protected Dictionary<string, Sentence> m_dic;
 
         //path of the files.
         protected string m_dataPath;
 
+        //protected Dictionary<string, HashSet<string>> m_similarities;
 
         public abstract List<List<Sentence>> extractTransParts(string source);
 
         protected Extractor(string path)
         {
-            m_wordToSenMap = new Dictionary<string, Word>();
+            //m_wordToSenMap = new Dictionary<string, Word>();
             m_allSen = new Dictionary<string, Sentence>();
             m_dataPath = path;
-            m_dic = new Dictionary<string, string>();
+            m_dic = new Dictionary<string, Sentence>();
+            //m_similarities = new Dictionary<string, HashSet<string>>();
         }
 
        
 
-        public bool build(ref Statistics stats)
+        public virtual bool build(ref Statistics stats)
         {
             // check if all needed files exists
-            if (!File.Exists(m_dataPath + @"/DownloadedFullTrain.en-he.low.he") ||
-                !File.Exists(m_dataPath + @"/DownloadedFullTrain.en-he.low.en") ||
-                !File.Exists(m_dataPath + @"/GoogleTranslateWords.txt"))
+            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.low.he"))
+                return false;
+
+            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.low.en"))
+                return false;
+
+            if (!File.Exists(m_dataPath + @"\GoogleTranslateWords.txt"))
                 return false;
             //
             StreamReader soReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.low.he");
@@ -56,42 +63,41 @@ namespace TheTranslator
 
             int linesCounter = 0;
 
-            Regex rxRemovePsik = new Regex(",+");
+            //Regex rxRemovePsik = new Regex(",+");
             Regex rxRemoveSpace = new Regex(@"\s\s+");
-
+            
             string sourceLine = null;
             string targetLine = null;
 
             Sentence sen;
             bool isNew;
-            string[] linePartsSo;
+            //string[] linePartsSo;
 
             try
             {
-                string[] allWords = dicReader.ReadToEnd().Split(new string[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
+                
 
                 // Read every line in each file
                 while ((sourceLine = soReader.ReadLine()) != null & (targetLine = taReader.ReadLine()) != null)
                 {
                     // write progress
-                    if (linesCounter++ % 10000 == 0) { 
+                    if (linesCounter % 10000 == 0) { 
                         Console.WriteLine(linesCounter);
                         Trace.WriteLine(linesCounter);
                     }
-                    if (linesCounter == 200000) break;
+                    linesCounter++;
+                    if (linesCounter >= 600000) break;
 
-                    //train language model (statistics for later use)
-                    stats.Insert(targetLine);
-
-
-                    sourceLine = rxRemovePsik.Replace(sourceLine, " ");
+                    //sourceLine = rxRemovePsik.Replace(sourceLine, " ");
                     sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
 
-                    targetLine = rxRemovePsik.Replace(targetLine, " ");
+                    //targetLine = rxRemovePsik.Replace(targetLine, " ");
                     targetLine = rxRemoveSpace.Replace(targetLine, " ");
 
+                    // Save all statistics here. (this is the english [[source]] language model)
+                    stats.Insert(targetLine);
 
-
+                    // Add all source sentences into a dictionary
 
                     isNew = !m_allSen.TryGetValue(sourceLine, out sen);
                     if (isNew)
@@ -100,8 +106,12 @@ namespace TheTranslator
                         m_allSen.Add(sourceLine, sen);
                     }
 
+                    // Add the target to the source that is in the dictionary
                     sen.addTarget(targetLine);
-                    linePartsSo = sourceLine.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
+
+
+                    //-------------------------------------------- we want to avoid using Word --------------------
+                    /*linePartsSo = sourceLine.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
                     if (linePartsSo.Length == 0)
                         continue;
 
@@ -112,14 +122,12 @@ namespace TheTranslator
                         bool isNewWord = !m_wordToSenMap.TryGetValue(linePart, out word);
                         if (isNewWord)
                         {
-                            word = new WordList(linePart);
+                            word = new Word(linePart);
                             m_wordToSenMap.Add(linePart, word);
                         }
                         word.addSentence(sen);
-                    }
-                    // Save all statistics here. (this is the english [[source]] language model)
-                    stats.Insert(targetLine);
-
+                    }*/
+                    //--------------------------------------------
                 }
 
                 if ((sourceLine == null && targetLine != null) || (sourceLine != null && targetLine == null))
@@ -130,17 +138,22 @@ namespace TheTranslator
                 foreach (var item in m_allSen)
                 {
                     item.Value.sortAmdUpdatePr();
-
-
                 }
+
+                // Read auxilery dictionary
+                string[] allWords = dicReader.ReadToEnd().Split(new string[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var line in allWords)
                 {
                     string[] lineData = line.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                     string sWord = lineData[0];
                     string tWord = lineData[2];
+
                     tWord = tWord.ToLower();
-                    m_dic.Add(sWord, tWord);
-                    if (!m_wordToSenMap.ContainsKey(sWord))
+                    if (!m_dic.ContainsKey(sWord))
+                        m_dic.Add(sWord, new Sentence(sWord, 0));
+                    m_dic[sWord].addTarget(tWord);
+
+                    /*if (!m_wordToSenMap.ContainsKey(sWord))
                         continue;
                     else //WORD IS IN THE DB
                     {
@@ -162,7 +175,9 @@ namespace TheTranslator
                         lts.Add(ts);
 
                         m_wordToSenMap[sWord].m_translation = lts;
-                    }
+                    }*/
+
+                    //UpdateLevenshteinSimilarities();
                 }
             }
             catch (Exception e)
@@ -174,14 +189,119 @@ namespace TheTranslator
             {
                 soReader.Close();
                 taReader.Close();
+                dicReader.Close();
                 Console.WriteLine("Load done!");
             }
 
             return true;
         }
 
+        /*private void UpdateLevenshteinSimilarities()
+        {
+            int counter = 0;
+            int total = m_allSen.Keys.Count;
+
+            // we want to do levenstain distance on all the db, we have to do it fast!
+
+            List<Tuple<string, string>> temp = new List<Tuple<string, string>>();
+            foreach (var item1 in m_allSen.Keys)
+            {
+                counter++;
+                foreach (var item2 in m_allSen.Keys)
+                {
+                    if (item1 != item2 && ((item1.Length - item2.Length) < 3 || (item2.Length - item1.Length) < 3))
+                        temp.Add(new Tuple<string, string>(item1, item2));
+                }
+                if (counter % 50 == 0)
+                {
+                    Console.WriteLine("Computing Levenshtein similarities Part 1: " + counter + "/" + total);
+                }
+            }
+
+            counter = 0;
+            total = temp.Count;
+
+            foreach (var item in temp)
+            {
+                counter++;
+                if (counter % 50 == 0)
+                {
+                    if (ComputeLevenshteinDistance(item.Item1,item.Item2)<3)
+                    {
+                        if (!m_similarities.ContainsKey(item.Item1))
+                            m_similarities.Add(item.Item1, new HashSet<string>());
+                        if (!m_similarities[item.Item1].Contains(item.Item2))
+                            m_similarities[item.Item1].Add(item.Item2);
+                        if (!m_similarities.ContainsKey(item.Item2))
+                            m_similarities.Add(item.Item2, new HashSet<string>());
+                        if (!m_similarities[item.Item2].Contains(item.Item1))
+                            m_similarities[item.Item2].Add(item.Item1);
+                    }
+                    Console.WriteLine("Computing Levenshtein similarities Part 1: " + counter + "/" + total);
+                }
+            }
+        }*/
+        /*private static int ComputeLevenshteinDistance(string s, string t)
+        {
+            int n = s.Length;
+            int m = t.Length;
+            int[,] d = new int[n + 1, m + 1];
+
+            // Step 1
+            if (n == 0)
+            {
+                return m;
+            }
+
+            if (m == 0)
+            {
+                return n;
+            }
+
+            // Step 2
+            for (int i = 0; i <= n; d[i, 0] = i++)
+            {
+            }
+
+            for (int j = 0; j <= m; d[0, j] = j++)
+            {
+            }
+
+            // Step 3
+            for (int i = 1; i <= n; i++)
+            {
+                //Step 4
+                for (int j = 1; j <= m; j++)
+                {
+                    // Step 5
+                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+
+                    // Step 6
+                    d[i, j] = Math.Min(
+                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                        d[i - 1, j - 1] + cost);
+                }
+            }
+            // Step 7
+            return d[n, m];
+        }*/
+
+
         public Sentence getWordTranslation(string word)
         {
+            if (m_allSen.ContainsKey(word))
+            {
+                return m_allSen[word];
+            } else if (m_dic.ContainsKey(word))
+            {
+                return m_dic[word];
+            } else
+            {
+                return new Sentence(word, -1);
+            }
+            
+            
+            /*
             Sentence ans = new Sentence(word, -1);
             List<TargetSentence> lts;
             if (m_wordToSenMap.ContainsKey(word))
@@ -204,7 +324,7 @@ namespace TheTranslator
             lts = new List<TargetSentence>();
             lts.Add(new TargetSentence(word, 1, Sentence.m_gradeForUnkown, false));
             ans.addTargetList(lts, 1);
-            return ans;
+            return ans;*/
         }
 
         public bool Enhance()

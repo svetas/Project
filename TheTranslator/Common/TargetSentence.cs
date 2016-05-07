@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TheTranslator
 {
     public class TargetSentence : IEquatable<TargetSentence>, IComparable<TargetSentence>
     {
+        Regex rxPsik = new Regex(",+");
+
         // Text in english, tranlation
         public string m_translation { get; set; }
         // how many time repeated as translation
@@ -18,20 +21,31 @@ namespace TheTranslator
 
         public bool m_isReal;
 
+        public int[] m_psikLocations;
+
         public TargetSentence(string translation, int count, double pr)
         {
-            m_translation = translation;
+            string cleanedTrans = rxPsik.Replace(translation, "");
+            m_translation = cleanedTrans;
             m_count = count;
             m_pr = pr;
             m_isReal = true;
+
+            MatchCollection mc = rxPsik.Matches(translation);
+            m_psikLocations = new int[mc.Count];
+            for (int i = 0; i < mc.Count; i++)
+            {
+                m_psikLocations[i] = mc[i].Index;
+            }
         }
-        public TargetSentence(string translation, int count, double pr, bool isReal)
+        /*public TargetSentence(string translation, int count, double pr, bool isReal)
         {
             m_isReal = isReal;
             m_translation = translation;
             m_count = count;
             m_pr = pr;
-        }
+        }*/
+
         public override string ToString()
         {
             return m_translation + " _ " + m_count;

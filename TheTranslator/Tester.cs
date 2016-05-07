@@ -33,16 +33,17 @@ namespace TheTranslator
             m_stats = new DistanceStatistics();
             m_extractor = new ExtractorNaive(path);
             m_extractor.build(ref m_stats);
+            //m_extractor.Enhance();
             return true;
         }
-        public bool testSentenceDistanceAndPermutations(string item)
+        public string testSentenceDistanceAndPermutations(string item)
         {
             Combiner c = new CombinerNaive();
             Evaluator EV = new EvaluatorProbability((DistanceStatistics)m_stats);
             List<List<Sentence>> sentences = m_extractor.extractTransParts(item);
             List<TranslationOption> transOptions = c.combine(sentences, item);
             string trans = EV.GetBestTranslation(transOptions);
-            return true;
+            return trans;
         }
         public void testLenX(string testFilesPath, int x)
         {
@@ -68,10 +69,10 @@ namespace TheTranslator
 
 
         }
-        public static bool testWordData()
+        /*public static bool testWordData()
         {
-            WordList s = new WordList("short");
-            WordList l = new WordList("long");
+            //WordList s = new WordList("short");
+            //WordList l = new WordList("long");
             Sentence s2 = new Sentence("two", 2);
             Sentence s10 = new Sentence("ten", 10);
             Sentence s1 = new Sentence("one", 1);
@@ -80,34 +81,34 @@ namespace TheTranslator
             Sentence s12 = new Sentence("10+two", 12);
             Sentence s15 = new Sentence("10+5", 15);
 
-            s.addSentence(s2);
-            s.addSentence(s10);
-
-            l.addSentence(s1);
-            l.addSentence(s2);
-            l.addSentence(s3);
-            l.addSentence(s4);
-
-            List<Sentence> ans = l.getItemsInCommon(s);
-            //long list ends first
-            if (ans.Count != 1 || ans[0].m_id != (2))
-                return false;
-
-            l.addSentence(s12);
-            ans = s.getItemsInCommon(l);
-            //short list ends first
-            if (ans.Count != 1 || ans[0].m_id != (2))
-                return false;
-
-            s.addSentence(s15);
-            l.addSentence(s15);
-            ans = s.getItemsInCommon(l);
-            //lists end at the same time
-            if (ans.Count != 2 || ans[0].m_id != (2) || ans[1].m_id != (15))
-                return false;
-
-            return true;
-        }
+            //s.addSentence(s2);
+            //s.addSentence(s10);
+            //
+            //l.addSentence(s1);
+            //l.addSentence(s2);
+            //l.addSentence(s3);
+            //l.addSentence(s4);
+            //
+            //List<Sentence> ans = l.getItemsInCommon(s);
+            ////long list ends first
+            //if (ans.Count != 1 || ans[0].m_id != (2))
+            //    return false;
+            //
+            //l.addSentence(s12);
+            //ans = s.getItemsInCommon(l);
+            ////short list ends first
+            //if (ans.Count != 1 || ans[0].m_id != (2))
+            //    return false;
+            //
+            //s.addSentence(s15);
+            //l.addSentence(s15);
+            //ans = s.getItemsInCommon(l);
+            ////lists end at the same time
+            //if (ans.Count != 2 || ans[0].m_id != (2) || ans[1].m_id != (15))
+            //    return false;
+            //
+            //return true;
+        }*/
 
 
         public bool testExtractor()
@@ -116,11 +117,12 @@ namespace TheTranslator
             return e.build(ref m_stats);
 
         }
-        public bool testLargeDataBase(string testPath)
+        public bool testLargeDataBase(string testPath,string outputPath)
         {
             // using sveta's implementations
+            StreamWriter sw = new StreamWriter(outputPath);
             Combiner c = new CombinerNaive();
-            Evaluator EV = new EvaluatorNaive((PermutationsStatistics)m_stats);
+            Evaluator EV = new EvaluatorNaive((DistanceStatistics)m_stats);
             int total = 0;
             int counter = 0;
             StreamReader sr = new StreamReader(testPath);
@@ -134,13 +136,17 @@ namespace TheTranslator
                 List<List<Sentence>> sentences = m_extractor.extractTransParts(item);
                 List<TranslationOption> transOptions = c.combine(sentences, item);
                 trans = EV.GetBestTranslation(transOptions);
-
+                
                 if (trans == null || trans.Length == 0)
                 {
-                    counter++;
+                    sw.WriteLine("UNK");
+                }else 
+                {
+                    sw.WriteLine(trans.TrimStart(' '));
                 }
             }
             Console.WriteLine(counter + "/" + total);
+            sw.Close();
             return true;
         }
 

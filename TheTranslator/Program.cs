@@ -25,8 +25,8 @@ namespace TheTranslator
         public static void test2()
         {
             Tester t = new Tester();
-            t.InitWithDistance("Z:");
-            t.testSentenceDistanceAndPermutations("אאבזר דגעדגעדעדגע");
+            t.InitWithDistance(@"Z:\40000wordsNoPsik");
+            t.testLargeDataBase(@"Z:\40000wordsNoPsik\Len4\Downloaded.low.he", @"Z:\40000wordsNoPsik\Len4\translated.low.he");
         }
     }
 }

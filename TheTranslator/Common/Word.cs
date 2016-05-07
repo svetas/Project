@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheTranslator
 {
-    public abstract class Word
+    public class Word
     {
         // one word in Hebrew 
         public string m_word;
@@ -18,7 +18,7 @@ namespace TheTranslator
         protected int m_countInDB;    
         public int countInDB { get { return m_countInDB; } }
 
-        protected Word(string word)
+        public Word(string word)
         {
             m_word = word;
             m_countInDB = 0;
@@ -34,9 +34,6 @@ namespace TheTranslator
         public void addTranslaion(TargetSentence trans)
         {
             m_translation.Add(trans);
-        }
-        abstract public void addSentence(Sentence sen);
-        abstract public List<Sentence> getItemsInCommon(WordList other);
-        
+        }        
     }
 }

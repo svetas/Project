@@ -9,19 +9,22 @@ namespace TheTranslator
     public class DistanceStatistics : Statistics
     {
         //
-        private const double DEFAULT_RANK = 0.1;
+        private const double DEFAULT_RANK = 0.01;
         //
         Dictionary<string, Dictionary<string, int>[]> m_Statistics = new Dictionary<string, Dictionary<string, int>[]>();
+        Dictionary<string, int> m_TargetGlobalCount = new Dictionary<string, int>();
         //      
         //
         public double GetRank(string original, string target, int range) 
         {
+            double answer = DEFAULT_RANK;
             if (m_Statistics.ContainsKey(original))
             {
                 if (m_Statistics[original].Length>range)
                 {
                     var y = m_Statistics[original];
                     var x = m_Statistics[original][range];
+                    //var z = m_Statistics[original][range][target];
                     if (m_Statistics[original][range].ContainsKey(target))
                     {
                         int totalCount = 0;
@@ -30,11 +33,20 @@ namespace TheTranslator
                             totalCount += item.Value;
                         }
                         int mone = m_Statistics[original][range][target];
-                        return mone/(double)totalCount;
+                        answer = GetPopularity(target)* mone/(double)totalCount;
+
                     }
                 }
             }
-            return DEFAULT_RANK;
+            double rangePanelty =  answer*Math.Pow(0.8, range+1);
+            return rangePanelty;
+        }
+
+        internal double GetPopularity(string m_translation)
+        {
+            if (!m_TargetGlobalCount.ContainsKey(m_translation))
+                return 1/(double)m_TargetGlobalCount.Count;
+            return m_TargetGlobalCount[m_translation] / (double)m_TargetGlobalCount.Count;
         }
 
         private void GetPermutations(int ArrSize, int ElemCount, int CurrInd, ref int[] arr, ref List<int[]> ans)
@@ -66,6 +78,7 @@ namespace TheTranslator
                 }
             }
         }
+
         private void AddArrayOfStrings(string[] linePartsTa)
         {
             if (linePartsTa.Length == 0)
@@ -138,6 +151,10 @@ namespace TheTranslator
                     currentIndex += sizes[i][j];
                     // add chunkStr to list of chunks
                     chunksArr.Add(chunkStr);
+
+                    if (!m_TargetGlobalCount.ContainsKey(chunkStr))
+                        m_TargetGlobalCount.Add(chunkStr, 0);
+                    m_TargetGlobalCount[chunkStr]++;
                 }
                 // set all chunks into memory
                 string[] parts = chunksArr.ToArray();
