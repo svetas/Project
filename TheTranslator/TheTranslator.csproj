@@ -67,7 +67,6 @@
     <Compile Include="Tester.cs" />
     <Compile Include="Common\TranslationOption.cs" />
     <Compile Include="Common\Word.cs" />
-    <Compile Include="Common\WordList.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

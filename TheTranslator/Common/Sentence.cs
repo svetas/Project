@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TheTranslator
@@ -9,9 +10,14 @@ namespace TheTranslator
     public class Sentence
     {
 
-        private const int N_FOR_TOPN = 4;
+
+        private const int N_FOR_TOPN = 6;
         private const int MINIMUM_TOPN_OPTION_COUNT = 2;
         public const double m_gradeForUnkown = 0.3;
+
+
+        Regex rxPsik = new Regex(",+");
+
 
         // Source, Hebrew sentence (contains 1-n words)
         public string m_source;
@@ -25,8 +31,10 @@ namespace TheTranslator
         // How many times the sentence appeared in the training set
         public int m_countInDB;
 
+        //
+        public int[] m_psikLocations;
 
-        public Sentence(string source, string target, int id, double pr)
+        /*public Sentence(string source, string target, int id, double pr)
         {
             m_source = source;
             m_target = new List<TargetSentence>();
@@ -34,32 +42,51 @@ namespace TheTranslator
             m_id = id;
             m_countInDB = 1;
             
-        }
+        }*/
 
         public Sentence(string source, int id)
         {
+            string cleanedSourceFromPsik = rxPsik.Replace(source, "");
             m_target = new List<TargetSentence>();
-            m_source = source;
+            m_source = cleanedSourceFromPsik;
             m_id = id;
             m_countInDB = 0;
+
+            MatchCollection mc = rxPsik.Matches(source);
+            m_psikLocations = new int[mc.Count];
+            for (int i = 0; i < mc.Count; i++)
+            {
+                m_psikLocations[i] = mc[i].Index;
+            }
         }
 
         public List<TargetSentence> getTopN()
         {
-            int n = N_FOR_TOPN;
+            // assamption, there is at least one translation.
+
             List<TargetSentence> top = new List<TargetSentence>();
-            if(m_target.Count==1)
-            {
-                top.Add(m_target[0]);
-                return top;
-            }
+
             foreach (var item in m_target) // items sorted by count  
-            {                
-                if (top.Count == 0 || (n > 0 && item.m_count > MINIMUM_TOPN_OPTION_COUNT))
-                    top.Add(item);
-                else
+            {       
+                if (top.Count > N_FOR_TOPN)
                     return top;
-                n--;
+
+                if (item.m_count < MINIMUM_TOPN_OPTION_COUNT)
+                    continue;
+
+                top.Add(item);
+            }
+
+            // if no perfect translation were found, 
+            // enter translations without the minimum count check, it might help.
+            if (top.Count==0)
+            {
+                foreach (var item in m_target)
+                {
+                    if (top.Count > N_FOR_TOPN)
+                        return top;
+                    top.Add(item);
+                }
             }
             return top;
         }
@@ -70,9 +97,9 @@ namespace TheTranslator
             for (int i = 0; i < m_target.Count; i++)
             {
                 TargetSentence sen = m_target[i];
-                if (sen.m_translation.Equals(target))
+                if (sen.m_translation==target)
                 {
-                    int count = sen.m_count + 1;
+                    //int count = sen.m_count + 1;
                     sen.m_count++;
                     sen.m_pr = sen.m_count / (double)m_countInDB;
                     return;

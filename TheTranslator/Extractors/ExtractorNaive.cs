@@ -88,14 +88,14 @@ namespace TheTranslator
 
         }
 
-        private bool chunkTrans(string source, int count, out Sentence terget)
+        private bool chunkTrans(string source, int count, out Sentence target)
         {
             if (count == 1)
             {
-                terget = getWordTranslation(source);
+                target = getWordTranslation(source);
                 return true;
             }
-            return m_allSen.TryGetValue(source, out terget);
+            return m_allSen.TryGetValue(source, out target);
         }
 
         private List<List<Sentence>> chunksTrans(string source, string[] splitSource)

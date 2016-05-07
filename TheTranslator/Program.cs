@@ -26,7 +26,7 @@ namespace TheTranslator
         {
             Tester t = new Tester();
             t.InitWithDistance("Z:");
-            t.testSentenceDistanceAndPermutations("אאבזר דגעדגעדעדגע");
+            t.testLargeDataBase(@"Z:\Len4\Downloaded.he", @"Z:\Len4\translated.he");
         }
     }
 }
