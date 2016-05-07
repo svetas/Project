@@ -48,9 +48,13 @@ namespace TheTranslator
         public virtual bool build(ref Statistics stats)
         {
             // check if all needed files exists
-            if (!File.Exists(m_dataPath + @"/DownloadedFullTrain.en-he.low.he") ||
-                !File.Exists(m_dataPath + @"/DownloadedFullTrain.en-he.low.en") ||
-                !File.Exists(m_dataPath + @"/GoogleTranslateWords.txt"))
+            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.low.he"))
+                return false;
+
+            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.low.en"))
+                return false;
+
+            if (!File.Exists(m_dataPath + @"\GoogleTranslateWords.txt"))
                 return false;
             //
             StreamReader soReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.low.he");
@@ -82,7 +86,7 @@ namespace TheTranslator
                         Trace.WriteLine(linesCounter);
                     }
                     linesCounter++;
-                    if (linesCounter >= 100000) break;
+                    if (linesCounter >= 600000) break;
 
                     //sourceLine = rxRemovePsik.Replace(sourceLine, " ");
                     sourceLine = rxRemoveSpace.Replace(sourceLine, " ");

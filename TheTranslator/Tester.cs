@@ -33,7 +33,7 @@ namespace TheTranslator
             m_stats = new DistanceStatistics();
             m_extractor = new ExtractorNaive(path);
             m_extractor.build(ref m_stats);
-            m_extractor.Enhance();
+            //m_extractor.Enhance();
             return true;
         }
         public string testSentenceDistanceAndPermutations(string item)

@@ -25,8 +25,8 @@ namespace TheTranslator
         public static void test2()
         {
             Tester t = new Tester();
-            t.InitWithDistance("Z:");
-            t.testLargeDataBase(@"Z:\Len4\Downloaded.he", @"Z:\Len4\translated.he");
+            t.InitWithDistance(@"Z:\40000wordsNoPsik");
+            t.testLargeDataBase(@"Z:\40000wordsNoPsik\Len4\Downloaded.low.he", @"Z:\40000wordsNoPsik\Len4\translated.low.he");
         }
     }
 }
