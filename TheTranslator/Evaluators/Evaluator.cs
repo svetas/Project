@@ -8,6 +8,8 @@ namespace TheTranslator
 {
     public abstract class Evaluator
     {
+
+        // test
         protected Statistics m_stats;
 
         protected Evaluator(Statistics stats)
