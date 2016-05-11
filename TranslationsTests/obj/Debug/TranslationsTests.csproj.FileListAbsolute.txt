@@ -40,3 +40,12 @@ C:\Users\itskovic\Documents\GitHub\Project\TranslationsTests\bin\Debug\Microsoft
 C:\Users\itskovic\Documents\GitHub\Project\TranslationsTests\obj\Debug\TranslationsTests.csprojResolveAssemblyReference.cache
 C:\Users\itskovic\Documents\GitHub\Project\TranslationsTests\obj\Debug\TranslationsTests.dll
 C:\Users\itskovic\Documents\GitHub\Project\TranslationsTests\obj\Debug\TranslationsTests.pdb
+C:\Git\Project\TranslationsTests\obj\Debug\TranslationsTests.csprojResolveAssemblyReference.cache
+C:\Git\Project\TranslationsTests\obj\Debug\TranslationsTests.dll
+C:\Git\Project\TranslationsTests\obj\Debug\TranslationsTests.pdb
+C:\Git\Project\TranslationsTests\bin\Debug\TranslationsTests.dll
+C:\Git\Project\TranslationsTests\bin\Debug\TranslationsTests.pdb
+C:\Git\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Git\Project\TranslationsTests\bin\Debug\TheTranslator.exe
+C:\Git\Project\TranslationsTests\bin\Debug\TheTranslator.pdb
+C:\Git\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
