@@ -163,7 +163,7 @@ namespace BLEUevaluator
         // will contain bleu1, bleu2, bleu3, bleu4, brevity penalty 
         public double score(int[] suffStats, double[] allResults)
         {
-            if (!(suffStats.Length == N * 2 + 1)) {
+            if (!(suffStats.Length == (N * 2) + 1)) {
                 Console.WriteLine("BLEU sufficient stats must be of length N*2+1");
                 throw new Exception();
             }
@@ -172,7 +172,7 @@ namespace BLEUevaluator
             double hypWords = getAttemptedNgrams(suffStats, 0);
             if (hypWords < refWords)
             {
-                brevityPenalty = Math.Exp(1.0 - refWords / hypWords);
+                brevityPenalty = Math.Exp(1.0 - (refWords / hypWords));
             }
             else
             {
@@ -205,20 +205,20 @@ namespace BLEUevaluator
                 {
                     iscore = 0.0;
                     if (verbosity >= 1)
-                        Console.WriteLine("jBLEU: "+ (j+1) +"-grams: raw 0/0 = 0 %%");
+                        Console.WriteLine("BLEU: "+ (j+1) +"-grams: raw 0/0 = 0 %%");
                 }
                 else if (matchingNgramsJ == 0)
                 {
                     smooth *= 2;
                     double smoothedPrecision = 1.0 / (smooth * attemptedNgramsJ);
                     iscore = Math.Log(smoothedPrecision);
-                    if (verbosity >= 1) Console.WriteLine("jBLEU: "+ j + 1 + "-grams: "+ matchingNgramsJ + "/"+ attemptedNgramsJ + " = "+ smoothedPrecision * 100 + " %% (smoothed) :: raw = "+ matchingNgramsJ / (double)attemptedNgramsJ * 100 + " %%");
+                    if (verbosity >= 1) Console.WriteLine("BLEU: "+ j + 1 + "-grams: "+ matchingNgramsJ + "/"+ attemptedNgramsJ + " = "+ smoothedPrecision * 100 + " %% (smoothed) :: raw = "+ matchingNgramsJ / (double)attemptedNgramsJ * 100 + " %%");
                 }
                 else
                 {
                     double precisionAtJ = matchingNgramsJ / attemptedNgramsJ;
                     iscore = Math.Log(precisionAtJ);
-                    if (verbosity >= 1) Console.WriteLine("jBLEU: "+ j + 1 + "-grams: "+ matchingNgramsJ + "/"+ attemptedNgramsJ + " = " + precisionAtJ * 100 + " %% (unsmoothed)");
+                    if (verbosity >= 1) Console.WriteLine("BLEU: "+ j + 1 + "-grams: "+ matchingNgramsJ + "/"+ attemptedNgramsJ + " = " + precisionAtJ * 100 + " %% (unsmoothed)");
                 }
                 // TODO: Allow non-uniform weights instead of just the "baseline" 
                 // 1/4 from Papenini 

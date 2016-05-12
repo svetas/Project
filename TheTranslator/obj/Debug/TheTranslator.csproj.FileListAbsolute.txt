@@ -48,3 +48,5 @@ C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator
 C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.Properties.Resources.resources
 C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator.csproj.GenerateResource.Cache
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
+D:\Projects\Project\TheTranslator\bin\Debug\BLEUevaluator.exe
+D:\Projects\Project\TheTranslator\bin\Debug\BLEUevaluator.pdb

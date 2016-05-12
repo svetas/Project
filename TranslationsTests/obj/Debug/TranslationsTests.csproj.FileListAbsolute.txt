@@ -49,3 +49,5 @@ C:\Git\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.U
 C:\Git\Project\TranslationsTests\bin\Debug\TheTranslator.exe
 C:\Git\Project\TranslationsTests\bin\Debug\TheTranslator.pdb
 C:\Git\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+D:\Projects\Project\TranslationsTests\bin\Debug\BLEUevaluator.exe
+D:\Projects\Project\TranslationsTests\bin\Debug\BLEUevaluator.pdb

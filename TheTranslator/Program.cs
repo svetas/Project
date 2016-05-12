@@ -1,10 +1,10 @@
-﻿using BLEUevaluator;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BLEUevaluator;
 
 namespace TheTranslator
 {
@@ -41,11 +41,12 @@ namespace TheTranslator
             List<List<string>> refs = new List<List<string>>();
             refs.Add("This is the first reference sentence .".Split(' ').ToList());
             refs.Add("This is the second reference sentence .".Split(' ').ToList());
-
+            refs.Add("This is an hypothesis sentence .".Split(' ').ToList());
             bleu.stats(hyp, refs, result);
 
             Console.WriteLine(string.Join(",", result));
             Console.WriteLine(bleu.score(result));
+            Console.ReadKey();
         }
     }
 }

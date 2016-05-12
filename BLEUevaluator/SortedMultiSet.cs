@@ -25,6 +25,7 @@ namespace BLEUevaluator
         {
             get
             {
+                if (!_dict.ContainsKey(key)) return 0;
                 return _dict[key];
             } 
             set
