@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheTranslator.Evaluators;
+using TheTranslator.Extractors;
 
 namespace TheTranslator
 {
@@ -13,7 +14,7 @@ namespace TheTranslator
         private Extractor m_extractor;
         private Statistics m_stats;
 
-        public bool Init(string path)
+        /*public bool Init(string path)
         {
             try
             {
@@ -26,14 +27,14 @@ namespace TheTranslator
             {
                 return false;
             }
-        }
+        }*/
 
         public bool InitWithDistance(string path)
         {
-            m_stats = new DistanceStatistics();
-            m_extractor = new ExtractorNaive(path);
-            m_extractor.build(ref m_stats);
-            //m_extractor.Enhance();
+           // m_stats = new DistanceStatistics();
+            m_extractor = new ExtractorDirect(path);
+            m_extractor.build();
+            m_extractor.Enhance();
             return true;
         }
         public string testSentenceDistanceAndPermutations(string item)
@@ -111,17 +112,18 @@ namespace TheTranslator
         }*/
 
 
-        public bool testExtractor()
+       /* public bool testExtractor()
         {
             Extractor e = new ExtractorNaive(@"C:\studies\project\DB");
             return e.build(ref m_stats);
 
-        }
+        }*/
         public bool testLargeDataBase(string testPath,string outputPath)
         {
             // using sveta's implementations
             StreamWriter sw = new StreamWriter(outputPath);
             Combiner c = new CombinerNaive();
+            SeperatingCombiner sc = new SeperatingCombiner(m_extractor);
             Evaluator EV = new EvaluatorNaive((DistanceStatistics)m_stats);
             int total = 0;
             int counter = 0;
@@ -133,15 +135,29 @@ namespace TheTranslator
                 counter = 0;
                 total++;
 
-                List<List<Sentence>> sentences = m_extractor.extractTransParts(item);
-                List<TranslationOption> transOptions = c.combine(sentences, item);
-                trans = EV.GetBestTranslation(transOptions);
-                
-                if (trans == null || trans.Length == 0)
+                //List<List<Sentence>> sentences = m_extractor.extractTransParts(item);
+                //List<TranslationOption> transOptions = c.combine(sentences, item);       
+                //trans = EV.GetBestTranslation(transOptions);
+
+                trans = m_extractor.ExtractExactTranslation(item);
+                if (trans=="")
                 {
-                    sw.WriteLine("UNK");
+                    trans = sc.SeperateTranslate(item, 2);
+                }
+                 if (trans == "")
+                {
+                    trans = sc.SeperateTranslate(item, 3);
+                }
+                 if (trans == "")
+                {
+                    trans = sc.SeperateTranslate(item, 4);
+                }
+                 if (trans == null || trans.Length == 0)
+                {
+                    sw.WriteLine("UNK UNK UNK UNK UNK");
                 }else 
                 {
+                    
                     sw.WriteLine(trans.TrimStart(' '));
                 }
             }
@@ -150,17 +166,15 @@ namespace TheTranslator
             return true;
         }
 
-        public void testExtractor2()
+       /* public void testExtractor2()
         {
             Extractor e = new ExtractorNaive(@"C:\studies\project\DB");
             e.build(ref m_stats);
             e.printTrans(e.extractTransParts("לא תודה"));
             e.printTrans(e.extractTransParts("שלום מה נשמע"));
+        }*/
 
-
-        }
-
-        public void testCombiner()
+        /*public void testCombiner()
         {
             Extractor e = new ExtractorNaive(@"C:\studies\project\DB");
             e.build(ref m_stats);
@@ -171,10 +185,10 @@ namespace TheTranslator
             c.combine(e.extractTransParts("שלום מה נשמע"), "שלום מה נשמע");
 
 
-        }
+        }*/
 
         
-        public void teastAll2()
+        /*public void teastAll2()
         {
             string path = @"C:\studies\project\DB";
             Extractor e = new ExtractorNaive(path);
@@ -224,11 +238,11 @@ namespace TheTranslator
             if (trans == null || trans.Length == 0)
                 trans = "fail:(";
             Console.WriteLine(trans);
-        }
+        }*/
 
 
 
-
+            /*
         public void teastAll3()
         {
             string path = @"C:\studies\project\DB";
@@ -245,7 +259,7 @@ namespace TheTranslator
             if (trans == null || trans.Length == 0)
                 trans = "fail:(";
             Console.WriteLine(trans);
-        }
+        }*/
 
         public bool testSentence(string item)
         {

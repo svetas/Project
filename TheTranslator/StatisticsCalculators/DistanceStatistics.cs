@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheTranslator.DataManager;
 
 namespace TheTranslator
 {
@@ -11,8 +12,20 @@ namespace TheTranslator
         //
         private const double DEFAULT_RANK = 0.01;
         //
+        DBManager dmbPairCount;
+        DBManager dmbTripleCount;
+        DBManager dmbSingleCount;
+
         Dictionary<string, Dictionary<string, int>[]> m_Statistics = new Dictionary<string, Dictionary<string, int>[]>();
         Dictionary<string, int> m_TargetGlobalCount = new Dictionary<string, int>();
+
+        public DistanceStatistics()
+        {
+            dmbPairCount = new DBManager();//@"Z:\tmp", "Pairs");
+            dmbTripleCount = new DBManager();//@"Z:\tmp", "Triple");
+            dmbSingleCount = new DBManager();//@"Z:\tmp", "Single");
+        }
+
         //      
         //
         public double GetRank(string original, string target, int range) 
@@ -126,7 +139,22 @@ namespace TheTranslator
         }
         public override void Insert(string target)
         {
-            string[] chunks = target.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] chunks = target.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+
+
+            if ((chunks.Length>=1) && (chunks.Length<=3))
+            {
+                dmbSingleCount.WriteData(target);
+            } else if (chunks.Length>3 && chunks.Length<=5)
+            {
+                dmbPairCount.WriteData(target);
+            } else
+            {
+                dmbTripleCount.WriteData(target);
+            }
+
+            /*
             List<int[]> sizes = new List<int[]>();
             int groupsNum = Math.Min(3,chunks.Length);
             int[] arr = new int[groupsNum];
@@ -159,7 +187,7 @@ namespace TheTranslator
                 // set all chunks into memory
                 string[] parts = chunksArr.ToArray();
                 AddArrayOfStrings(parts);
-            }
+            }*/
         }
     }
 }

@@ -1,64 +1,50 @@
-﻿using System;
+﻿using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using TheTranslator.DataManager;
+using TheTranslator.Extractors;
 
 namespace TheTranslator
 {
     public abstract class Extractor
-    {
-        // if a dictionary word already appears more times then this number,
-        // do not take the dictionary translations. - sometimes the dictionary is wrong.
+    { 
         private const int MIN_COMMON_MAKES_SKIP=2;
 
-
-
-        // map of a word to its' sentence, 
-        //protected Dictionary<string, Word> m_wordToSenMap;
-
-
-        // Every line in the training set is inserted here.
-        protected Dictionary<string, Sentence> m_allSen;
-
-        // ALL extended dictionary
-        protected Dictionary<string, Sentence> m_dic;
-
+        protected DBManager m_sentences;
         //path of the files.
         protected string m_dataPath;
-
-        //protected Dictionary<string, HashSet<string>> m_similarities;
 
         public abstract List<List<Sentence>> extractTransParts(string source);
 
         protected Extractor(string path)
         {
-            //m_wordToSenMap = new Dictionary<string, Word>();
-            m_allSen = new Dictionary<string, Sentence>();
             m_dataPath = path;
-            m_dic = new Dictionary<string, Sentence>();
-            //m_similarities = new Dictionary<string, HashSet<string>>();
+            m_sentences = new DBManager();
         }
 
-       
 
-        public virtual bool build(ref Statistics stats)
+        public virtual bool build()
         {
+            m_sentences.Reset();
             // check if all needed files exists
-            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.low.he"))
+            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.true.he"))
                 return false;
 
-            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.low.en"))
+            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.true.en"))
                 return false;
 
             if (!File.Exists(m_dataPath + @"\GoogleTranslateWords.txt"))
                 return false;
             //
-            StreamReader soReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.low.he");
-            StreamReader taReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.low.en");
+            StreamReader soReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.true.he");
+            StreamReader taReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.true.en");
             StreamReader dicReader = new StreamReader(m_dataPath + @"/GoogleTranslateWords.txt");
 
             int linesCounter = 0;
@@ -68,66 +54,42 @@ namespace TheTranslator
             
             string sourceLine = null;
             string targetLine = null;
-
-            Sentence sen;
-            bool isNew;
-            //string[] linePartsSo;
-
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
-                
-
                 // Read every line in each file
                 while ((sourceLine = soReader.ReadLine()) != null & (targetLine = taReader.ReadLine()) != null)
                 {
-                    // write progress
-                    if (linesCounter % 10000 == 0) { 
-                        Console.WriteLine(linesCounter);
-                        Trace.WriteLine(linesCounter);
-                    }
-                    linesCounter++;
-                    if (linesCounter >= 600000) break;
-
-                    //sourceLine = rxRemovePsik.Replace(sourceLine, " ");
-                    sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
-
-                    //targetLine = rxRemovePsik.Replace(targetLine, " ");
-                    targetLine = rxRemoveSpace.Replace(targetLine, " ");
-
-                    // Save all statistics here. (this is the english [[source]] language model)
-                    stats.Insert(targetLine);
-
-                    // Add all source sentences into a dictionary
-
-                    isNew = !m_allSen.TryGetValue(sourceLine, out sen);
-                    if (isNew)
+                    try
                     {
-                        sen = new Sentence(sourceLine, linesCounter);
-                        m_allSen.Add(sourceLine, sen);
-                    }
-
-                    // Add the target to the source that is in the dictionary
-                    sen.addTarget(targetLine);
-
-
-                    //-------------------------------------------- we want to avoid using Word --------------------
-                    /*linePartsSo = sourceLine.Split(new string[] { " ", "," }, StringSplitOptions.RemoveEmptyEntries);
-                    if (linePartsSo.Length == 0)
-                        continue;
-
-                    for (int i = 0; i < linePartsSo.Length; i++)
-                    {
-                        string linePart = linePartsSo[i];
-                        Word word;
-                        bool isNewWord = !m_wordToSenMap.TryGetValue(linePart, out word);
-                        if (isNewWord)
+                        // write progress
+                        if (linesCounter % 10000 == 0)
                         {
-                            word = new Word(linePart);
-                            m_wordToSenMap.Add(linePart, word);
+                            Console.WriteLine(linesCounter + " ,Time took: " + stopwatch.Elapsed);
+                            Trace.WriteLine(linesCounter + " ,Time took: " + stopwatch.Elapsed);
+                            stopwatch.Restart();
                         }
-                        word.addSentence(sen);
-                    }*/
-                    //--------------------------------------------
+                        linesCounter++;
+                        //if (linesCounter == 1367)
+                        //    Console.Beep();
+                        if (linesCounter == 10000) break;
+
+                        sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
+                        targetLine = rxRemoveSpace.Replace(targetLine, " ");
+
+                        // Save all statistics here. (this is the english [[source]] language model)
+                        //stats.Insert(targetLine);
+                        //stats.Insert(sourceLine);
+                        m_sentences.WriteSet("TargetSentences",targetLine);
+                        m_sentences.WriteSet("SourceSentences",sourceLine);
+                        m_sentences.WriteSet(sourceLine, targetLine);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("could not remember " + sourceLine + " -> " + targetLine);
+                    }
                 }
 
                 if ((sourceLine == null && targetLine != null) || (sourceLine != null && targetLine == null))
@@ -135,50 +97,21 @@ namespace TheTranslator
                     Console.WriteLine("!!!!!the DB files have diff length!!!!!");
                 }
 
-                foreach (var item in m_allSen)
-                {
-                    item.Value.sortAmdUpdatePr();
-                }
-
                 // Read auxilery dictionary
                 string[] allWords = dicReader.ReadToEnd().Split(new string[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
+                int counterDictionary = 0;
                 foreach (var line in allWords)
                 {
-                    string[] lineData = line.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    string sWord = lineData[0];
-                    string tWord = lineData[2];
-
-                    tWord = tWord.ToLower();
-                    if (!m_dic.ContainsKey(sWord))
-                        m_dic.Add(sWord, new Sentence(sWord, 0));
-                    m_dic[sWord].addTarget(tWord);
-
-                    /*if (!m_wordToSenMap.ContainsKey(sWord))
-                        continue;
-                    else //WORD IS IN THE DB
+                    if (counterDictionary % 1000 == 0)
                     {
-                        List<TargetSentence> lts = new List<TargetSentence>();
-                        TargetSentence ts;
-                        if (m_allSen.ContainsKey(sWord)) //word apears as a sentence
-                        {
-                            Sentence oneWordSen = m_allSen[sWord];
-                            lts = oneWordSen.getTopN();
-                            int countWordAp = lts[0].m_count;
-                            if (countWordAp > MIN_COMMON_MAKES_SKIP)
-                            {
-                                m_wordToSenMap[sWord].m_translation = lts;
-                                continue;
-                            }
+                        Console.WriteLine(counterDictionary + "/" + allWords.Length);
+                    }
+                    counterDictionary++;
 
-                        }
-                        ts = new TargetSentence(tWord, 1, Sentence.m_gradeForUnkown, false);
-                        lts.Add(ts);
-
-                        m_wordToSenMap[sWord].m_translation = lts;
-                    }*/
-
-                    //UpdateLevenshteinSimilarities();
+                    string[] lineData = line.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    m_sentences.WriteSet(lineData[0], lineData[2]);
                 }
+                
             }
             catch (Exception e)
             {
@@ -195,6 +128,231 @@ namespace TheTranslator
 
             return true;
         }
+
+        internal void Enhance()
+        {
+            SeperatingCombiner sc = new SeperatingCombiner(this);
+            IEnumerable<HashEntry> entries = m_sentences.GetAllValues("SourceSentences");
+            foreach (var item in entries)
+            {
+                string key = item.Name.ToString().Substring(1);
+
+                string[] parts = key.Split(' ');
+
+                List<List<string>> options = sc.GetPermuationsToGroups(parts, 2,false,false);
+
+                foreach (var option in options)
+                {
+                    var opt1Ex = m_sentences.GetSet(option[0]);
+                    var opt2Ex = m_sentences.GetSet(option[1]);
+
+                    if (opt1Ex.Length>0 && opt2Ex.Length==0)
+                    {
+                        int best = 0;
+                        string bestStr = "";
+                        foreach (var sx in opt1Ex)
+                        {
+                            if ((int)sx.Value > best)
+                            {
+                                best = (int)sx.Value;
+                                bestStr = sx.Name;
+                            }
+                        }
+                        if (best>3)
+                        {
+                            m_sentences.WriteSet(option[1], bestStr);
+                        }
+                    }
+
+                }
+
+                Console.WriteLine(item.Name);
+            }
+        }
+
+        private void playMario()
+        {
+            Console.Beep(659, 125);
+            Console.Beep(659, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(523, 125);
+            Console.Beep(659, 125);
+            Thread.Sleep(125);
+            Console.Beep(784, 125);
+            Thread.Sleep(375);
+            Console.Beep(392, 125);
+            Thread.Sleep(375);
+            Console.Beep(523, 125);
+            Thread.Sleep(250);
+            Console.Beep(392, 125);
+            Thread.Sleep(250);
+            Console.Beep(330, 125);
+            Thread.Sleep(250);
+            Console.Beep(440, 125);
+            Thread.Sleep(125);
+            Console.Beep(494, 125);
+            Thread.Sleep(125);
+            Console.Beep(466, 125);
+            Thread.Sleep(42);
+            Console.Beep(440, 125);
+            Thread.Sleep(125);
+            Console.Beep(392, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(125);
+            Console.Beep(784, 125);
+            Thread.Sleep(125);
+            Console.Beep(880, 125);
+            Thread.Sleep(125);
+            Console.Beep(698, 125);
+            Console.Beep(784, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(125);
+            Console.Beep(523, 125);
+            Thread.Sleep(125);
+            Console.Beep(587, 125);
+            Console.Beep(494, 125);
+            Thread.Sleep(125);
+            Console.Beep(523, 125);
+            Thread.Sleep(250);
+            Console.Beep(392, 125);
+            Thread.Sleep(250);
+            Console.Beep(330, 125);
+            Thread.Sleep(250);
+            Console.Beep(440, 125);
+            Thread.Sleep(125);
+            Console.Beep(494, 125);
+            Thread.Sleep(125);
+            Console.Beep(466, 125);
+            Thread.Sleep(42);
+            Console.Beep(440, 125);
+            Thread.Sleep(125);
+            Console.Beep(392, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(125);
+            Console.Beep(784, 125);
+            Thread.Sleep(125);
+            Console.Beep(880, 125);
+            Thread.Sleep(125);
+            Console.Beep(698, 125);
+            Console.Beep(784, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(125);
+            Console.Beep(523, 125);
+            Thread.Sleep(125);
+            Console.Beep(587, 125);
+            Console.Beep(494, 125);
+            Thread.Sleep(375);
+            Console.Beep(784, 125);
+            Console.Beep(740, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(42);
+            Console.Beep(622, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(415, 125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Thread.Sleep(125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Console.Beep(587, 125);
+            Thread.Sleep(250);
+            Console.Beep(784, 125);
+            Console.Beep(740, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(42);
+            Console.Beep(622, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(698, 125);
+            Thread.Sleep(125);
+            Console.Beep(698, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(625);
+            Console.Beep(784, 125);
+            Console.Beep(740, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(42);
+            Console.Beep(622, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(415, 125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Thread.Sleep(125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Console.Beep(587, 125);
+            Thread.Sleep(250);
+            Console.Beep(622, 125);
+            Thread.Sleep(250);
+            Console.Beep(587, 125);
+            Thread.Sleep(250);
+            Console.Beep(523, 125);
+            Thread.Sleep(1125);
+            Console.Beep(784, 125);
+            Console.Beep(740, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(42);
+            Console.Beep(622, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(415, 125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Thread.Sleep(125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Console.Beep(587, 125);
+            Thread.Sleep(250);
+            Console.Beep(784, 125);
+            Console.Beep(740, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(42);
+            Console.Beep(622, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(698, 125);
+            Thread.Sleep(125);
+            Console.Beep(698, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(625);
+            Console.Beep(784, 125);
+            Console.Beep(740, 125);
+            Console.Beep(698, 125);
+            Thread.Sleep(42);
+            Console.Beep(622, 125);
+            Thread.Sleep(125);
+            Console.Beep(659, 125);
+            Thread.Sleep(167);
+            Console.Beep(415, 125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Thread.Sleep(125);
+            Console.Beep(440, 125);
+            Console.Beep(523, 125);
+            Console.Beep(587, 125);
+            Thread.Sleep(250);
+            Console.Beep(622, 125);
+            Thread.Sleep(250);
+            Console.Beep(587, 125);
+            Thread.Sleep(250);
+            Console.Beep(523, 125);
+            Thread.Sleep(625);
+        }
+        public abstract bool TranslationExists(string source);
+        public abstract string ExtractExactTranslation(string source);
 
         /*private void UpdateLevenshteinSimilarities()
         {
@@ -285,10 +443,11 @@ namespace TheTranslator
             // Step 7
             return d[n, m];
         }*/
-
-
-        public Sentence getWordTranslation(string word)
+        /*public Sentence getWordTranslation(string word)
         {
+            string isnb = m_sentences.GetSet(word);
+
+
             if (m_allSen.ContainsKey(word))
             {
                 return m_allSen[word];
@@ -324,10 +483,9 @@ namespace TheTranslator
             lts = new List<TargetSentence>();
             lts.Add(new TargetSentence(word, 1, Sentence.m_gradeForUnkown, false));
             ans.addTargetList(lts, 1);
-            return ans;*/
-        }
-
-        public bool Enhance()
+            return ans;
+        }*/
+        /*public bool Enhance()
         {
             StreamReader soReader = new StreamReader(m_dataPath + @"\enhancmentSet.he.txt");
             StreamReader taReader = new StreamReader(m_dataPath + @"\enhancmentSet.en.txt");
@@ -391,8 +549,8 @@ namespace TheTranslator
                 Console.WriteLine("Load done!");
             }
             return true;
-        }     
-        public void printTrans(List<List<Sentence>> trans)
+        }    */
+        /*public void printTrans(List<List<Sentence>> trans)
         {
             Console.WriteLine("");
             Console.WriteLine("START");
@@ -419,6 +577,6 @@ namespace TheTranslator
             }
             Console.Write("End");
             Console.Write(" ");
-        }
+        }*/
     }
 }

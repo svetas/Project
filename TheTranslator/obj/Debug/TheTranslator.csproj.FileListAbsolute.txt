@@ -50,3 +50,16 @@ C:\Users\itskovic\Documents\GitHub\Project\TheTranslator\obj\Debug\TheTranslator
 D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.csprojResolveAssemblyReference.cache
 D:\Projects\Project\TheTranslator\bin\Debug\BLEUevaluator.exe
 D:\Projects\Project\TheTranslator\bin\Debug\BLEUevaluator.pdb
+D:\Projects\Project\TheTranslator\bin\Debug\EntityFramework.xml
+D:\Projects\Project\TheTranslator\bin\Debug\EntityFramework.SqlServer.xml
+D:\Projects\Project\TheTranslator\bin\Debug\EntityFramework.dll
+D:\Projects\Project\TheTranslator\bin\Debug\EntityFramework.SqlServer.dll
+D:\Projects\Project\TheTranslator\bin\Debug\StackExchange.Redis.dll
+D:\Projects\Project\TheTranslator\bin\Debug\StackExchange.Redis.xml
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Common.dll
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Interfaces.dll
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Redis.dll
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Text.dll
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Common.xml
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Redis.xml
+D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Text.xml

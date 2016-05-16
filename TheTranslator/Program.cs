@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLEUevaluator;
+using StackExchange.Redis;
 
 namespace TheTranslator
 {
@@ -12,25 +13,36 @@ namespace TheTranslator
     {
         static void Main()
         {
-            //test2();
-            TestBleu();
+            test2();
+            //TestBleu();
         }
 
-        public static void test()
+        /*public static void test()
         {
             Tester t = new Tester();
             //t.Init(@"C:\studies\project\DB\Big\17_new");
             //t.testLenX(@"C:\studies\project\DB\Big\17_new", 4);
             t.Init(@"Z:");
             t.testLenX(@"Z:", 4);
-        }
+        }*/
+
         public static void test2()
         {
             Tester t = new Tester();
-            t.InitWithDistance(@"Z:\40000wordsNoPsik");
-            t.testLargeDataBase(@"Z:\40000wordsNoPsik\Len4\Downloaded.low.he", @"Z:\40000wordsNoPsik\Len4\translated.low.he");
+            t.InitWithDistance(@"Z:");
+            //t.InitWithDistance(@"Z:\40000wordsNoPsik");
+            t.testLargeDataBase(@"Z:\DownloadedFullTest.en-he.true.he", @"Z:\OurTranslated.en");
         }
 
+        public static void testRedis()
+        {
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
+            IDatabase db = redis.GetDatabase();
+            string value = "abcdefg";
+            db.StringSet("mykey", value);
+            value = db.StringGet("mykey");
+            Console.WriteLine(value); // writes: "abcdefg"
+        }
         public static void TestBleu()
         {
             BLEU bleu = new BLEU();

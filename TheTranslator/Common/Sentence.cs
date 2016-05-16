@@ -90,22 +90,26 @@ namespace TheTranslator
             }
             return top;
         }
-
-        public void addTarget(string target)
+        public void addTarget(string target,int count)
         {
-            m_countInDB++;
+            m_countInDB += count;
             for (int i = 0; i < m_target.Count; i++)
             {
                 TargetSentence sen = m_target[i];
-                if (sen.m_translation==target)
+                if (sen.m_translation == target)
                 {
                     //int count = sen.m_count + 1;
-                    sen.m_count++;
+                    sen.m_count+= count;
                     sen.m_pr = sen.m_count / (double)m_countInDB;
                     return;
-                }   
+                }
             }
-            m_target.Add(new TargetSentence(target, 1, (1/(double)m_countInDB)));
+            m_target.Add(new TargetSentence(target, count, (count / (double)m_countInDB)));
+        }
+
+        public void addTarget(string target)
+        {
+            addTarget(target, 1);
         }
 
         public void addTargetList(List<TargetSentence> target, int count)

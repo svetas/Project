@@ -16,7 +16,10 @@ namespace TheTranslator
         private const int m_MAX_SPLIT_NUM_ALLOWED = 12;
 
         public ExtractorNaive(string path) : base(path) { }
-
+        public override string ExtractExactTranslation(string source)
+        {
+            return "";
+        }
         // 
         public override List<List<Sentence>> extractTransParts(string source)
         {
@@ -51,7 +54,10 @@ namespace TheTranslator
 
             return ans;
         }
-
+        public override bool TranslationExists(string source)
+        {
+            return true;
+        }
         // Get the translation possibilies of the source
         private List<List<Sentence>> fullTransOrTwoChunks(string source, string[] splitSource)
         {
