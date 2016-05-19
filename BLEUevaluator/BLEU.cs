@@ -18,6 +18,19 @@ namespace BLEUevaluator
         {
             this.verbosity = verbosity;
         }
+        public static double Evaluate(string hypo, List<string> reference)
+        {
+            BLEU bleu = new BLEU();
+            int[] result = new int[getSuffStatCount()];
+            List<string> hyp = hypo.Split(' ').ToList();
+            List<List<string>> refs = new List<List<string>>();
+            foreach (var refe in reference)
+            {
+                refs.Add(refe.Split(' ').ToList());
+            }
+            bleu.stats(hyp, refs, result);
+            return bleu.score(result);
+        }
 
         public static int pickReference(List<string> hyp, List<List<string>> refs, int verbosity)
         {

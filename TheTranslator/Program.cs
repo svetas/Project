@@ -13,7 +13,7 @@ namespace TheTranslator
     {
         static void Main()
         {
-            test2();
+            test3();
             //TestBleu();
         }
 
@@ -31,9 +31,14 @@ namespace TheTranslator
             Tester t = new Tester();
             t.InitWithDistance(@"Z:");
             //t.InitWithDistance(@"Z:\40000wordsNoPsik");
-            t.testLargeDataBase(@"Z:\DownloadedFullTest.en-he.true.he", @"Z:\OurTranslated.en");
+            t.testLargeDataBase(@"Z:\DownloadedFullTest.en-he.true.he", @"Z:\OurTranslatedafterEnhance.en");
         }
 
+        public static void test3()
+        {
+            Tester t = new Tester();
+            t.testMosesImprovment(@"Z:\DownloadedFullTest.en-he.true.he",@"Z:\MosesTranslated.en", @"Z:\MosesAfterImprovedByOur.en");
+        }
         public static void testRedis()
         {
             ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
@@ -49,15 +54,12 @@ namespace TheTranslator
 
             int[] result = new int[BLEU.getSuffStatCount()];
 
-            List<string> hyp = "This is a hypothesis sentence .".Split(' ').ToList();
-            List<List<string>> refs = new List<List<string>>();
-            refs.Add("This is the first reference sentence .".Split(' ').ToList());
-            refs.Add("This is the second reference sentence .".Split(' ').ToList());
-            refs.Add("This is an hypothesis sentence .".Split(' ').ToList());
-            bleu.stats(hyp, refs, result);
-
-            Console.WriteLine(string.Join(",", result));
-            Console.WriteLine(bleu.score(result));
+            string hyp = "This is a hypothesis sentence .";
+            List<string> refs = new List<string>();
+            refs.Add("This is the first reference sentence .");
+            refs.Add("This is the second reference sentence .");
+            refs.Add("This is an hypothesis sentence .");
+            Console.WriteLine(BLEU.Evaluate(hyp, refs));
             Console.ReadKey();
         }
     }

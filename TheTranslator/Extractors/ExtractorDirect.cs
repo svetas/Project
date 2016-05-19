@@ -44,7 +44,7 @@ namespace TheTranslator.Extractors
             return m_sentences.CheckGet("SourceSentences", source);
         }
 
-        public override string ExtractExactTranslation(string source)
+        public override string ExtractExactTranslation(string source,int minCount)
         {
             Regex rxSpace = new Regex(@"\s\s+");
             source = rxSpace.Replace(source, " ");
@@ -62,8 +62,10 @@ namespace TheTranslator.Extractors
                     bestTranslation = item.Name.ToString().Substring(1);
                 }
             }
-            
-            return bestTranslation;
+            if (bestCounted > minCount)
+                return bestTranslation;
+            else
+                return "";
         }
     }
 }

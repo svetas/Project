@@ -23,6 +23,8 @@ namespace TheTranslator
 
         public abstract List<List<Sentence>> extractTransParts(string source);
 
+        private HashSet<string> m_sourceSentences = new HashSet<string>();
+
         protected Extractor(string path)
         {
             m_dataPath = path;
@@ -73,7 +75,7 @@ namespace TheTranslator
                         linesCounter++;
                         //if (linesCounter == 1367)
                         //    Console.Beep();
-                        if (linesCounter == 10000) break;
+                        //if (linesCounter == 10000) break;
 
                         sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
                         targetLine = rxRemoveSpace.Replace(targetLine, " ");
@@ -81,9 +83,11 @@ namespace TheTranslator
                         // Save all statistics here. (this is the english [[source]] language model)
                         //stats.Insert(targetLine);
                         //stats.Insert(sourceLine);
-                        m_sentences.WriteSet("TargetSentences",targetLine);
-                        m_sentences.WriteSet("SourceSentences",sourceLine);
-                        m_sentences.WriteSet(sourceLine, targetLine);
+                        //m_sentences.WriteSet("TargetSentences",targetLine);
+                        //m_sentences.WriteSet("SourceSentences",sourceLine);
+                        if (!m_sourceSentences.Contains(sourceLine))
+                            m_sourceSentences.Add(sourceLine);
+                        //m_sentences.WriteSet(sourceLine, targetLine);
 
                     }
                     catch (Exception e)
@@ -91,6 +95,7 @@ namespace TheTranslator
                         Console.WriteLine("could not remember " + sourceLine + " -> " + targetLine);
                     }
                 }
+                return true;
 
                 if ((sourceLine == null && targetLine != null) || (sourceLine != null && targetLine == null))
                 {
@@ -131,43 +136,83 @@ namespace TheTranslator
 
         internal void Enhance()
         {
-            SeperatingCombiner sc = new SeperatingCombiner(this);
-            IEnumerable<HashEntry> entries = m_sentences.GetAllValues("SourceSentences");
-            foreach (var item in entries)
+            //SeperatingCombiner sc = new SeperatingCombiner(this);
+            //IEnumerable<HashEntry> entries = m_sentences.GetAllValues("SourceSentences");
+
+            int counter = 0;
+            int counterAdded = 0;
+            foreach (var source in m_sourceSentences)
             {
-                string key = item.Name.ToString().Substring(1);
-
-                string[] parts = key.Split(' ');
-
-                List<List<string>> options = sc.GetPermuationsToGroups(parts, 2,false,false);
-
-                foreach (var option in options)
+                Console.WriteLine("Enhance: " + counter++ + "/" + m_sourceSentences.Count + ",added: "+counterAdded);
+                string key = source.ToString();//.Substring(1);
+                string[] srcParts = key.Split(' ');
+                IEnumerable<HashEntry> correlatedTranslations = m_sentences.GetAllValues(key);
+                foreach (var target in correlatedTranslations)
                 {
-                    var opt1Ex = m_sentences.GetSet(option[0]);
-                    var opt2Ex = m_sentences.GetSet(option[1]);
+                    string value = target.Name.ToString().Substring(1);
 
-                    if (opt1Ex.Length>0 && opt2Ex.Length==0)
+                    string[] dstParts = value.Split(' ');
+                    if (dstParts.Length != srcParts.Length || dstParts.Length<2)
+                        continue;
+
+                    List<Tuple<string, string>> srcCombinedParts = CombineStringParts(srcParts);
+                    List<Tuple<string, string>> dstCombinedParts = CombineStringParts(dstParts);
+
+                    for (int i = 0; i < srcCombinedParts.Count; i++)
                     {
-                        int best = 0;
-                        string bestStr = "";
-                        foreach (var sx in opt1Ex)
-                        {
-                            if ((int)sx.Value > best)
+                        var srcopt1Ex = m_sentences.GetSet(srcCombinedParts[i].Item1);
+                        var srcopt2Ex = m_sentences.GetSet(srcCombinedParts[i].Item2);
+                        var dstopt1Ex = m_sentences.GetSet(dstCombinedParts[i].Item1);
+                        var dstopt2Ex = m_sentences.GetSet(dstCombinedParts[i].Item2);
+
+                        if (m_sentences.CheckGet(srcCombinedParts[i].Item1,dstCombinedParts[i].Item1)) {
+                            if ((int)m_sentences.GetSet(srcCombinedParts[i].Item1, dstCombinedParts[i].Item1) > 3)
                             {
-                                best = (int)sx.Value;
-                                bestStr = sx.Name;
+                                m_sentences.WriteSet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2);
+                                counterAdded++;
                             }
                         }
-                        if (best>3)
+                        if (m_sentences.CheckGet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2))
                         {
-                            m_sentences.WriteSet(option[1], bestStr);
+                            if ((int)m_sentences.GetSet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2) > 3)
+                            {
+                                m_sentences.WriteSet(srcCombinedParts[i].Item1, dstCombinedParts[i].Item1);
+                                counterAdded++;
+                            }
                         }
                     }
-
                 }
-
-                Console.WriteLine(item.Name);
             }
+            Console.WriteLine("Finished enhancing, added " + counterAdded + " new entries");
+        }
+
+        private List<Tuple<string, string>> CombineStringParts(string[] srcParts)
+        {
+            List<Tuple<string, string>> parts = new List<Tuple<string, string>>();
+            StringBuilder Part1;
+            StringBuilder Part2;
+
+            for (int limit = 1; limit < srcParts.Length; limit++)
+            {
+                Part1 = new StringBuilder();
+                Part2 = new StringBuilder();
+                for (int i = 0; i < limit; i++)
+                {
+                    if (i != limit - 1)
+                        Part1.Append(srcParts[i]).Append(' ');
+                    else
+                        Part1.Append(srcParts[i]);
+                }
+                for (int i = limit; i < srcParts.Length; i++)
+                {
+                    if (i != srcParts.Length - 1)
+                        Part2.Append(srcParts[i]).Append(' ');
+                    else
+                        Part2.Append(srcParts[i]);
+                }
+                parts.Add(new Tuple<string, string>(Part1.ToString(), Part2.ToString()));
+            }
+            return parts;
         }
 
         private void playMario()
@@ -352,7 +397,7 @@ namespace TheTranslator
             Thread.Sleep(625);
         }
         public abstract bool TranslationExists(string source);
-        public abstract string ExtractExactTranslation(string source);
+        public abstract string ExtractExactTranslation(string source, int minCount);
 
         /*private void UpdateLevenshteinSimilarities()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TheTranslator.Evaluators;
 using TheTranslator.Extractors;
@@ -46,6 +47,60 @@ namespace TheTranslator
             string trans = EV.GetBestTranslation(transOptions);
             return trans;
         }
+
+        internal void testMosesImprovment(string source, string moses, string output)
+        {
+            m_extractor = new ExtractorDirect("");
+            StreamReader sr = new StreamReader(source);
+            StreamReader srM = new StreamReader(moses);
+            StreamWriter sw = new StreamWriter(output);
+            Regex rxHeb = new Regex(@"[א-ת]");
+            string trans;
+            int counter=0,total=0;
+
+            while (!sr.EndOfStream)
+            {
+                if (total % 100 == 0)
+                {
+                    Console.WriteLine(total + " updated: " + counter);
+                }
+                string lineM = srM.ReadLine();
+                string item = sr.ReadLine();
+                total++;
+                trans = m_extractor.ExtractExactTranslation(item,2);
+
+                if (trans == null || trans.Length == 0)
+                {
+                    sw.WriteLine(lineM);
+                }
+                else if (rxHeb.IsMatch(lineM))
+                {
+                    sw.WriteLine(trans);
+                    counter++;
+                }
+                else if (lineM.Split(' ').Length > trans.Split(' ').Length)
+                {
+                    sw.WriteLine(lineM);
+                } else
+                {
+                    sw.WriteLine(trans);
+                    counter++;
+                }
+                    /*else if (trans.Split(' ').Length>3) {
+                        sw.WriteLine(trans);
+                        counter++;
+                    } else
+                    {
+                        sw.WriteLine(lineM);
+                    }*/
+                }
+            Console.WriteLine("We improved " + counter + "/" + total + ", thats " + counter / (double)total+"!");
+            sw.Close();
+            sr.Close();
+            srM.Close();
+            Console.ReadKey();
+        }
+
         public void testLenX(string testFilesPath, int x)
         {
             Combiner c = new CombinerNaive();
@@ -139,7 +194,7 @@ namespace TheTranslator
                 //List<TranslationOption> transOptions = c.combine(sentences, item);       
                 //trans = EV.GetBestTranslation(transOptions);
 
-                trans = m_extractor.ExtractExactTranslation(item);
+                trans = m_extractor.ExtractExactTranslation(item,0);
                 if (trans=="")
                 {
                     trans = sc.SeperateTranslate(item, 2);

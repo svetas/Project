@@ -16,7 +16,7 @@ namespace TheTranslator
         private const int m_MAX_SPLIT_NUM_ALLOWED = 12;
 
         public ExtractorNaive(string path) : base(path) { }
-        public override string ExtractExactTranslation(string source)
+        public override string ExtractExactTranslation(string source, int minCount)
         {
             return "";
         }

@@ -65,7 +65,7 @@ namespace TheTranslator.Extractors
 
                         string translation;
                         if (translate)
-                            translation = m_extractor.ExtractExactTranslation(chunkStr);
+                            translation = m_extractor.ExtractExactTranslation(chunkStr,0);
                         else
                             translation = chunkStr;
                         currentConnectedChunks.Add(translation);

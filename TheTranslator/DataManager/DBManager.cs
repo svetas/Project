@@ -12,11 +12,22 @@ namespace TheTranslator.DataManager
     {
         private ConnectionMultiplexer redis;
 
+        private static Lazy<ConfigurationOptions> configOptions
+                = new Lazy<ConfigurationOptions>(() =>
+                {
+                var configOptions = new ConfigurationOptions();
+                configOptions.EndPoints.Add("localhost");
+                configOptions.ClientName = "LeakyRedisConnection";
+                    configOptions.AllowAdmin = true;
+                configOptions.ConnectTimeout = 1000000;
+                configOptions.SyncTimeout = 1000000;
+                return configOptions;
+                });
 
         public DBManager()
         {
-            
-            redis = ConnectionMultiplexer.Connect("localhost,allowAdmin=true");
+            redis = ConnectionMultiplexer.Connect(configOptions.Value);
+            //redis = ConnectionMultiplexer.Connect("localhost,allowAdmin=true");
 
         }
         public void Reset()
@@ -44,6 +55,7 @@ namespace TheTranslator.DataManager
         public IEnumerable<HashEntry> GetAllValues(string key)
         {
             IDatabase db = redis.GetDatabase();
+            int co = (int)db.HashLength("k" + key);
             return db.HashGetAll("k"+key);
         }
 
@@ -57,6 +69,11 @@ namespace TheTranslator.DataManager
         {
             IDatabase db = redis.GetDatabase();
             return db.HashExists("k" + table, "k" + key);
+        }
+        public RedisValue GetSet(string table, string key)
+        {
+            IDatabase db = redis.GetDatabase();
+            return db.HashGet("k" + table, "k" + key);
         }
     }
 }
