@@ -63,3 +63,12 @@ D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Text.dll
 D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Common.xml
 D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Redis.xml
 D:\Projects\Project\TheTranslator\bin\Debug\ServiceStack.Text.xml
+D:\Projects\Project\TheTranslator\bin\Debug\MathNet.Numerics.dll
+D:\Projects\Project\TheTranslator\bin\Debug\MathNet.Numerics.xml
+D:\Projects\Project\TheTranslator\bin\Debug\RDotNet.dll
+D:\Projects\Project\TheTranslator\bin\Debug\DynamicInterop.dll
+D:\Projects\Project\TheTranslator\bin\Debug\RDotNet.NativeLibrary.dll
+D:\Projects\Project\TheTranslator\bin\Debug\RDotNet.xml
+D:\Projects\Project\TheTranslator\bin\Debug\DynamicInterop.xml
+D:\Projects\Project\TheTranslator\bin\Debug\RDotNet.NativeLibrary.xml
+D:\Projects\Project\TheTranslator\obj\Debug\TheTranslator.GUI.Main.resources

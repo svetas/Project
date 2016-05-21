@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLEUevaluator;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TheTranslator.Evaluators;
 using TheTranslator.Extractors;
+using TheTranslator.ImproveMethods;
 
 namespace TheTranslator
 {
@@ -33,9 +35,9 @@ namespace TheTranslator
         public bool InitWithDistance(string path)
         {
            // m_stats = new DistanceStatistics();
-            m_extractor = new ExtractorDirect(path);
+            /*m_extractor = new ExtractorDirect(path);
             m_extractor.build();
-            m_extractor.Enhance();
+            m_extractor.Enhance();*/
             return true;
         }
         public string testSentenceDistanceAndPermutations(string item)
@@ -48,26 +50,226 @@ namespace TheTranslator
             return trans;
         }
 
-        internal void testMosesImprovment(string source, string moses, string output)
+        internal void CompareSystems(string reference, string system1, string system2)
         {
-            m_extractor = new ExtractorDirect("");
-            StreamReader sr = new StreamReader(source);
+            Console.WriteLine("Comparing systems 1#: " + system1 + " vs 2#: " + system2);
+            BLEU bleu = new BLEU();
+            StreamReader srSource = new StreamReader(reference);
+            StreamReader srSystemFirst = new StreamReader(system1);
+            StreamReader srSystemSecond = new StreamReader(system2);
+            StreamWriter signOutput = new StreamWriter(@"D:\tes\signTest.txt");
+            double firstBetter = 0;
+            double secondBetter = 0;
+            int counter = 0;
+            while (!srSource.EndOfStream)
+            {
+                string refe = srSource.ReadLine();
+                double bleuFirst = BLEU.Evaluate(srSystemFirst.ReadLine(), new List<string> { refe });
+                double bleuSecond = BLEU.Evaluate(srSystemSecond.ReadLine(), new List<string> { refe });
+                counter++;
+
+
+                if (bleuFirst > bleuSecond)
+                {
+                    firstBetter++;
+                    signOutput.WriteLine(-1);
+                } else if (bleuFirst < bleuSecond)
+                {
+                    secondBetter++;
+                    signOutput.WriteLine(1);
+                } else
+                {
+                    signOutput.WriteLine(0);
+                    firstBetter += 0.5;
+                    secondBetter += 0.5;
+                }
+
+            }
+            
+            Console.WriteLine("System "+ system1 + " is better then system "+ system2+ " with confidence of: " + SignTest.CalcConfidence((int)firstBetter, (int)firstBetter + (int)secondBetter));
+            Console.WriteLine("System "+ system1 + " is better then system "+ system2+ " with confidence of: " + SignTest.CalcConfidence((int)secondBetter, (int)firstBetter + (int)secondBetter));
+            srSource.Close();
+            srSystemFirst.Close();
+            srSystemSecond.Close();
+            signOutput.Close();
+        }
+
+
+        public int LevenshteinDistance(string s, string t)
+        {
+            int n = s.Length;
+            int m = t.Length;
+            int[,] d = new int[n + 1, m + 1];
+
+            // Step 1
+            if (n == 0)
+            {
+                return m;
+            }
+
+            if (m == 0)
+            {
+                return n;
+            }
+
+            // Step 2
+            for (int i = 0; i <= n; d[i, 0] = i++)
+            {
+            }
+
+            for (int j = 0; j <= m; d[0, j] = j++)
+            {
+            }
+
+            // Step 3
+            for (int i = 1; i <= n; i++)
+            {
+                //Step 4
+                for (int j = 1; j <= m; j++)
+                {
+                    // Step 5
+                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+
+                    // Step 6
+                    d[i, j] = Math.Min(
+                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                        d[i - 1, j - 1] + cost);
+                }
+            }
+            // Step 7
+            return d[n, m];
+        }
+
+
+
+        internal void testMosesImprovment(string sourceEn, string sourceHe, string moses, string output,ImprovementMethod improveMethod)
+        {
+            //while (true)
+            //{
+            StreamReader srEN = new StreamReader(sourceEn);
+            StreamReader srHe = new StreamReader(sourceHe);
             StreamReader srM = new StreamReader(moses);
             StreamWriter sw = new StreamWriter(output);
+            StreamWriter stats = new StreamWriter(@"D:\tes\stats.txt");
+            stats.WriteLine("bleuBetter,jaccardMosesOurs,levinstain,timeRepeated,lengthDifference");
             Regex rxHeb = new Regex(@"[א-ת]");
             string trans;
-            int counter=0,total=0;
+            int counter = 0, total = 0;
 
-            while (!sr.EndOfStream)
+            while (!srHe.EndOfStream)
             {
                 if (total % 100 == 0)
                 {
                     Console.WriteLine(total + " updated: " + counter);
                 }
                 string lineM = srM.ReadLine();
-                string item = sr.ReadLine();
+                string item = srHe.ReadLine();
+                string itemEnglish = srEN.ReadLine();
+
                 total++;
-                trans = m_extractor.ExtractExactTranslation(item,2);
+
+                trans = m_extractor.ExtractExactTranslation(item, 0);
+                int x;
+                string chosen = improveMethod.ChooseBetter(trans, lineM,out x);
+
+                if (chosen != lineM)
+                    counter++;
+
+                sw.WriteLine(chosen);
+
+
+                // sveta algorithm 
+
+                /*bool mosesB = true;
+                trans = m_extractor.ExtractExactTranslation(item, 0);
+                if (trans.Length > 0)
+                {
+                    //if (trans.Split(' ').Length < 5 && m_extractor.GetTimesRepeated(item, trans) > 50)
+                    //{
+                    //    mosesB = false;
+                    //}
+                    if (trans.Split(' ').Length >= 5 && Math.Abs(trans.Split(' ').Length - source.Split(' ').Length) <=2)
+                    {
+                        mosesB = false;
+                    }
+                    if (trans.Split(' ').Length >= 5 && LevenshteinDistance(trans,lineM)<lineM.Length/4)
+                    {
+                        mosesB = false;
+                    }
+                    if (trans.Split(' ').Length > 3 && m_extractor.GetTimesRepeated(item, trans) > 1)
+                    {
+                        mosesB = false;
+                    }
+                    if (trans == lineM.TrimEnd(' '))
+                    {
+                        mosesB = true;
+                    }
+                }
+                if (mosesB)
+                    sw.WriteLine(lineM);
+                else {
+                    sw.WriteLine(trans);
+                    counter++;
+                }
+                */
+                /*
+                //**********************************************
+                // score: 22
+                trans = m_extractor.ExtractExactTranslation(item, 0);
+                double levinstain = LevenshteinDistance(trans, lineM);
+
+                if (trans == null || trans.Length == 0)
+                {
+                    if (levinstain <=1.5)
+                    {
+                        sw.WriteLine(trans);
+                        counter++;
+                    } else
+                    {
+                        sw.WriteLine(lineM);
+                    }
+                } else
+                {
+                    sw.WriteLine(lineM);
+                }
+                //**********************************************
+                */
+                /*
+                trans = m_extractor.ExtractExactTranslation(item, 0);
+
+                double bleuOur = BLEU.Evaluate(trans, new List<string>() { itemEnglish });
+                double bleuMoses = BLEU.Evaluate(lineM, new List<string>() { itemEnglish });
+                int bleuBetter = 0;
+                if (bleuOur > bleuMoses)
+                    bleuBetter = 1;
+                else if (bleuMoses > bleuOur)
+                    bleuBetter = -1;
+
+                double jaccardMosesOurs = CalcJaccard(trans, lineM);
+
+                double levinstain = LevenshteinDistance(trans, lineM);
+
+                int timeRepeated = m_extractor.GetTimesRepeated(item, trans);
+
+                int lengthDifference = Math.Abs(trans.Split(' ').Length - item.Split(' ').Length);
+
+
+                
+
+                if (trans == null || trans.Length == 0)
+                    sw.WriteLine(lineM);
+                else {
+                    sw.WriteLine(trans);
+                    stats.WriteLine(bleuBetter + "," + jaccardMosesOurs + "," + levinstain + "," + timeRepeated + "," + lengthDifference);
+                    counter++;
+                }
+                */
+
+
+                /*
+                //mine, 66
+
+                trans = m_extractor.ExtractExactTranslation(item, 1);
 
                 if (trans == null || trans.Length == 0)
                 {
@@ -78,27 +280,108 @@ namespace TheTranslator
                     sw.WriteLine(trans);
                     counter++;
                 }
-                else if (lineM.Split(' ').Length > trans.Split(' ').Length)
-                {
-                    sw.WriteLine(lineM);
-                } else
+                else if (trans.Split(' ').Length > 3)
                 {
                     sw.WriteLine(trans);
                     counter++;
                 }
-                    /*else if (trans.Split(' ').Length>3) {
+                else
+                {
+                    sw.WriteLine(lineM);
+                }*/
+
+
+
+                /*trans = m_extractor.ExtractExactTranslation(item, 0);
+                if (trans.Length > 0)
+                    if (trans.Split(' ').Length < 5)
+                    {
+                        if (m_extractor.GetTimesRepeated(item,trans) > 15)
+                        {
+                            sw.WriteLine(trans);
+                            counter++;
+                        } else
+                        {
+                            sw.WriteLine(lineM);
+                        }
+                    }
+                    else if (Math.Abs(trans.Split(' ').Length - source.Split(' ').Length)<3)
+                    {
                         sw.WriteLine(trans);
                         counter++;
                     } else
                     {
                         sw.WriteLine(lineM);
-                    }*/
+                    }
+                else
+                    sw.WriteLine(lineM);
+
+            */
+
+
+                /* To be tested! transMany = m_extractor.ExtractExactTranslation(item, 1);
+                transExists = m_extractor.ExtractExactTranslation(item, 0);
+
+                if (transExists.Length > 0 && transExists.Split(' ').Length > 5)
+                {
+                    sw.WriteLine(transExists);
+                } else if (transMany.Length > 0 && transMany.Split(' ').Length > 3)
+                {
+                    sw.WriteLine(transMany);
+                } else
+                    sw.WriteLine(lineM);*/
+
+                /*trans = m_extractor.ExtractExactTranslation(item,1);
+
+                if (trans == null || trans.Length == 0)
+                {
+                    sw.WriteLine(lineM);
                 }
-            Console.WriteLine("We improved " + counter + "/" + total + ", thats " + counter / (double)total+"!");
+                else if (rxHeb.IsMatch(lineM))
+                {
+                    sw.WriteLine(trans);
+                    counter++;
+                }
+               //else if (lineM.Split(' ').Length > trans.Split(' ').Length)
+               // {
+               //     sw.WriteLine(lineM);
+               // } else
+               // {
+               //     sw.WriteLine(trans);
+               //     counter++;
+               // }
+                    else if (trans.Split(' ').Length>3) {
+                        sw.WriteLine(trans);
+                        counter++;
+                    } else
+                    {
+                        sw.WriteLine(lineM);
+                    }
+                }*/
+
+            }
+
+
+            Console.WriteLine("We improved " + counter + "/" + total + ", thats " + counter / (double)total + "!");
             sw.Close();
-            sr.Close();
+            srHe.Close();
             srM.Close();
-            Console.ReadKey();
+            stats.Close();
+            //}
+            //Console.ReadKey();
+        }
+
+        private double CalcJaccard(string trans, string lineM)
+        {
+            List<string> l1 = trans.Split(' ').ToList();
+            List<string> l2 = lineM.Split(' ').ToList();
+
+            int mone = l1.Intersect(l2).Count();
+            int mechane = l1.Union(l2).Count();
+
+            return mone / (double)mechane;
+
+
         }
 
         public void testLenX(string testFilesPath, int x)

@@ -23,7 +23,9 @@ namespace TheTranslator
 
         public abstract List<List<Sentence>> extractTransParts(string source);
 
-        private HashSet<string> m_sourceSentences = new HashSet<string>();
+        public Dictionary<string,int> m_sourceSentences = new Dictionary<string, int>();
+        public Dictionary<string, int> m_targetSentences = new Dictionary<string, int>();
+
 
         protected Extractor(string path)
         {
@@ -31,23 +33,18 @@ namespace TheTranslator
             m_sentences = new DBManager();
         }
 
-
-        public virtual bool build()
+        public void ResetDB()
         {
             m_sentences.Reset();
-            // check if all needed files exists
-            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.true.he"))
-                return false;
+        }
 
-            if (!File.Exists(m_dataPath + @"\DownloadedFullTrain.en-he.true.en"))
-                return false;
+        public virtual bool build(string trainHePath, string trainEnPath, string auxDictionaryPath)
+        {
+            m_sentences.Reset();
 
-            if (!File.Exists(m_dataPath + @"\GoogleTranslateWords.txt"))
-                return false;
-            //
-            StreamReader soReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.true.he");
-            StreamReader taReader = new StreamReader(m_dataPath + @"/DownloadedFullTrain.en-he.true.en");
-            StreamReader dicReader = new StreamReader(m_dataPath + @"/GoogleTranslateWords.txt");
+            StreamReader soReader = new StreamReader(trainHePath);
+            StreamReader taReader = new StreamReader(trainEnPath);
+            StreamReader dicReader = new StreamReader(auxDictionaryPath);
 
             int linesCounter = 0;
 
@@ -73,9 +70,6 @@ namespace TheTranslator
                             stopwatch.Restart();
                         }
                         linesCounter++;
-                        //if (linesCounter == 1367)
-                        //    Console.Beep();
-                        //if (linesCounter == 10000) break;
 
                         sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
                         targetLine = rxRemoveSpace.Replace(targetLine, " ");
@@ -85,9 +79,16 @@ namespace TheTranslator
                         //stats.Insert(sourceLine);
                         //m_sentences.WriteSet("TargetSentences",targetLine);
                         //m_sentences.WriteSet("SourceSentences",sourceLine);
-                        if (!m_sourceSentences.Contains(sourceLine))
-                            m_sourceSentences.Add(sourceLine);
-                        //m_sentences.WriteSet(sourceLine, targetLine);
+
+                        if (!m_sourceSentences.ContainsKey(sourceLine))
+                            m_sourceSentences.Add(sourceLine,0);
+                        m_sourceSentences[sourceLine]++;
+
+                        if (!m_targetSentences.ContainsKey(targetLine))
+                            m_targetSentences.Add(targetLine, 0);
+                        m_targetSentences[targetLine]++;
+
+                        m_sentences.WriteSet(sourceLine, targetLine);
 
                     }
                     catch (Exception e)
@@ -95,7 +96,6 @@ namespace TheTranslator
                         Console.WriteLine("could not remember " + sourceLine + " -> " + targetLine);
                     }
                 }
-                return true;
 
                 if ((sourceLine == null && targetLine != null) || (sourceLine != null && targetLine == null))
                 {
@@ -117,6 +117,81 @@ namespace TheTranslator
                     m_sentences.WriteSet(lineData[0], lineData[2]);
                 }
                 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("failed to load the DB: " + e.InnerException + "id=" + linesCounter);
+                return false;
+            }
+            finally
+            {
+                soReader.Close();
+                taReader.Close();
+                dicReader.Close();
+                Console.WriteLine("Load done!");
+            }
+
+            return true;
+        }
+
+        internal int GetTimesRepeated(string item, string trans)
+        {
+            return (int)m_sentences.GetSet(item, trans);
+        }
+
+        public bool ScanWords(string trainHePath, string trainEnPath, string auxDictionaryPath)
+        {
+            StreamReader soReader = new StreamReader(trainHePath);
+            StreamReader taReader = new StreamReader(trainEnPath);
+            StreamReader dicReader = new StreamReader(auxDictionaryPath);
+
+            int linesCounter = 0;
+
+            Regex rxRemoveSpace = new Regex(@"\s\s+");
+
+            string sourceLine = null;
+            string targetLine = null;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
+            {
+                // Read every line in each file
+                while ((sourceLine = soReader.ReadLine()) != null & (targetLine = taReader.ReadLine()) != null)
+                {
+                    try
+                    {
+                        // write progress
+                        if (linesCounter % 10000 == 0)
+                        {
+                            Console.WriteLine(linesCounter + " , Took: " + stopwatch.Elapsed);
+                            Trace.WriteLine(linesCounter + " , Took: " + stopwatch.Elapsed);
+                            stopwatch.Restart();
+                        }
+                        linesCounter++;
+
+                        sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
+                        targetLine = rxRemoveSpace.Replace(targetLine, " ");
+
+                        if (!m_sourceSentences.ContainsKey(sourceLine))
+                            m_sourceSentences.Add(sourceLine, 0);
+                        m_sourceSentences[sourceLine]++;
+
+                        if (!m_targetSentences.ContainsKey(targetLine))
+                            m_targetSentences.Add(targetLine, 0);
+                        m_targetSentences[targetLine]++;
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("could not remember " + sourceLine + " -> " + targetLine);
+                    }
+                }
+
+                if ((sourceLine == null && targetLine != null) || (sourceLine != null && targetLine == null))
+                {
+                    Console.WriteLine("!!!!!the DB files have diff length!!!!!");
+                }
+             
             }
             catch (Exception e)
             {
@@ -215,187 +290,7 @@ namespace TheTranslator
             return parts;
         }
 
-        private void playMario()
-        {
-            Console.Beep(659, 125);
-            Console.Beep(659, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(523, 125);
-            Console.Beep(659, 125);
-            Thread.Sleep(125);
-            Console.Beep(784, 125);
-            Thread.Sleep(375);
-            Console.Beep(392, 125);
-            Thread.Sleep(375);
-            Console.Beep(523, 125);
-            Thread.Sleep(250);
-            Console.Beep(392, 125);
-            Thread.Sleep(250);
-            Console.Beep(330, 125);
-            Thread.Sleep(250);
-            Console.Beep(440, 125);
-            Thread.Sleep(125);
-            Console.Beep(494, 125);
-            Thread.Sleep(125);
-            Console.Beep(466, 125);
-            Thread.Sleep(42);
-            Console.Beep(440, 125);
-            Thread.Sleep(125);
-            Console.Beep(392, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(125);
-            Console.Beep(784, 125);
-            Thread.Sleep(125);
-            Console.Beep(880, 125);
-            Thread.Sleep(125);
-            Console.Beep(698, 125);
-            Console.Beep(784, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(125);
-            Console.Beep(523, 125);
-            Thread.Sleep(125);
-            Console.Beep(587, 125);
-            Console.Beep(494, 125);
-            Thread.Sleep(125);
-            Console.Beep(523, 125);
-            Thread.Sleep(250);
-            Console.Beep(392, 125);
-            Thread.Sleep(250);
-            Console.Beep(330, 125);
-            Thread.Sleep(250);
-            Console.Beep(440, 125);
-            Thread.Sleep(125);
-            Console.Beep(494, 125);
-            Thread.Sleep(125);
-            Console.Beep(466, 125);
-            Thread.Sleep(42);
-            Console.Beep(440, 125);
-            Thread.Sleep(125);
-            Console.Beep(392, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(125);
-            Console.Beep(784, 125);
-            Thread.Sleep(125);
-            Console.Beep(880, 125);
-            Thread.Sleep(125);
-            Console.Beep(698, 125);
-            Console.Beep(784, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(125);
-            Console.Beep(523, 125);
-            Thread.Sleep(125);
-            Console.Beep(587, 125);
-            Console.Beep(494, 125);
-            Thread.Sleep(375);
-            Console.Beep(784, 125);
-            Console.Beep(740, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(42);
-            Console.Beep(622, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(415, 125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Thread.Sleep(125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Console.Beep(587, 125);
-            Thread.Sleep(250);
-            Console.Beep(784, 125);
-            Console.Beep(740, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(42);
-            Console.Beep(622, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(698, 125);
-            Thread.Sleep(125);
-            Console.Beep(698, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(625);
-            Console.Beep(784, 125);
-            Console.Beep(740, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(42);
-            Console.Beep(622, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(415, 125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Thread.Sleep(125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Console.Beep(587, 125);
-            Thread.Sleep(250);
-            Console.Beep(622, 125);
-            Thread.Sleep(250);
-            Console.Beep(587, 125);
-            Thread.Sleep(250);
-            Console.Beep(523, 125);
-            Thread.Sleep(1125);
-            Console.Beep(784, 125);
-            Console.Beep(740, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(42);
-            Console.Beep(622, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(415, 125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Thread.Sleep(125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Console.Beep(587, 125);
-            Thread.Sleep(250);
-            Console.Beep(784, 125);
-            Console.Beep(740, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(42);
-            Console.Beep(622, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(698, 125);
-            Thread.Sleep(125);
-            Console.Beep(698, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(625);
-            Console.Beep(784, 125);
-            Console.Beep(740, 125);
-            Console.Beep(698, 125);
-            Thread.Sleep(42);
-            Console.Beep(622, 125);
-            Thread.Sleep(125);
-            Console.Beep(659, 125);
-            Thread.Sleep(167);
-            Console.Beep(415, 125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Thread.Sleep(125);
-            Console.Beep(440, 125);
-            Console.Beep(523, 125);
-            Console.Beep(587, 125);
-            Thread.Sleep(250);
-            Console.Beep(622, 125);
-            Thread.Sleep(250);
-            Console.Beep(587, 125);
-            Thread.Sleep(250);
-            Console.Beep(523, 125);
-            Thread.Sleep(625);
-        }
+        
         public abstract bool TranslationExists(string source);
         public abstract string ExtractExactTranslation(string source, int minCount);
 

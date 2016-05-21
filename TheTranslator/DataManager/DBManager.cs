@@ -75,5 +75,10 @@ namespace TheTranslator.DataManager
             IDatabase db = redis.GetDatabase();
             return db.HashGet("k" + table, "k" + key);
         }
+
+        internal int GetValue(string item, string trans)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

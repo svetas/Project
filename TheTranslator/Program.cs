@@ -6,15 +6,28 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLEUevaluator;
 using StackExchange.Redis;
+using TheTranslator.GUI;
 
 namespace TheTranslator
 {
     static class Program
     {
-        static void Main()
+        [STAThread]
+        static void Main(string[] args)
         {
-            test3();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Main());
+        }
+
+
+           // test3();
             //TestBleu();
+        
+
+        private static double testBinom(int v1, int v2)
+        {
+            return SignTest.CalcConfidence(v1, v2);
         }
 
         /*public static void test()
@@ -36,8 +49,11 @@ namespace TheTranslator
 
         public static void test3()
         {
-            Tester t = new Tester();
-            t.testMosesImprovment(@"Z:\DownloadedFullTest.en-he.true.he",@"Z:\MosesTranslated.en", @"Z:\MosesAfterImprovedByOur.en");
+            /*Tester t = new Tester();
+            t.LoadFlatStats(@"Z:");           
+            t.testMosesImprovment(@"Z:\DownloadedFullTest.en-he.true.en",@"Z:\DownloadedFullTest.en-he.true.he",@"Z:\MosesTranslated.en", @"Z:\MosesAfterImprovedByOur.en");
+            t.CompareSystems(@"Z:\DownloadedFullTest.en-he.true.en", @"Z:\MosesTranslated.en", @"Z:\MosesAfterImprovedByOur.en");
+            Console.ReadKey();*/
         }
         public static void testRedis()
         {

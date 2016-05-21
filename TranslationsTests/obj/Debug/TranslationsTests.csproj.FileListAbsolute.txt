@@ -52,3 +52,11 @@ D:\Projects\Project\TranslationsTests\bin\Debug\BLEUevaluator.exe
 D:\Projects\Project\TranslationsTests\bin\Debug\BLEUevaluator.pdb
 D:\Projects\Project\TranslationsTests\bin\Debug\StackExchange.Redis.dll
 D:\Projects\Project\TranslationsTests\bin\Debug\StackExchange.Redis.xml
+D:\Projects\Project\TranslationsTests\bin\Debug\MathNet.Numerics.dll
+D:\Projects\Project\TranslationsTests\bin\Debug\MathNet.Numerics.xml
+D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.dll
+D:\Projects\Project\TranslationsTests\bin\Debug\DynamicInterop.dll
+D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.NativeLibrary.dll
+D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.xml
+D:\Projects\Project\TranslationsTests\bin\Debug\DynamicInterop.xml
+D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.NativeLibrary.xml
