@@ -10,16 +10,12 @@ namespace BLEUevaluator
 {
     public class SignTest
     {
-        //public static Dictionary<string, Dictionary<string, double>> m_methodsComparison = new Dictionary<string, Dictionary<string, double>>();
-
-        public static double CalcConfidence(int count,int totalTries)//string sFirst, string sSecond)
+        public static double CalcConfidence(int count,int totalTries)
         {
-
             REngine engine = REngine.GetInstance();
             string[] a = engine.Evaluate("binom.test("+ count + ", "+ totalTries + ")").AsCharacter().ToArray();
             string pValue = a[2];
             return double.Parse(pValue);          
         }
-       
     }
 }

@@ -10,12 +10,10 @@ namespace TransltrProject
     public class TranSubtitle
     {
         public List<Tuple<string,string>> Translations { get; set; }
-
         public TranSubtitle()
         {
             Translations = new List<Tuple<string, string>>();
         }
-
         public List<Tuple<string[], string[]>> GetTranslations()
         {
             List<Tuple<string[], string[]>> ans = new List<Tuple<string[], string[]>>();
@@ -35,12 +33,8 @@ namespace TransltrProject
             }
             return ans;
         }
-
-
         public void WriteToFile(string p)
         {
-            //FileStream fs = new FileStream(p, FileMode.Create);
-           // using (StreamWriter sw = new StreamWriter(fs,Encoding.UTF8))
             using (StreamWriter sw = new StreamWriter(p))
             {
                 foreach (var item in Translations)
@@ -49,7 +43,6 @@ namespace TransltrProject
                 }
             }
         }
-
         internal void Add(string phrase, string v)
         {
             Translations.Add(new Tuple<string, string>(phrase, v));

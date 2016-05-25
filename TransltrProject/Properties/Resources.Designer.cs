@@ -59,50 +59,5 @@ namespace TransltrProject.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A,א
-        ///a,א
-        ///aal,אאל
-        ///Aani,קציר
-        ///aardwolf,זאב אדמה
-        ///Aaron,אהרון
-        ///aba,אבא
-        ///abacate,אבוקדו
-        ///aback,הופתע
-        ///abaculus,צוהר
-        ///abacus,אבקוס
-        ///Abadite,עבאד
-        ///abaft,לאחורנית
-        ///abalienation,ניכור
-        ///abalone,אבלונה
-        ///Abama,בחירה
-        ///abandon,לנטוש
-        ///abandoned,נטוש
-        ///abandoner,ניטש
-        ///abandonment,נטישה
-        ///abas,שני
-        ///abase,הברזילאים
-        ///abased,משמש
-        ///abasement,מרתף
-        ///abaser,לייזר
-        ///abash,להעליב
-        ///abashed,אסם
-        ///abashedly,מבוכה
-        ///abashment,הכלמה
-        ///abasia,מנזר
-        ///abasic,בסיסי
-        ///abask,עבאס
-        ///Abassin,עבאסי
-        ///abate,לשכך
-        ///abatement,הפחתה
-        ///abater,טבח
-        ///abaton,אבוט        /// [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Dictionary {
-            get {
-                return ResourceManager.GetString("Dictionary", resourceCulture);
-            }
-        }
     }
 }

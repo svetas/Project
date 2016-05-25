@@ -31,23 +31,6 @@ namespace TransltrProject
                 string[] src = dstList.ToArray();
                 string[] dst = srcList.ToArray();
 
-                /*string srcText = string.Join(" ", item.Item1);
-                string dstText = string.Join(" ", item.Item2);
-
-                var charsToRemove = new string[] { "@", ",", ".", ";", "'" ,"?"};
-                foreach (var c in charsToRemove)
-                {
-                    srcText = srcText.Replace(c, string.Empty).TrimEnd(' ').TrimStart(' ');
-                    dstText = dstText.Replace(c, string.Empty).TrimEnd(' ').TrimStart(' ');
-                }
-                if (!Translations.ContainsKey(srcText))
-                    Translations.Add(srcText, new Dictionary<string, int>());
-
-                if (Translations[srcText].ContainsKey(dstText))
-                    Translations[srcText][dstText] += 1;
-                else
-                    Translations[srcText].Add(dstText, 1);*/
-
                 if (src.Count() == dst.Count())
                 {
                     for (int i = 0; i < dst.Count(); i++)

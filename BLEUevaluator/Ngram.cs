@@ -8,7 +8,6 @@ namespace BLEUevaluator
 {
     public class Ngram
     {
-
         private List<string> toks;
         private int hash = 0;
 
@@ -17,13 +16,11 @@ namespace BLEUevaluator
             hashCode ^= (hashCode >> 20) ^ (hashCode >> 12);
             return hashCode ^ (hashCode >> 7) ^ (hashCode >> 4);
         }
-
         public Ngram(List<string> toks)
         {
             this.toks = toks;
             hash = hashCode();
         }
-
         public int hashCode()
         {
             if (hash == 0)
@@ -49,7 +46,6 @@ namespace BLEUevaluator
                 throw new Exception("Comparing n-gram to non-n-gram");
             }
         }
-
         public override string ToString()
         {
             return toks.ToString();

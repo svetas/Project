@@ -10,7 +10,6 @@ namespace TransltrProject
 {
     class XMLexctractor
     {
-        private string path;
         public List<object> data = new List<object>();
         public XMLexctractor(string path)
         {

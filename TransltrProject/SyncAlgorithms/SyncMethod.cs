@@ -8,12 +8,7 @@ namespace TransltrProject.SyncAlgorithms
 {
     public abstract class SyncMethod
     {
-
-
         public abstract AlignmentSetting GetBestDeviation(Subtitle s1, Subtitle s2, out double deviation);
-       
-
-
         public List<Tuple<Sentence, int>> FindSentenceNextToGaps(Subtitle sub, int sentencesAmount)
         {
             Dictionary<Tuple<Sentence, int>, int> minHeap = new Dictionary<Tuple<Sentence, int>, int>();
@@ -40,6 +35,5 @@ namespace TransltrProject.SyncAlgorithms
 
             return minHeap.Keys.ToList();
         }
-         
     }
 }

@@ -34,7 +34,6 @@ namespace TheTranslator.DataManager
             }
             return instance;
         }
-
         private DBManager()
         {
             redis = ConnectionMultiplexer.Connect(configOptions.Value);
@@ -45,7 +44,6 @@ namespace TheTranslator.DataManager
             var server = redis.GetServer(endpoints.First());
             server.FlushDatabase();
         }
-
         public bool WriteData(string key)
         {
             IDatabase db = redis.GetDatabase();
@@ -53,21 +51,18 @@ namespace TheTranslator.DataManager
             db.StringIncrement(keyStr, 1);
             return true;            
         }
-
         public bool WriteSet(string key, string value)
         {
             IDatabase db = redis.GetDatabase();
             db.HashIncrement("k"+key, "k"+value, 1);
             return true;
         }
-
         public IEnumerable<HashEntry> GetAllValues(string key)
         {
             IDatabase db = redis.GetDatabase();
             int co = (int)db.HashLength("k" + key);
             return db.HashGetAll("k"+key);
         }
-
         public HashEntry[] GetSet(string key)
         {
             IDatabase db = redis.GetDatabase();
@@ -83,11 +78,6 @@ namespace TheTranslator.DataManager
         {
             IDatabase db = redis.GetDatabase();
             return db.HashGet("k" + table, "k" + key);
-        }
-
-        internal int GetValue(string item, string trans)
-        {
-            throw new NotImplementedException();
         }
     }
 }

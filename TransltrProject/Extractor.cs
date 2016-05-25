@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TransltrProject.SyncAlgorithms;
-using static System.Diagnostics.Stopwatch;
 
 namespace TransltrProject
 {

@@ -44,10 +44,8 @@ C:\Git\Project\TranslationsTests\obj\Debug\TranslationsTests.dll
 C:\Git\Project\TranslationsTests\obj\Debug\TranslationsTests.pdb
 C:\Git\Project\TranslationsTests\bin\Debug\TranslationsTests.dll
 C:\Git\Project\TranslationsTests\bin\Debug\TranslationsTests.pdb
-C:\Git\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Git\Project\TranslationsTests\bin\Debug\TheTranslator.exe
 C:\Git\Project\TranslationsTests\bin\Debug\TheTranslator.pdb
-C:\Git\Project\TranslationsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
 D:\Projects\Project\TranslationsTests\bin\Debug\BLEUevaluator.exe
 D:\Projects\Project\TranslationsTests\bin\Debug\BLEUevaluator.pdb
 D:\Projects\Project\TranslationsTests\bin\Debug\StackExchange.Redis.dll
@@ -60,3 +58,15 @@ D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.NativeLibrary.dll
 D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.xml
 D:\Projects\Project\TranslationsTests\bin\Debug\DynamicInterop.xml
 D:\Projects\Project\TranslationsTests\bin\Debug\RDotNet.NativeLibrary.xml
+C:\Git\Project\TranslationsTests\bin\Debug\MathNet.Numerics.dll
+C:\Git\Project\TranslationsTests\bin\Debug\MathNet.Numerics.xml
+C:\Git\Project\TranslationsTests\bin\Debug\StackExchange.Redis.dll
+C:\Git\Project\TranslationsTests\bin\Debug\BLEUevaluator.exe
+C:\Git\Project\TranslationsTests\bin\Debug\RDotNet.dll
+C:\Git\Project\TranslationsTests\bin\Debug\DynamicInterop.dll
+C:\Git\Project\TranslationsTests\bin\Debug\RDotNet.NativeLibrary.dll
+C:\Git\Project\TranslationsTests\bin\Debug\StackExchange.Redis.xml
+C:\Git\Project\TranslationsTests\bin\Debug\BLEUevaluator.pdb
+C:\Git\Project\TranslationsTests\bin\Debug\RDotNet.xml
+C:\Git\Project\TranslationsTests\bin\Debug\DynamicInterop.xml
+C:\Git\Project\TranslationsTests\bin\Debug\RDotNet.NativeLibrary.xml

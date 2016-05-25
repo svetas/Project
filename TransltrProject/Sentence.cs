@@ -24,8 +24,6 @@ namespace TransltrProject
 
         public Sentence(){}
 
-
-        
         public override string ToString()
         {
             return Text;

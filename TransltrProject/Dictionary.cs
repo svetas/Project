@@ -10,22 +10,6 @@ namespace TransltrProject
     class Dictionary
     {
         public static Dictionary<string, string> dic = new Dictionary<string, string>();
-
-        public static void Load()
-        {
-            char[] split = { '\r', '\n' };
-            string[] data = Properties.Resources.Dictionary.Split(split, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string item in data)
-            {
-                string key = item.Split(',')[0];
-                string value = item.Split(',')[1];
-                if (!dic.ContainsKey(key))
-                {
-                    dic.Add(key, value);
-                }
-            }
-        }
-
         public static string Translate(string input)
         {
             string ans = "";

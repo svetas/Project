@@ -53,7 +53,6 @@ namespace TransltrProject.SyncAlgorithms
                 subHistoryS2.Add(new Tuple<Sentence, List<Sentence>>(sen.Item1, historyPerSen));
             }
 
-
             double minScore = 0;
             AlignmentSetting bestAlignsetting = new AlignmentSetting(0,0,0,0);
 
@@ -80,44 +79,7 @@ namespace TransltrProject.SyncAlgorithms
             }
             deviation = minScore;
             return bestAlignsetting;
-
         }
-
-
-
-        //int minumumValue = Int32.MaxValue;
-        //Tuple<int, int, int, int> res = new Tuple<int, int, int, int>(0, 0, 0, 0);
-
-        //if (set1.Count < 9 || set2.Count < 9) 
-        //    return res;
-
-        //for (int i = 0; i < set1.Count / 2 - 4; i++)
-        //{
-        //    for (int j = 0; j < set1.Count / 2 - 4; j++)
-        //    {
-        //        for (int m = 0; m < set2.Count / 2 - 4; m++)
-        //        {
-        //            for (int n = 0; n < set2.Count / 2 - 4; n++)
-        //            {
-        //                int diff_1 = Math.Abs(set1[i] - set2[m]);
-        //                int diff_2 = Math.Abs(set1[i + 1] - set2[m + 1]);
-        //                int diff_3 = Math.Abs(set1[i + 2] - set2[m + 2]);
-        //                int diff_4 = Math.Abs(set1[i + 3] - set2[m + 3]);
-        //                int diff_5 = Math.Abs(set1[set1.Count - j - 1] - set2[set2.Count - n - 1]);
-        //                int diff_6 = Math.Abs(set1[set1.Count - j - 2] - set2[set2.Count - n - 2]);
-        //                int diff_7 = Math.Abs(set1[set1.Count - j - 3] - set2[set2.Count - n - 3]);
-        //                int diff_8 = Math.Abs(set1[set1.Count - j - 4] - set2[set2.Count - n - 4]);
-        //                int total = diff_1 + diff_2 + diff_3 + diff_4 + diff_5 + diff_6 + diff_7 + diff_8;
-        //                if (total < minumumValue)
-        //                {
-        //                    minumumValue = total;
-        //                    res = new Tuple<int, int, int, int>(i, set1.Count- j - 4, m, set2.Count - n - 4);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //return res;
 
         private double calcScore(List<Sentence> src1, List<Sentence> src2, List<Sentence> trg1, List<Sentence> trg2)
         {

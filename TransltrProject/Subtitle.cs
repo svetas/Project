@@ -67,19 +67,13 @@ namespace TransltrProject
                     int BeginMin = int.Parse(splitedBegin[1]);
                     int BeginSec = int.Parse(splitedBegin[2].Split(',')[0]);
                     int BeginMilisec = int.Parse(splitedBegin[2].Split(',')[1]);
-                    /*string[] splitedEnd = times[2].Split(':');
-                    int EndHour = int.Parse(splitedEnd[0]);
-                    int EndMin = int.Parse(splitedEnd[1]);
-                    int EndSec = int.Parse(splitedEnd[2].Split(',')[0]);
-                    int EndMilisec = int.Parse(splitedEnd[2].Split(',')[1]);
-                    */
+
                     StartTime = BeginHour * 3600000 + BeginMin * 60000 +
                         BeginSec * 1000 + BeginMilisec;
-                    //int EndTime = EndHour * 3600000 + EndMin * 60000
-                    //      + EndSec * 1000 + EndMilisec;
+
                     sentence.Text = currentSentence;
                     sentence.Start = StartTime;
-                    //sentence.End = EndTime;
+
                     Sentences.Add(sentence);
                     if (Sentences.Count > 1)
                         Sentences[Sentences.Count - 2].TimeToNext = StartTime -
