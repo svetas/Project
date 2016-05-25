@@ -45,8 +45,17 @@
             this.txtExperimentPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rtbTranslationProcedure = new System.Windows.Forms.RichTextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtMosesPath = new System.Windows.Forms.TextBox();
+            this.radioButton7 = new System.Windows.Forms.RadioButton();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioCombine = new System.Windows.Forms.RadioButton();
             this.radioSeenLength = new System.Windows.Forms.RadioButton();
             this.btnRunCombined = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -56,24 +65,17 @@
             this.btnEnhance = new System.Windows.Forms.Button();
             this.btnLoadRedis = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.txtOutputToMoses = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.chkSign = new System.Windows.Forms.CheckBox();
             this.btnSaveStats = new System.Windows.Forms.Button();
             this.btnSaveForBleu = new System.Windows.Forms.Button();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.rtbSignTestResults = new System.Windows.Forms.RichTextBox();
+            this.btnSignTest = new System.Windows.Forms.Button();
             this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.saveTranslation = new System.Windows.Forms.SaveFileDialog();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton7 = new System.Windows.Forms.RadioButton();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.btnSignTest = new System.Windows.Forms.Button();
-            this.rtbSignTestResults = new System.Windows.Forms.RichTextBox();
-            this.rtbTranslationProcedure = new System.Windows.Forms.RichTextBox();
-            this.txtMosesPath = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.txtLimit = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -262,6 +264,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Step 2: Generate Translations";
             // 
+            // rtbTranslationProcedure
+            // 
+            this.rtbTranslationProcedure.Location = new System.Drawing.Point(4, 211);
+            this.rtbTranslationProcedure.Name = "rtbTranslationProcedure";
+            this.rtbTranslationProcedure.ReadOnly = true;
+            this.rtbTranslationProcedure.Size = new System.Drawing.Size(346, 54);
+            this.rtbTranslationProcedure.TabIndex = 2;
+            this.rtbTranslationProcedure.Text = "";
+            // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.label9);
@@ -272,7 +283,7 @@
             this.groupBox6.Controls.Add(this.radioButton4);
             this.groupBox6.Controls.Add(this.radioButton3);
             this.groupBox6.Controls.Add(this.radioButton1);
-            this.groupBox6.Controls.Add(this.radioButton2);
+            this.groupBox6.Controls.Add(this.radioCombine);
             this.groupBox6.Controls.Add(this.radioSeenLength);
             this.groupBox6.Controls.Add(this.btnRunCombined);
             this.groupBox6.Location = new System.Drawing.Point(6, 20);
@@ -282,16 +293,99 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Select Improvement Method";
             // 
-            // radioButton2
+            // label9
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(7, 87);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(85, 17);
-            this.radioButton2.TabIndex = 3;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "radioButton2";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(10, 32);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(57, 13);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "Moses file:";
+            // 
+            // txtMosesPath
+            // 
+            this.txtMosesPath.Location = new System.Drawing.Point(82, 29);
+            this.txtMosesPath.Name = "txtMosesPath";
+            this.txtMosesPath.Size = new System.Drawing.Size(244, 20);
+            this.txtMosesPath.TabIndex = 10;
+            this.txtMosesPath.Text = "MosesTranslated.en";
+            // 
+            // radioButton7
+            // 
+            this.radioButton7.AutoSize = true;
+            this.radioButton7.Location = new System.Drawing.Point(197, 133);
+            this.radioButton7.Name = "radioButton7";
+            this.radioButton7.Size = new System.Drawing.Size(85, 17);
+            this.radioButton7.TabIndex = 9;
+            this.radioButton7.TabStop = true;
+            this.radioButton7.Text = "radioButton7";
+            this.radioButton7.UseVisualStyleBackColor = true;
+            // 
+            // radioButton6
+            // 
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.Location = new System.Drawing.Point(197, 110);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(85, 17);
+            this.radioButton6.TabIndex = 8;
+            this.radioButton6.TabStop = true;
+            this.radioButton6.Text = "radioButton6";
+            this.radioButton6.UseVisualStyleBackColor = true;
+            // 
+            // radioButton5
+            // 
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Location = new System.Drawing.Point(197, 87);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(85, 17);
+            this.radioButton5.TabIndex = 7;
+            this.radioButton5.TabStop = true;
+            this.radioButton5.Text = "radioButton5";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(197, 64);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(85, 17);
+            this.radioButton4.TabIndex = 6;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "radioButton4";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(7, 133);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(85, 17);
+            this.radioButton3.TabIndex = 5;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "radioButton3";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(7, 110);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(85, 17);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "radioButton1";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioCombine
+            // 
+            this.radioCombine.AutoSize = true;
+            this.radioCombine.Location = new System.Drawing.Point(7, 87);
+            this.radioCombine.Name = "radioCombine";
+            this.radioCombine.Size = new System.Drawing.Size(145, 17);
+            this.radioCombine.TabIndex = 3;
+            this.radioCombine.TabStop = true;
+            this.radioCombine.Text = "Seen>0 && Combine Large";
+            this.radioCombine.UseVisualStyleBackColor = true;
             // 
             // radioSeenLength
             // 
@@ -316,6 +410,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.txtLimit);
             this.groupBox3.Controls.Add(this.rtbMemoryStatus);
             this.groupBox3.Controls.Add(this.btnCleanDB);
             this.groupBox3.Controls.Add(this.btnLoadToMemory);
@@ -352,7 +447,7 @@
             // 
             this.btnLoadToMemory.Location = new System.Drawing.Point(6, 28);
             this.btnLoadToMemory.Name = "btnLoadToMemory";
-            this.btnLoadToMemory.Size = new System.Drawing.Size(341, 23);
+            this.btnLoadToMemory.Size = new System.Drawing.Size(226, 23);
             this.btnLoadToMemory.TabIndex = 3;
             this.btnLoadToMemory.Text = "Load Training Set to Memory";
             this.btnLoadToMemory.UseVisualStyleBackColor = true;
@@ -380,6 +475,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.txtOutputToMoses);
             this.groupBox4.Controls.Add(this.groupBox5);
             this.groupBox4.Controls.Add(this.btnSaveForBleu);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -389,6 +485,14 @@
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Step 3: Save translations";
+            // 
+            // txtOutputToMoses
+            // 
+            this.txtOutputToMoses.Location = new System.Drawing.Point(13, 30);
+            this.txtOutputToMoses.Name = "txtOutputToMoses";
+            this.txtOutputToMoses.Size = new System.Drawing.Size(184, 20);
+            this.txtOutputToMoses.TabIndex = 2;
+            this.txtOutputToMoses.Text = "MosesAfterImprovedByOur.en";
             // 
             // groupBox5
             // 
@@ -422,78 +526,13 @@
             // 
             // btnSaveForBleu
             // 
-            this.btnSaveForBleu.Location = new System.Drawing.Point(6, 28);
+            this.btnSaveForBleu.Location = new System.Drawing.Point(203, 28);
             this.btnSaveForBleu.Name = "btnSaveForBleu";
             this.btnSaveForBleu.Size = new System.Drawing.Size(130, 23);
             this.btnSaveForBleu.TabIndex = 0;
             this.btnSaveForBleu.Text = "Save for BLEU";
             this.btnSaveForBleu.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(7, 110);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(85, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(7, 133);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(85, 17);
-            this.radioButton3.TabIndex = 5;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "radioButton3";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(197, 64);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(85, 17);
-            this.radioButton4.TabIndex = 6;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "radioButton4";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(197, 87);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(85, 17);
-            this.radioButton5.TabIndex = 7;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "radioButton5";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            // 
-            // radioButton6
-            // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(197, 110);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(85, 17);
-            this.radioButton6.TabIndex = 8;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "radioButton6";
-            this.radioButton6.UseVisualStyleBackColor = true;
-            // 
-            // radioButton7
-            // 
-            this.radioButton7.AutoSize = true;
-            this.radioButton7.Location = new System.Drawing.Point(197, 133);
-            this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(85, 17);
-            this.radioButton7.TabIndex = 9;
-            this.radioButton7.TabStop = true;
-            this.radioButton7.Text = "radioButton7";
-            this.radioButton7.UseVisualStyleBackColor = true;
+            this.btnSaveForBleu.Click += new System.EventHandler(this.btnSaveForBleu_Click);
             // 
             // groupBox7
             // 
@@ -507,6 +546,15 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Evaluate";
             // 
+            // rtbSignTestResults
+            // 
+            this.rtbSignTestResults.Location = new System.Drawing.Point(6, 46);
+            this.rtbSignTestResults.Name = "rtbSignTestResults";
+            this.rtbSignTestResults.ReadOnly = true;
+            this.rtbSignTestResults.Size = new System.Drawing.Size(346, 96);
+            this.rtbSignTestResults.TabIndex = 1;
+            this.rtbSignTestResults.Text = "";
+            // 
             // btnSignTest
             // 
             this.btnSignTest.Location = new System.Drawing.Point(6, 20);
@@ -517,40 +565,12 @@
             this.btnSignTest.UseVisualStyleBackColor = true;
             this.btnSignTest.Click += new System.EventHandler(this.btnSignTest_Click);
             // 
-            // rtbSignTestResults
+            // txtLimit
             // 
-            this.rtbSignTestResults.Location = new System.Drawing.Point(6, 46);
-            this.rtbSignTestResults.Name = "rtbSignTestResults";
-            this.rtbSignTestResults.ReadOnly = true;
-            this.rtbSignTestResults.Size = new System.Drawing.Size(346, 96);
-            this.rtbSignTestResults.TabIndex = 1;
-            this.rtbSignTestResults.Text = "";
-            // 
-            // rtbTranslationProcedure
-            // 
-            this.rtbTranslationProcedure.Location = new System.Drawing.Point(4, 211);
-            this.rtbTranslationProcedure.Name = "rtbTranslationProcedure";
-            this.rtbTranslationProcedure.ReadOnly = true;
-            this.rtbTranslationProcedure.Size = new System.Drawing.Size(346, 54);
-            this.rtbTranslationProcedure.TabIndex = 2;
-            this.rtbTranslationProcedure.Text = "";
-            // 
-            // txtMosesPath
-            // 
-            this.txtMosesPath.Location = new System.Drawing.Point(82, 29);
-            this.txtMosesPath.Name = "txtMosesPath";
-            this.txtMosesPath.Size = new System.Drawing.Size(244, 20);
-            this.txtMosesPath.TabIndex = 10;
-            this.txtMosesPath.Text = "MosesTranslated.en";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(10, 32);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(57, 13);
-            this.label9.TabIndex = 11;
-            this.label9.Text = "Moses file:";
+            this.txtLimit.Location = new System.Drawing.Point(239, 29);
+            this.txtLimit.Name = "txtLimit";
+            this.txtLimit.Size = new System.Drawing.Size(100, 20);
+            this.txtLimit.TabIndex = 11;
             // 
             // Main
             // 
@@ -567,7 +587,9 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -609,7 +631,7 @@
         private System.Windows.Forms.Button btnSaveForBleu;
         private System.Windows.Forms.SaveFileDialog saveTranslation;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioCombine;
         private System.Windows.Forms.RadioButton radioSeenLength;
         private System.Windows.Forms.RichTextBox rtbTranslationProcedure;
         private System.Windows.Forms.RadioButton radioButton7;
@@ -623,5 +645,7 @@
         private System.Windows.Forms.Button btnSignTest;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtMosesPath;
+        private System.Windows.Forms.TextBox txtOutputToMoses;
+        private System.Windows.Forms.TextBox txtLimit;
     }
 }

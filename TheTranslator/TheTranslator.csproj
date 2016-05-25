@@ -115,7 +115,9 @@
     <Compile Include="GUI\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImproveMethods\AposPrefer.cs" />
     <Compile Include="ImproveMethods\ImprovementMethod.cs" />
+    <Compile Include="ImproveMethods\LongCombiner.cs" />
     <Compile Include="ImproveMethods\SureAndLong.cs" />
     <Compile Include="StatisticsCalculators\DistanceStatistics.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />

@@ -11,19 +11,13 @@ namespace TheTranslator
     {
         //
         private const double DEFAULT_RANK = 0.01;
-        //
-        DBManager dmbPairCount;
-        DBManager dmbTripleCount;
-        DBManager dmbSingleCount;
+
 
         Dictionary<string, Dictionary<string, int>[]> m_Statistics = new Dictionary<string, Dictionary<string, int>[]>();
         Dictionary<string, int> m_TargetGlobalCount = new Dictionary<string, int>();
 
         public DistanceStatistics()
         {
-            dmbPairCount = new DBManager();//@"Z:\tmp", "Pairs");
-            dmbTripleCount = new DBManager();//@"Z:\tmp", "Triple");
-            dmbSingleCount = new DBManager();//@"Z:\tmp", "Single");
         }
 
         //      
@@ -145,13 +139,13 @@ namespace TheTranslator
 
             if ((chunks.Length>=1) && (chunks.Length<=3))
             {
-                dmbSingleCount.WriteData(target);
+                DBManager.GetInstance().WriteData(target);
             } else if (chunks.Length>3 && chunks.Length<=5)
             {
-                dmbPairCount.WriteData(target);
+                DBManager.GetInstance().WriteData(target);
             } else
             {
-                dmbTripleCount.WriteData(target);
+                DBManager.GetInstance().WriteData(target);
             }
 
             /*

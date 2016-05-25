@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TheTranslator.DataManager;
 
 namespace TheTranslator.Extractors
 {
@@ -43,7 +44,7 @@ namespace TheTranslator.Extractors
         {
             Regex rxSpace = new Regex(@"\s\s+");
             source = rxSpace.Replace(source, " ");
-            return m_sentences.CheckGet("SourceSentences", source);
+            return DBManager.GetInstance().CheckGet("SourceSentences", source);
         }
 
         public override string ExtractExactTranslation(string source,int minCount)
@@ -51,15 +52,18 @@ namespace TheTranslator.Extractors
             Regex rxSpace = new Regex(@"\s\s+");
             source = rxSpace.Replace(source, " ");
 
-            HashEntry[] directResults = m_sentences.GetSet(source);
+            HashEntry[] directResults = DBManager.GetInstance().GetSet(source);
 
             string bestTranslation = "";
             double bestCounted = 0;
             int bestLength = int.MaxValue;
             
-            Dictionary<string,int> bestCandidates = new Dictionary<string, int>();
+            Dictionary<string,double> bestCandidates = new Dictionary<string, double>();
 
             // Step 1: find best candidate
+
+            int sumRepetitions = 0;
+
             foreach (var item in directResults)
             {
                 string trans = item.Name.ToString().Substring(1);
@@ -69,7 +73,10 @@ namespace TheTranslator.Extractors
                 {
                     bestTranslation = trans;
                     bestCounted = timesRepeated;
+
                 }
+                sumRepetitions += timesRepeated;
+
             }
 
             // Step 2: Get all the translations which are at almost the same length as the best candidate
@@ -77,23 +84,25 @@ namespace TheTranslator.Extractors
             {
                 string trans = item.Name.ToString().Substring(1);
                 int timesRepeated = (int)item.Value;
-
-                if (Math.Abs(trans.Split(' ').Length - bestTranslation.Split(' ').Length) < 2)
-                {
-                    bestCandidates.Add(trans,timesRepeated);
-                }
+                bestCandidates.Add(trans,timesRepeated/(double)sumRepetitions);
             }
+
+            var topN = (from entry in bestCandidates orderby entry.Value descending select entry).Take(3);
 
             double bestScore = 0;
             string bestCandidate = "";
-
-            foreach (var candidate in bestCandidates)
+            int isShortenVer = 0;
+            foreach (var candidate in topN)
             {
                 int popularity = 0;
                 m_targetSentences.TryGetValue(candidate.Key, out popularity);
+                if (candidate.Key.Contains("&apos;"))
+                    isShortenVer = 1;
 
+                double adjPop = popularity / (double)m_targetSentences.Count;
                 //double candidateScore = candidate.Value;
-                double candidateScore = 0.999 * candidate.Value + 0.001 * popularity;
+                double candidateScore = (0.849 * candidate.Value +
+                    0.001 * adjPop + 0.05 *isShortenVer);
                 if (candidateScore> bestScore)
                 {
                     bestScore = candidateScore;

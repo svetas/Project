@@ -12,6 +12,8 @@ namespace TheTranslator.DataManager
     {
         private ConnectionMultiplexer redis;
 
+        private static DBManager instance; 
+
         private static Lazy<ConfigurationOptions> configOptions
                 = new Lazy<ConfigurationOptions>(() =>
                 {
@@ -24,11 +26,18 @@ namespace TheTranslator.DataManager
                 return configOptions;
                 });
 
-        public DBManager()
+        public static DBManager GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new DBManager();
+            }
+            return instance;
+        }
+
+        private DBManager()
         {
             redis = ConnectionMultiplexer.Connect(configOptions.Value);
-            //redis = ConnectionMultiplexer.Connect("localhost,allowAdmin=true");
-
         }
         public void Reset()
         {

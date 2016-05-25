@@ -17,7 +17,7 @@ namespace TheTranslator
     { 
         private const int MIN_COMMON_MAKES_SKIP=2;
 
-        protected DBManager m_sentences;
+        public DBManager m_sentences;
         //path of the files.
         protected string m_dataPath;
 
@@ -30,17 +30,16 @@ namespace TheTranslator
         protected Extractor(string path)
         {
             m_dataPath = path;
-            m_sentences = new DBManager();
         }
 
         public void ResetDB()
         {
-            m_sentences.Reset();
+            DBManager.GetInstance().Reset();
         }
 
-        public virtual bool build(string trainHePath, string trainEnPath, string auxDictionaryPath)
+        public virtual bool build(string trainHePath, string trainEnPath, string auxDictionaryPath,int limitLearning)
         {
-            m_sentences.Reset();
+            DBManager.GetInstance().Reset();
 
             StreamReader soReader = new StreamReader(trainHePath);
             StreamReader taReader = new StreamReader(trainEnPath);
@@ -69,7 +68,11 @@ namespace TheTranslator
                             Trace.WriteLine(linesCounter + " ,Time took: " + stopwatch.Elapsed);
                             stopwatch.Restart();
                         }
+                        
+
                         linesCounter++;
+                        if (limitLearning != 0 && linesCounter > limitLearning)
+                            break;
 
                         sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
                         targetLine = rxRemoveSpace.Replace(targetLine, " ");
@@ -88,7 +91,7 @@ namespace TheTranslator
                             m_targetSentences.Add(targetLine, 0);
                         m_targetSentences[targetLine]++;
 
-                        m_sentences.WriteSet(sourceLine, targetLine);
+                        DBManager.GetInstance().WriteSet(sourceLine, targetLine);
 
                     }
                     catch (Exception e)
@@ -114,7 +117,7 @@ namespace TheTranslator
                     counterDictionary++;
 
                     string[] lineData = line.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    m_sentences.WriteSet(lineData[0], lineData[2]);
+                    DBManager.GetInstance().WriteSet(lineData[0], lineData[2]);
                 }
                 
             }
@@ -136,10 +139,10 @@ namespace TheTranslator
 
         internal int GetTimesRepeated(string item, string trans)
         {
-            return (int)m_sentences.GetSet(item, trans);
+            return (int)DBManager.GetInstance().GetSet(item, trans);
         }
 
-        public bool ScanWords(string trainHePath, string trainEnPath, string auxDictionaryPath)
+        public bool ScanWords(string trainHePath, string trainEnPath, string auxDictionaryPath,int limitLearning)
         {
             StreamReader soReader = new StreamReader(trainHePath);
             StreamReader taReader = new StreamReader(trainEnPath);
@@ -168,6 +171,8 @@ namespace TheTranslator
                             stopwatch.Restart();
                         }
                         linesCounter++;
+                        if (limitLearning != 0 && linesCounter > limitLearning)
+                            break;
 
                         sourceLine = rxRemoveSpace.Replace(sourceLine, " ");
                         targetLine = rxRemoveSpace.Replace(targetLine, " ");
@@ -221,7 +226,7 @@ namespace TheTranslator
                 Console.WriteLine("Enhance: " + counter++ + "/" + m_sourceSentences.Count + ",added: "+counterAdded);
                 string key = source.ToString();//.Substring(1);
                 string[] srcParts = key.Split(' ');
-                IEnumerable<HashEntry> correlatedTranslations = m_sentences.GetAllValues(key);
+                IEnumerable<HashEntry> correlatedTranslations = DBManager.GetInstance().GetAllValues(key);
                 foreach (var target in correlatedTranslations)
                 {
                     string value = target.Name.ToString().Substring(1);
@@ -235,23 +240,23 @@ namespace TheTranslator
 
                     for (int i = 0; i < srcCombinedParts.Count; i++)
                     {
-                        var srcopt1Ex = m_sentences.GetSet(srcCombinedParts[i].Item1);
-                        var srcopt2Ex = m_sentences.GetSet(srcCombinedParts[i].Item2);
-                        var dstopt1Ex = m_sentences.GetSet(dstCombinedParts[i].Item1);
-                        var dstopt2Ex = m_sentences.GetSet(dstCombinedParts[i].Item2);
+                        var srcopt1Ex = DBManager.GetInstance().GetSet(srcCombinedParts[i].Item1);
+                        var srcopt2Ex = DBManager.GetInstance().GetSet(srcCombinedParts[i].Item2);
+                        var dstopt1Ex = DBManager.GetInstance().GetSet(dstCombinedParts[i].Item1);
+                        var dstopt2Ex = DBManager.GetInstance().GetSet(dstCombinedParts[i].Item2);
 
-                        if (m_sentences.CheckGet(srcCombinedParts[i].Item1,dstCombinedParts[i].Item1)) {
-                            if ((int)m_sentences.GetSet(srcCombinedParts[i].Item1, dstCombinedParts[i].Item1) > 3)
+                        if (DBManager.GetInstance().CheckGet(srcCombinedParts[i].Item1,dstCombinedParts[i].Item1)) {
+                            if ((int)DBManager.GetInstance().GetSet(srcCombinedParts[i].Item1, dstCombinedParts[i].Item1) > 3)
                             {
-                                m_sentences.WriteSet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2);
+                                DBManager.GetInstance().WriteSet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2);
                                 counterAdded++;
                             }
                         }
-                        if (m_sentences.CheckGet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2))
+                        if (DBManager.GetInstance().CheckGet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2))
                         {
-                            if ((int)m_sentences.GetSet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2) > 3)
+                            if ((int)DBManager.GetInstance().GetSet(srcCombinedParts[i].Item2, dstCombinedParts[i].Item2) > 3)
                             {
-                                m_sentences.WriteSet(srcCombinedParts[i].Item1, dstCombinedParts[i].Item1);
+                                DBManager.GetInstance().WriteSet(srcCombinedParts[i].Item1, dstCombinedParts[i].Item1);
                                 counterAdded++;
                             }
                         }
@@ -261,7 +266,7 @@ namespace TheTranslator
             Console.WriteLine("Finished enhancing, added " + counterAdded + " new entries");
         }
 
-        private List<Tuple<string, string>> CombineStringParts(string[] srcParts)
+        public List<Tuple<string, string>> CombineStringParts(string[] srcParts)
         {
             List<Tuple<string, string>> parts = new List<Tuple<string, string>>();
             StringBuilder Part1;

@@ -40,7 +40,9 @@ namespace TheTranslator.GUI
 
                 m_extractor = new ExtractorDirect(txtExperimentPath.Text);
 
-                bool status = m_extractor.ScanWords(trainHePath, trainEnPath, auxDictionaryPath);
+                int limitLearning = txtLimit.Text == "" ? 0 : int.Parse(txtLimit.Text);
+
+                bool status = m_extractor.ScanWords(trainHePath, trainEnPath, auxDictionaryPath, limitLearning);
 
                 if (status)
                     rtbMemoryStatus.Text = "Loading ended successfully";
@@ -71,7 +73,10 @@ namespace TheTranslator.GUI
 
                 m_extractor = new ExtractorDirect(txtExperimentPath.Text);
 
-                bool status = m_extractor.build(trainHePath, trainEnPath, auxDictionaryPath);
+                int limitLearning = txtLimit.Text == "" ? 0 : int.Parse(txtLimit.Text);
+
+
+                bool status = m_extractor.build(trainHePath, trainEnPath, auxDictionaryPath, limitLearning);
 
                 if (status)
                     rtbMemoryStatus.Text = "Loading ended successfully";
@@ -303,9 +308,9 @@ namespace TheTranslator.GUI
                 {
                     m_subtitutionLogic = new SureAndLong();
                 }
-                else
+                else if (radioCombine.Checked) 
                 {
-
+                    m_subtitutionLogic = new LongCombiner(m_extractor);
                 }
 
                 if (m_subtitutionLogic == null)
@@ -345,7 +350,7 @@ namespace TheTranslator.GUI
 
                     int selectedMachine;
 
-                    string chosen = m_subtitutionLogic.ChooseBetter(lineOur, lineMoses,out selectedMachine);
+                    string chosen = m_subtitutionLogic.ChooseBetter(lineOur, lineMoses,lineSource, out selectedMachine);
 
                     if (selectedMachine==1)
                         counter++;
@@ -359,6 +364,7 @@ namespace TheTranslator.GUI
 
                 rtbTranslationProcedure.Text = "\r\n Finished loading.";
                 rtbTranslationProcedure.Text += "\r\n We improved " + counter + "/" + total + ", thats " + counter / (double)total + "!";
+                rtbTranslationProcedure.Text += "\r\n" + m_subtitutionLogic.ToString();
             }
             catch (Exception e)
             {
@@ -403,9 +409,22 @@ namespace TheTranslator.GUI
             rtbSignTestResults.Text += "Different with confidence of "+SignTest.CalcConfidence((int)firstBetter, counter);
         }
 
+        private void SaveForBleu()
+        {            
+            if (m_OutputTranslations!=null && m_OutputTranslations.Count>0 && txtOutputToMoses.Text!="")
+            {
+                string translationPath = txtExperimentPath.Text + txtOutputToMoses.Text;
 
+                StreamWriter swToBleu= new StreamWriter(translationPath);
+                foreach (var item in m_OutputTranslations)
+                {
+                    swToBleu.WriteLine(item.Hypo);
+                }
+                swToBleu.Close();
+            }
+        }
 
-    private void openDialog_Click(object sender, EventArgs e)
+        private void openDialog_Click(object sender, EventArgs e)
         {
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
@@ -436,6 +455,11 @@ namespace TheTranslator.GUI
         private void btnSignTest_Click(object sender, EventArgs e)
         {
             RunSignTest();
+        }
+
+        private void btnSaveForBleu_Click(object sender, EventArgs e)
+        {
+            SaveForBleu();
         }
 
 

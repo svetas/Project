@@ -170,7 +170,7 @@ namespace TheTranslator
 
                 trans = m_extractor.ExtractExactTranslation(item, 0);
                 int x;
-                string chosen = improveMethod.ChooseBetter(trans, lineM,out x);
+                string chosen = improveMethod.ChooseBetter(trans, lineM,"",out x);
 
                 if (chosen != lineM)
                     counter++;
