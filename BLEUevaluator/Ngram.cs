@@ -8,6 +8,7 @@ namespace BLEUevaluator
 {
     public class Ngram
     {
+        // test
         private List<string> toks;
         private int hash = 0;
 
