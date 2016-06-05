@@ -224,7 +224,7 @@ namespace TheTranslator
             foreach (var source in m_sourceSentences)
             {
                 Console.WriteLine("Enhance: " + counter++ + "/" + m_sourceSentences.Count + ",added: "+counterAdded);
-                string key = source.ToString();//.Substring(1);
+                string key = source.Key.ToString();//.Substring(1);
                 string[] srcParts = key.Split(' ');
                 IEnumerable<HashEntry> correlatedTranslations = DBManager.GetInstance().GetAllValues(key);
                 foreach (var target in correlatedTranslations)

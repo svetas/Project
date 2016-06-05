@@ -124,8 +124,7 @@ namespace TransltrProject
 
             double sumPrecision = 0;
             int syncedCount = 0;
-            int totalMovies = 0;
-
+            int totalMovies = 0;         
 
             List<string> savedHebSentences = new List<string>();
             List<string> savedEngSentences = new List<string>();
@@ -133,7 +132,7 @@ namespace TransltrProject
             Dictionary<string, int> savedEngWords = new Dictionary<string, int>();
 
 
-            string[] splitby = { " ", ",", ".", "-", "!" };//, "?" };
+            string[] splitby = { " ", ",", ".", "-", "!" , "?" };
             foreach (string directory in InputDirectory)
             {
                 foreach (var subdir in Directory.GetDirectories(directory))
@@ -190,11 +189,16 @@ namespace TransltrProject
 
                             foreach (var item in translations.Translations)
                             {
+                                if (item.Item1.Contains("?") || item.Item2.Contains("?"))
+                                    continue;
                                 string engSentence = FixEngSentence(item.Item1);
                                 string hebSentence = FixHebSentence(item.Item2);
 
                                 if (!inValidEnglishSen(item.Item1) || !inValidHebrewSen(item.Item2))
                                     continue;
+
+                                if (hebSentence.Contains("אף פעם לא הודיתי לך"))
+                                    Console.Beep();
 
                                 savedEngSentences.Add(engSentence);
                                 savedHebSentences.Add(hebSentence);
@@ -244,7 +248,7 @@ namespace TransltrProject
 
             StreamWriter swEnTrain = new StreamWriter(OutputDirectory+"\\DownloadedFullTrain.en-he.en");
             StreamWriter swHeTrain = new StreamWriter(OutputDirectory + "\\DownloadedFullTrain.en-he.he");
-            int limit = (int)(savedHebSentences.Count * 0.97);
+            int limit = (int)(savedHebSentences.Count * 1);
 
             for (int i = 0; i < limit; i++)
             {
@@ -254,7 +258,7 @@ namespace TransltrProject
 
             swEnTrain.Close();
             swHeTrain.Close();
-
+            return;
             StreamWriter swEnTune = new StreamWriter(OutputDirectory + "\\DownloadedFullTune.en-he.en");
             StreamWriter swHeTune = new StreamWriter(OutputDirectory + "\\DownloadedFullTune.en-he.he");
 
@@ -585,402 +589,403 @@ namespace TransltrProject
             }
         }
     
+        
 
-       /* public void ExtractReferences()
+        /* public void ExtractReferences()
+         {
+             translator = new Translation();
+
+             Stopwatch st = new Stopwatch();
+
+             //SubtitlesComparer sc;
+
+             double sumPrecision = 0;
+             int syncedCount = 0;
+             int totalMovies = 0;
+
+
+             List<string> savedHebSentences = new List<string>();
+             List<string> savedEngSentences = new List<string>();
+             Dictionary<string, int> savedHebWords = new Dictionary<string, int>();
+             Dictionary<string, int> savedEngWords = new Dictionary<string, int>();
+
+             Dictionary<string, Dictionary<string, int>> savedTranslations = new Dictionary<string, Dictionary<string, int>>();
+
+             string[] splitby = { " ", ",", ".", "-", "!", "?" };
+
+             foreach (var movieID in Directory.GetDirectories(InputDirectory))
+             {
+                 if (totalMovies % 100 == 0)
+                     Console.WriteLine("Completed: " + totalMovies + "/" + Directory.GetDirectories(InputDirectory).Length);
+
+                 if (totalMovies / (double)Directory.GetDirectories(InputDirectory).Length > ExtractionAmount)
+                     break;
+
+                 totalMovies++;
+                 try
+                 {
+                     string engLoc = movieID + "\\en.srt";
+                     string hebLoc = movieID + "\\he.srt";
+
+                     if (!File.Exists(hebLoc) || !File.Exists(engLoc))
+                     {
+                         if (!File.Exists(engLoc))
+                         {
+                             Logger.WriteError(movieID + "\\en.srt", "Missing");
+                         }
+
+                         if (!File.Exists(hebLoc))
+                         {
+                             Logger.WriteError(movieID + "\\he.srt", "Missing");
+                         }
+                         continue;
+                     }
+
+                     Subtitle subtitleOne = new Subtitle();
+                     Subtitle subtitleTwo = new Subtitle();
+
+                     bool subOneStatus = subtitleOne.ExtractAsSynchronized("eng", engLoc);
+                     bool subTwoStatus = subtitleTwo.ExtractAsSynchronized("heb", hebLoc);
+
+                     if (!subOneStatus || !subTwoStatus)
+                     {
+                         continue;
+                     }
+
+                     Synchronizer sync = new Synchronizer(subtitleOne, subtitleTwo, new SyncByLengthRatio());
+
+                     double precision = sync.Align(500);
+                     if (precision == 0)
+                         continue;
+
+
+                     Logger.WriteError(subtitleOne.Path, "Synced and extracted phrases");
+
+                     TranSubtitle translations = sync.GetTranslations();
+
+                     foreach (var item in translations.Translations)
+                     {
+
+                         if (!savedTranslations.ContainsKey(item.Item2))
+                         {
+                             savedTranslations.Add(item.Item2, new Dictionary<string, int>());
+                         } 
+                         if (!savedTranslations[item.Item2].ContainsKey(item.Item1))
+                         {
+                             savedTranslations[item.Item2].Add(item.Item1, 0);
+                         }
+                         savedTranslations[item.Item2][item.Item1]++;
+
+                         savedEngSentences.Add(item.Item1);
+                         savedHebSentences.Add(item.Item2);
+
+
+                         //string[] splitspace = { };
+                         string[] wordsEng = item.Item1.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+                         string[] wordsHeb = item.Item2.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+                         foreach (var word in wordsEng)
+                         {
+                             if (!savedEngWords.ContainsKey(word)) savedEngWords.Add(word, 0);
+                             savedEngWords[word] += 1;
+                         }
+                         foreach (var word in wordsHeb)
+                         {
+                             if (!savedHebWords.ContainsKey(word)) savedHebWords.Add(word, 0);
+                             savedHebWords[word] += 1;
+                         }
+                     }
+
+                     sumPrecision += precision;
+
+                     if (translations == null)
+                     {
+                         continue;
+                     }
+                     syncedCount++;
+                 }
+                 catch (Exception e)
+                 {
+                     Console.WriteLine(e.Message);
+                 }
+             }
+
+             string text = totalMovies + "," + syncedCount + "," + (sumPrecision / (double)syncedCount);
+             Logger.WriteLine(text);
+
+             HashSet<string> memoryGood = new HashSet<string>();
+             HashSet<string> memoryBad = new HashSet<string>();
+
+             List<string> toWriteMemoryEng = new List<string>();
+             List<string> toWriteMemoryHeb = new List<string>();
+
+             var pickedWordsHeb = (from entry in savedHebWords orderby entry.Value descending select entry.Key).Take(40000);
+             var pickedWordsEng = (from entry in savedEngWords orderby entry.Value descending select entry.Key).Take(40000);
+
+             st.Start();
+             StreamWriter swHe = new StreamWriter("Downloaded.en-he.he");
+             StreamWriter swEn0 = new StreamWriter("Downloaded.en-he.ref0");
+             StreamWriter swEn1 = new StreamWriter("Downloaded.en-he.ref1");
+             StreamWriter swEn2 = new StreamWriter("Downloaded.en-he.ref2");
+
+             StreamReader sr = new StreamReader(@"C:\Users\Sagi\Dropbox\JointProject\ExternalSystemsDB\5000words\DownloadedTest.en-he.he");
+             StreamReader swback = new StreamReader(@"C:\Users\Sagi\Dropbox\JointProject\ExternalSystemsDB\5000words\DownloadedTest.en-he.en");
+             while (!sr.EndOfStream)
+             {
+                 string backupLine = swback.ReadLine();
+                 string line = sr.ReadLine();
+                 if (!savedTranslations.ContainsKey(line))
+                 {
+                     swEn0.WriteLine(backupLine);
+                     swEn1.WriteLine(backupLine);
+                     swEn2.WriteLine(backupLine);
+                 } 
+                 else if (savedTranslations[line].Count > 3)
+                 {
+                     var bestReferences = (from entry in savedTranslations[line] orderby entry.Value descending select entry.Key).Take(3);
+                     swEn0.WriteLine(bestReferences.ElementAt(0));
+                     swEn1.WriteLine(bestReferences.ElementAt(1));
+                     swEn2.WriteLine(bestReferences.ElementAt(2));
+                 }
+                 else if (savedTranslations[line].Count == 3)
+                 {
+                     swEn0.WriteLine(savedTranslations[line].ElementAt(0).Key);
+                     swEn1.WriteLine(savedTranslations[line].ElementAt(1).Key);
+                     swEn2.WriteLine(savedTranslations[line].ElementAt(2).Key);
+                 }
+                 else if (savedTranslations[line].Count == 2)
+                 {
+                     swEn0.WriteLine(savedTranslations[line].ElementAt(0).Key);
+                     swEn1.WriteLine(savedTranslations[line].ElementAt(1).Key);
+                     swEn2.WriteLine(savedTranslations[line].ElementAt(1).Key);
+                 }
+                 else if (savedTranslations[line].Count == 1)
+                 {
+                     swEn0.WriteLine(savedTranslations[line].ElementAt(0).Key);
+                     swEn1.WriteLine(savedTranslations[line].ElementAt(0).Key);
+                     swEn2.WriteLine(savedTranslations[line].ElementAt(0).Key);
+                 }
+             }
+             */
+        /*
+
+        for (int i = 0; i < savedHebSentences.Count; i++)
         {
-            translator = new Translation();
-
-            Stopwatch st = new Stopwatch();
-
-            //SubtitlesComparer sc;
-
-            double sumPrecision = 0;
-            int syncedCount = 0;
-            int totalMovies = 0;
-
-
-            List<string> savedHebSentences = new List<string>();
-            List<string> savedEngSentences = new List<string>();
-            Dictionary<string, int> savedHebWords = new Dictionary<string, int>();
-            Dictionary<string, int> savedEngWords = new Dictionary<string, int>();
-
-            Dictionary<string, Dictionary<string, int>> savedTranslations = new Dictionary<string, Dictionary<string, int>>();
-
-            string[] splitby = { " ", ",", ".", "-", "!", "?" };
-
-            foreach (var movieID in Directory.GetDirectories(InputDirectory))
+            //string combined = savedHebSentences[i] + savedEngSentences[i];
+            // new hebrew phrase?
+            if (!memoryGood.Contains(savedHebSentences[i]) && !memoryBad.Contains(savedHebSentences[i]))
             {
-                if (totalMovies % 100 == 0)
-                    Console.WriteLine("Completed: " + totalMovies + "/" + Directory.GetDirectories(InputDirectory).Length);
-
-                if (totalMovies / (double)Directory.GetDirectories(InputDirectory).Length > ExtractionAmount)
-                    break;
-
-                totalMovies++;
-                try
+                string[] hebSen = savedHebSentences[i].Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+                if (hebSen.Intersect(pickedWordsHeb).Count() == hebSen.Length)
                 {
-                    string engLoc = movieID + "\\en.srt";
-                    string hebLoc = movieID + "\\he.srt";
-
-                    if (!File.Exists(hebLoc) || !File.Exists(engLoc))
-                    {
-                        if (!File.Exists(engLoc))
-                        {
-                            Logger.WriteError(movieID + "\\en.srt", "Missing");
-                        }
-
-                        if (!File.Exists(hebLoc))
-                        {
-                            Logger.WriteError(movieID + "\\he.srt", "Missing");
-                        }
-                        continue;
-                    }
-
-                    Subtitle subtitleOne = new Subtitle();
-                    Subtitle subtitleTwo = new Subtitle();
-
-                    bool subOneStatus = subtitleOne.ExtractAsSynchronized("eng", engLoc);
-                    bool subTwoStatus = subtitleTwo.ExtractAsSynchronized("heb", hebLoc);
-
-                    if (!subOneStatus || !subTwoStatus)
-                    {
-                        continue;
-                    }
-
-                    Synchronizer sync = new Synchronizer(subtitleOne, subtitleTwo, new SyncByLengthRatio());
-
-                    double precision = sync.Align(500);
-                    if (precision == 0)
-                        continue;
-
-
-                    Logger.WriteError(subtitleOne.Path, "Synced and extracted phrases");
-
-                    TranSubtitle translations = sync.GetTranslations();
-
-                    foreach (var item in translations.Translations)
-                    {
-                        
-                        if (!savedTranslations.ContainsKey(item.Item2))
-                        {
-                            savedTranslations.Add(item.Item2, new Dictionary<string, int>());
-                        } 
-                        if (!savedTranslations[item.Item2].ContainsKey(item.Item1))
-                        {
-                            savedTranslations[item.Item2].Add(item.Item1, 0);
-                        }
-                        savedTranslations[item.Item2][item.Item1]++;
-                         
-                        savedEngSentences.Add(item.Item1);
-                        savedHebSentences.Add(item.Item2);
-
-
-                        //string[] splitspace = { };
-                        string[] wordsEng = item.Item1.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
-                        string[] wordsHeb = item.Item2.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var word in wordsEng)
-                        {
-                            if (!savedEngWords.ContainsKey(word)) savedEngWords.Add(word, 0);
-                            savedEngWords[word] += 1;
-                        }
-                        foreach (var word in wordsHeb)
-                        {
-                            if (!savedHebWords.ContainsKey(word)) savedHebWords.Add(word, 0);
-                            savedHebWords[word] += 1;
-                        }
-                    }
-
-                    sumPrecision += precision;
-
-                    if (translations == null)
-                    {
-                        continue;
-                    }
-                    syncedCount++;
+                    memoryGood.Add(savedHebSentences[i]);
                 }
-                catch (Exception e)
+                else
                 {
-                    Console.WriteLine(e.Message);
+                    memoryBad.Add(savedHebSentences[i]);
                 }
             }
-            
-            string text = totalMovies + "," + syncedCount + "," + (sumPrecision / (double)syncedCount);
-            Logger.WriteLine(text);
 
-            HashSet<string> memoryGood = new HashSet<string>();
-            HashSet<string> memoryBad = new HashSet<string>();
 
-            List<string> toWriteMemoryEng = new List<string>();
-            List<string> toWriteMemoryHeb = new List<string>();
-
-            var pickedWordsHeb = (from entry in savedHebWords orderby entry.Value descending select entry.Key).Take(40000);
-            var pickedWordsEng = (from entry in savedEngWords orderby entry.Value descending select entry.Key).Take(40000);
-
-            st.Start();
-            StreamWriter swHe = new StreamWriter("Downloaded.en-he.he");
-            StreamWriter swEn0 = new StreamWriter("Downloaded.en-he.ref0");
-            StreamWriter swEn1 = new StreamWriter("Downloaded.en-he.ref1");
-            StreamWriter swEn2 = new StreamWriter("Downloaded.en-he.ref2");
-
-            StreamReader sr = new StreamReader(@"C:\Users\Sagi\Dropbox\JointProject\ExternalSystemsDB\5000words\DownloadedTest.en-he.he");
-            StreamReader swback = new StreamReader(@"C:\Users\Sagi\Dropbox\JointProject\ExternalSystemsDB\5000words\DownloadedTest.en-he.en");
-            while (!sr.EndOfStream)
+            if (!memoryGood.Contains(savedEngSentences[i]) && !memoryBad.Contains(savedEngSentences[i]))
             {
-                string backupLine = swback.ReadLine();
-                string line = sr.ReadLine();
-                if (!savedTranslations.ContainsKey(line))
+
+                string[] engSen = savedEngSentences[i].Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+                if (engSen.Intersect(pickedWordsEng).Count() == engSen.Length)
                 {
-                    swEn0.WriteLine(backupLine);
-                    swEn1.WriteLine(backupLine);
-                    swEn2.WriteLine(backupLine);
-                } 
-                else if (savedTranslations[line].Count > 3)
+                    memoryGood.Add(savedEngSentences[i]);
+                }
+                else
                 {
-                    var bestReferences = (from entry in savedTranslations[line] orderby entry.Value descending select entry.Key).Take(3);
+                    memoryBad.Add(savedEngSentences[i]);
+                }
+            }
+
+            if (memoryGood.Contains(savedEngSentences[i]) && memoryGood.Contains(savedHebSentences[i]))
+            {
+                //toWriteMemoryEng.Add(savedEngSentences[i]);
+                //toWriteMemoryHeb.Add(savedHebSentences[i]);
+
+                swHe.WriteLine(savedHebSentences[i]);
+                if (savedTranslations[savedHebSentences[i]].Count > 3)
+                {
+                    var bestReferences = (from entry in savedTranslations[savedHebSentences[i]] orderby entry.Value descending select entry.Key).Take(3);
                     swEn0.WriteLine(bestReferences.ElementAt(0));
                     swEn1.WriteLine(bestReferences.ElementAt(1));
                     swEn2.WriteLine(bestReferences.ElementAt(2));
                 }
-                else if (savedTranslations[line].Count == 3)
+                else if (savedTranslations[savedHebSentences[i]].Count == 3)
                 {
-                    swEn0.WriteLine(savedTranslations[line].ElementAt(0).Key);
-                    swEn1.WriteLine(savedTranslations[line].ElementAt(1).Key);
-                    swEn2.WriteLine(savedTranslations[line].ElementAt(2).Key);
+                    swEn0.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
+                    swEn1.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(1).Key);
+                    swEn2.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(2).Key);
                 }
-                else if (savedTranslations[line].Count == 2)
+                else if (savedTranslations[savedHebSentences[i]].Count == 2)
                 {
-                    swEn0.WriteLine(savedTranslations[line].ElementAt(0).Key);
-                    swEn1.WriteLine(savedTranslations[line].ElementAt(1).Key);
-                    swEn2.WriteLine(savedTranslations[line].ElementAt(1).Key);
+                    swEn0.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
+                    swEn1.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(1).Key);
+                    swEn2.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(1).Key);
                 }
-                else if (savedTranslations[line].Count == 1)
+                else if (savedTranslations[savedHebSentences[i]].Count == 1)
                 {
-                    swEn0.WriteLine(savedTranslations[line].ElementAt(0).Key);
-                    swEn1.WriteLine(savedTranslations[line].ElementAt(0).Key);
-                    swEn2.WriteLine(savedTranslations[line].ElementAt(0).Key);
+                    swEn0.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
+                    swEn1.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
+                    swEn2.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
                 }
             }
-            */
-            /*
 
-            for (int i = 0; i < savedHebSentences.Count; i++)
-            {
-                //string combined = savedHebSentences[i] + savedEngSentences[i];
-                // new hebrew phrase?
-                if (!memoryGood.Contains(savedHebSentences[i]) && !memoryBad.Contains(savedHebSentences[i]))
-                {
-                    string[] hebSen = savedHebSentences[i].Split(splitby, StringSplitOptions.RemoveEmptyEntries);
-                    if (hebSen.Intersect(pickedWordsHeb).Count() == hebSen.Length)
-                    {
-                        memoryGood.Add(savedHebSentences[i]);
-                    }
-                    else
-                    {
-                        memoryBad.Add(savedHebSentences[i]);
-                    }
-                }
-
-
-                if (!memoryGood.Contains(savedEngSentences[i]) && !memoryBad.Contains(savedEngSentences[i]))
-                {
-
-                    string[] engSen = savedEngSentences[i].Split(splitby, StringSplitOptions.RemoveEmptyEntries);
-                    if (engSen.Intersect(pickedWordsEng).Count() == engSen.Length)
-                    {
-                        memoryGood.Add(savedEngSentences[i]);
-                    }
-                    else
-                    {
-                        memoryBad.Add(savedEngSentences[i]);
-                    }
-                }
-
-                if (memoryGood.Contains(savedEngSentences[i]) && memoryGood.Contains(savedHebSentences[i]))
-                {
-                    //toWriteMemoryEng.Add(savedEngSentences[i]);
-                    //toWriteMemoryHeb.Add(savedHebSentences[i]);
-
-                    swHe.WriteLine(savedHebSentences[i]);
-                    if (savedTranslations[savedHebSentences[i]].Count > 3)
-                    {
-                        var bestReferences = (from entry in savedTranslations[savedHebSentences[i]] orderby entry.Value descending select entry.Key).Take(3);
-                        swEn0.WriteLine(bestReferences.ElementAt(0));
-                        swEn1.WriteLine(bestReferences.ElementAt(1));
-                        swEn2.WriteLine(bestReferences.ElementAt(2));
-                    }
-                    else if (savedTranslations[savedHebSentences[i]].Count == 3)
-                    {
-                        swEn0.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
-                        swEn1.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(1).Key);
-                        swEn2.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(2).Key);
-                    }
-                    else if (savedTranslations[savedHebSentences[i]].Count == 2)
-                    {
-                        swEn0.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
-                        swEn1.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(1).Key);
-                        swEn2.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(1).Key);
-                    }
-                    else if (savedTranslations[savedHebSentences[i]].Count == 1)
-                    {
-                        swEn0.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
-                        swEn1.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
-                        swEn2.WriteLine(savedTranslations[savedHebSentences[i]].ElementAt(0).Key);
-                    }
-                }
-
-            }*//*
-            swHe.Close();
-            swEn0.Close();
-            swEn1.Close();
-            swEn2.Close();
         }*//*
-        public void ExtractAsSrtOnlyEnglish()
+        swHe.Close();
+        swEn0.Close();
+        swEn1.Close();
+        swEn2.Close();
+    }*//*
+    public void ExtractAsSrtOnlyEnglish()
+    {
+        Translation translator = new Translation();
+
+        //SubtitlesComparer sc;
+
+        double sumPrecision = 0;
+        int syncedCount = 0;
+        int totalMovies = 0;
+        int counter = 0;
+        foreach (var dir1 in Directory.GetDirectories(InputDirectory))
         {
-            Translation translator = new Translation();
+            if (counter++ % 100 == 0)
+                Console.WriteLine("Done 1000 more:" + counter + "/" + Directory.GetDirectories(InputDirectory).Count());
 
-            //SubtitlesComparer sc;
-
-            double sumPrecision = 0;
-            int syncedCount = 0;
-            int totalMovies = 0;
-            int counter = 0;
-            foreach (var dir1 in Directory.GetDirectories(InputDirectory))
+            totalMovies++;
+            try
             {
-                if (counter++ % 100 == 0)
-                    Console.WriteLine("Done 1000 more:" + counter + "/" + Directory.GetDirectories(InputDirectory).Count());
+                string engLoc = dir1 + "\\en0.srt";
+                string hebLoc = dir1 + "\\he0.srt";
 
-                totalMovies++;
-                try
+                if (!File.Exists(hebLoc) || !File.Exists(engLoc))
                 {
-                    string engLoc = dir1 + "\\en0.srt";
-                    string hebLoc = dir1 + "\\he0.srt";
-
-                    if (!File.Exists(hebLoc) || !File.Exists(engLoc))
+                    if (!File.Exists(engLoc))
                     {
-                        if (!File.Exists(engLoc))
-                        {
-                            Logger.WriteError(dir1 + "\\en0.srt", "Missing");
-                        }
-
-                        if (!File.Exists(hebLoc))
-                        {
-                            Logger.WriteError(dir1 + "\\he0.srt", "Missing");
-                        }
-                        continue;
+                        Logger.WriteError(dir1 + "\\en0.srt", "Missing");
                     }
 
-                    Subtitle subtitleOne = new Subtitle();
-                    Subtitle subtitleTwo = new Subtitle();
-
-                    bool subOneStatus = subtitleOne.ExtractAsSrt("eng", engLoc);    
-                    bool subTwoStatus = subtitleTwo.ExtractAsSrt("heb", hebLoc);
-
-                    if (!subOneStatus || !subTwoStatus)
+                    if (!File.Exists(hebLoc))
                     {
-                        continue;
+                        Logger.WriteError(dir1 + "\\he0.srt", "Missing");
                     }
-
-
-                    TranSubtitle translations = subtitleTwo.GetMediumSizeSentences();
-
-                    translator.AddToDictionary(translations);
+                    continue;
                 }
-                catch (Exception e)
+
+                Subtitle subtitleOne = new Subtitle();
+                Subtitle subtitleTwo = new Subtitle();
+
+                bool subOneStatus = subtitleOne.ExtractAsSrt("eng", engLoc);    
+                bool subTwoStatus = subtitleTwo.ExtractAsSrt("heb", hebLoc);
+
+                if (!subOneStatus || !subTwoStatus)
                 {
-                    Console.WriteLine(e.Message);
+                    continue;
                 }
 
-            }
-            string text = totalMovies + "," + syncedCount + "," + (sumPrecision / (double)syncedCount);
-            Logger.WriteLine(text);
 
-            StreamWriter sw = new StreamWriter("outpuTest.txt");
-            //Console.WriteLine("skipped:" + SubtitlesComparer.skipCount + "outof:" + d.GetDirectories().Count());
-            foreach (var item in translator.Translations)
+                TranSubtitle translations = subtitleTwo.GetMediumSizeSentences();
+
+                translator.AddToDictionary(translations);
+            }
+            catch (Exception e)
             {
-                foreach (var values in item.Value)
-                {
-                    if (values.Value > 0)
-                        sw.WriteLine(item.Key + "," + values.Value);
-                }
+                Console.WriteLine(e.Message);
             }
-            sw.Close();
-
 
         }
+        string text = totalMovies + "," + syncedCount + "," + (sumPrecision / (double)syncedCount);
+        Logger.WriteLine(text);
 
-        public void ExtractAsSrtOnlyHebrew()
+        StreamWriter sw = new StreamWriter("outpuTest.txt");
+        //Console.WriteLine("skipped:" + SubtitlesComparer.skipCount + "outof:" + d.GetDirectories().Count());
+        foreach (var item in translator.Translations)
         {
-            Translation translator = new Translation();
-            
-            double sumPrecision = 0;
-            int syncedCount = 0;
-            int totalMovies = 0;
-            int counter = 0;
-            foreach (var dir1 in Directory.GetDirectories(InputDirectory))
+            foreach (var values in item.Value)
             {
-                if (counter++ % 100 == 0)
-                    Console.WriteLine("Done 1000 more:" + counter + "/" + Directory.GetDirectories(InputDirectory).Count());
+                if (values.Value > 0)
+                    sw.WriteLine(item.Key + "," + values.Value);
+            }
+        }
+        sw.Close();
 
-                totalMovies++;
-                try
+
+    }
+
+    public void ExtractAsSrtOnlyHebrew()
+    {
+        Translation translator = new Translation();
+
+        double sumPrecision = 0;
+        int syncedCount = 0;
+        int totalMovies = 0;
+        int counter = 0;
+        foreach (var dir1 in Directory.GetDirectories(InputDirectory))
+        {
+            if (counter++ % 100 == 0)
+                Console.WriteLine("Done 1000 more:" + counter + "/" + Directory.GetDirectories(InputDirectory).Count());
+
+            totalMovies++;
+            try
+            {
+                string engLoc = dir1 + "\\en.srt";
+                string hebLoc = dir1 + "\\he.srt";
+
+                if (!File.Exists(hebLoc) || !File.Exists(engLoc))
                 {
-                    string engLoc = dir1 + "\\en.srt";
-                    string hebLoc = dir1 + "\\he.srt";
-
-                    if (!File.Exists(hebLoc) || !File.Exists(engLoc))
+                    if (!File.Exists(engLoc))
                     {
-                        if (!File.Exists(engLoc))
-                        {
-                            Logger.WriteError(dir1 + "\\en.srt", "Missing");
-                        }
-
-                        if (!File.Exists(hebLoc))
-                        {
-                            Logger.WriteError(dir1 + "\\he.srt", "Missing");
-                        }
-                        continue;
+                        Logger.WriteError(dir1 + "\\en.srt", "Missing");
                     }
 
-                    Subtitle subtitleOne = new Subtitle();
-                    Subtitle subtitleTwo = new Subtitle();
-
-                    bool subOneStatus = subtitleOne.ExtractAsSynchronized("eng", engLoc);
-                    bool subTwoStatus = subtitleTwo.ExtractAsSynchronized("heb", hebLoc);
-                    
-                    if (!subOneStatus || !subTwoStatus)
+                    if (!File.Exists(hebLoc))
                     {
-                        continue;
+                        Logger.WriteError(dir1 + "\\he.srt", "Missing");
                     }
-
-
-                    TranSubtitle translations = subtitleTwo.GetMediumSizeSentences();
-
-                    translator.AddToDictionary(translations);
+                    continue;
                 }
-                catch (Exception e)
+
+                Subtitle subtitleOne = new Subtitle();
+                Subtitle subtitleTwo = new Subtitle();
+
+                bool subOneStatus = subtitleOne.ExtractAsSynchronized("eng", engLoc);
+                bool subTwoStatus = subtitleTwo.ExtractAsSynchronized("heb", hebLoc);
+
+                if (!subOneStatus || !subTwoStatus)
                 {
-                    Console.WriteLine(e.Message);
+                    continue;
                 }
 
-            }
-            string text = totalMovies + "," + syncedCount + "," + (sumPrecision / (double)syncedCount);
-            Logger.WriteLine(text);
 
-            StreamWriter sw = new StreamWriter("outpuTest.txt");
-            //Console.WriteLine("skipped:" + SubtitlesComparer.skipCount + "outof:" + d.GetDirectories().Count());
-            foreach (var item in translator.Translations)
+                TranSubtitle translations = subtitleTwo.GetMediumSizeSentences();
+
+                translator.AddToDictionary(translations);
+            }
+            catch (Exception e)
             {
-                foreach (var values in item.Value)
-                {
-                    if (values.Value > 0)
-                        sw.WriteLine(item.Key + "@,@" + values.Value);
-                }
+                Console.WriteLine(e.Message);
             }
-            sw.Close();
-
 
         }
-        */
+        string text = totalMovies + "," + syncedCount + "," + (sumPrecision / (double)syncedCount);
+        Logger.WriteLine(text);
+
+        StreamWriter sw = new StreamWriter("outpuTest.txt");
+        //Console.WriteLine("skipped:" + SubtitlesComparer.skipCount + "outof:" + d.GetDirectories().Count());
+        foreach (var item in translator.Translations)
+        {
+            foreach (var values in item.Value)
+            {
+                if (values.Value > 0)
+                    sw.WriteLine(item.Key + "@,@" + values.Value);
+            }
+        }
+        sw.Close();
+
+
+    }
+    */
     }
 }

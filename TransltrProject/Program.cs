@@ -46,8 +46,9 @@ namespace TransltrProject
                     Logger.Flush();
                     break;
                 case 'b':
-                    //ex = new Extractor(@"D:\DB", @"D:\DB", 1);
-                    //ex.ExtractReferences();
+                    string[] paths2 = { @"D:\chromeDownloads\SortedSynced" };
+                    ex = new Extractor(paths2, @"D:\AlignedSentencesReferences", 1);
+                    ex.ExtractAsSrt();
                     Logger.Flush();
                     break;
                 default:

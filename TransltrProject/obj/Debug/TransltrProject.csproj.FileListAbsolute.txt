@@ -1,0 +1,10 @@
+D:\SourceTree\Project\TransltrProject\bin\Debug\TransltrProject.exe.config
+D:\SourceTree\Project\TransltrProject\bin\Debug\TransltrProject.exe
+D:\SourceTree\Project\TransltrProject\bin\Debug\TransltrProject.pdb
+D:\SourceTree\Project\TransltrProject\bin\Debug\Newtonsoft.Json.dll
+D:\SourceTree\Project\TransltrProject\bin\Debug\Newtonsoft.Json.xml
+D:\SourceTree\Project\TransltrProject\obj\Debug\TransltrProject.csprojResolveAssemblyReference.cache
+D:\SourceTree\Project\TransltrProject\obj\Debug\TransltrProject.Properties.Resources.resources
+D:\SourceTree\Project\TransltrProject\obj\Debug\TransltrProject.csproj.GenerateResource.Cache
+D:\SourceTree\Project\TransltrProject\obj\Debug\TransltrProject.exe
+D:\SourceTree\Project\TransltrProject\obj\Debug\TransltrProject.pdb

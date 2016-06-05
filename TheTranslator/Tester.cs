@@ -380,8 +380,6 @@ namespace TheTranslator
             int mechane = l1.Union(l2).Count();
 
             return mone / (double)mechane;
-
-
         }
 
         public void testLenX(string testFilesPath, int x)

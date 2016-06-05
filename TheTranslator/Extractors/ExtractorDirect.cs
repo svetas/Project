@@ -87,8 +87,22 @@ namespace TheTranslator.Extractors
                 bestCandidates.Add(trans,timesRepeated/(double)sumRepetitions);
             }
 
-            var topN = (from entry in bestCandidates orderby entry.Value descending select entry).Take(3);
+            var topN = (from entry in bestCandidates orderby entry.Value descending select entry).Take(1);
 
+            double topItemValue = 0;
+            string topItemKey="";
+
+            foreach (var item in topN)
+            {
+                if (topItemValue<item.Key.Length)
+                {
+                    topItemKey = item.Key;
+                    topItemValue = item.Key.Length;
+                }
+            }
+            return topItemKey;
+
+            /*
             double bestScore = 0;
             string bestCandidate = "";
             int isShortenVer = 0;
@@ -110,7 +124,7 @@ namespace TheTranslator.Extractors
                 }
             }
             return bestCandidate;
-
+            */
             /*
             foreach (var item in directResults)
             {

@@ -30,7 +30,11 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.txtRefPath = new System.Windows.Forms.TextBox();
             this.txtAuxDic = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -47,18 +51,24 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.rtbTranslationProcedure = new System.Windows.Forms.RichTextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.radioWeka8 = new System.Windows.Forms.RadioButton();
+            this.btnTrimMoses = new System.Windows.Forms.Button();
+            this.radioLongerSure = new System.Windows.Forms.RadioButton();
+            this.radioWeka7 = new System.Windows.Forms.RadioButton();
+            this.txtLimitTest = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtMosesPath = new System.Windows.Forms.TextBox();
-            this.radioButton7 = new System.Windows.Forms.RadioButton();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioWeka6 = new System.Windows.Forms.RadioButton();
+            this.radioWeka5 = new System.Windows.Forms.RadioButton();
+            this.radioWeka4 = new System.Windows.Forms.RadioButton();
+            this.radioWeka3 = new System.Windows.Forms.RadioButton();
+            this.radioWeka2 = new System.Windows.Forms.RadioButton();
+            this.radioWeka1 = new System.Windows.Forms.RadioButton();
             this.radioCombine = new System.Windows.Forms.RadioButton();
             this.radioSeenLength = new System.Windows.Forms.RadioButton();
             this.btnRunCombined = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtLimit = new System.Windows.Forms.TextBox();
             this.rtbMemoryStatus = new System.Windows.Forms.RichTextBox();
             this.btnCleanDB = new System.Windows.Forms.Button();
             this.btnLoadToMemory = new System.Windows.Forms.Button();
@@ -73,9 +83,16 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.rtbSignTestResults = new System.Windows.Forms.RichTextBox();
             this.btnSignTest = new System.Windows.Forms.Button();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtRefNAMES = new System.Windows.Forms.TextBox();
+            this.btnMakeRefs = new System.Windows.Forms.Button();
             this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.saveTranslation = new System.Windows.Forms.SaveFileDialog();
-            this.txtLimit = new System.Windows.Forms.TextBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.button2 = new System.Windows.Forms.Button();
+            this.txtRefLocation = new System.Windows.Forms.TextBox();
+            this.txtMosesGrades = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -84,6 +101,7 @@
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -97,18 +115,23 @@
             this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.groupBox4, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.groupBox7, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBox8, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.94714F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 44.05286F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1088, 507);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1088, 574);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtMosesGrades);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.txtRefPath);
             this.groupBox1.Controls.Add(this.txtAuxDic);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
@@ -125,10 +148,38 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(356, 277);
+            this.groupBox1.Size = new System.Drawing.Size(356, 315);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Paths";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(119, 197);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(193, 23);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "LoadWekaTrainingTries";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(9, 151);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(63, 13);
+            this.label12.TabIndex = 18;
+            this.label12.Text = "Ref Names:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(209, 45);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(39, 13);
+            this.label11.TabIndex = 18;
+            this.label11.Text = ".en/he";
             // 
             // label8
             // 
@@ -138,6 +189,14 @@
             this.label8.Size = new System.Drawing.Size(75, 13);
             this.label8.TabIndex = 15;
             this.label8.Text = "Aux Dictionary";
+            // 
+            // txtRefPath
+            // 
+            this.txtRefPath.Location = new System.Drawing.Point(78, 148);
+            this.txtRefPath.Name = "txtRefPath";
+            this.txtRefPath.Size = new System.Drawing.Size(205, 20);
+            this.txtRefPath.TabIndex = 0;
+            this.txtRefPath.Text = "DownloadedFullRef.en-he.clean";
             // 
             // txtAuxDic
             // 
@@ -189,7 +248,7 @@
             this.txtTestNames.Name = "txtTestNames";
             this.txtTestNames.Size = new System.Drawing.Size(210, 20);
             this.txtTestNames.TabIndex = 8;
-            this.txtTestNames.Text = "DownloadedFullTest.en-he.true";
+            this.txtTestNames.Text = "DownloadedFullTest.en-he.clean";
             // 
             // label3
             // 
@@ -206,7 +265,7 @@
             this.txtTuningNames.Name = "txtTuningNames";
             this.txtTuningNames.Size = new System.Drawing.Size(210, 20);
             this.txtTuningNames.TabIndex = 6;
-            this.txtTuningNames.Text = "DownloadedFullTune.en-he.true";
+            this.txtTuningNames.Text = "DownloadedFullTune.en-he.clean";
             // 
             // label2
             // 
@@ -223,7 +282,7 @@
             this.txtTrainingNames.Name = "txtTrainingNames";
             this.txtTrainingNames.Size = new System.Drawing.Size(210, 20);
             this.txtTrainingNames.TabIndex = 4;
-            this.txtTrainingNames.Text = "DownloadedFullTrain.en-he.true";
+            this.txtTrainingNames.Text = "DownloadedFullTrain.en-he.clean";
             // 
             // btnOpenDialog
             // 
@@ -259,14 +318,14 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(365, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(356, 277);
+            this.groupBox2.Size = new System.Drawing.Size(356, 315);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Step 2: Generate Translations";
             // 
             // rtbTranslationProcedure
             // 
-            this.rtbTranslationProcedure.Location = new System.Drawing.Point(4, 211);
+            this.rtbTranslationProcedure.Location = new System.Drawing.Point(4, 255);
             this.rtbTranslationProcedure.Name = "rtbTranslationProcedure";
             this.rtbTranslationProcedure.ReadOnly = true;
             this.rtbTranslationProcedure.Size = new System.Drawing.Size(346, 54);
@@ -275,23 +334,78 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.radioWeka8);
+            this.groupBox6.Controls.Add(this.btnTrimMoses);
+            this.groupBox6.Controls.Add(this.radioLongerSure);
+            this.groupBox6.Controls.Add(this.radioWeka7);
+            this.groupBox6.Controls.Add(this.txtLimitTest);
             this.groupBox6.Controls.Add(this.label9);
             this.groupBox6.Controls.Add(this.txtMosesPath);
-            this.groupBox6.Controls.Add(this.radioButton7);
-            this.groupBox6.Controls.Add(this.radioButton6);
-            this.groupBox6.Controls.Add(this.radioButton5);
-            this.groupBox6.Controls.Add(this.radioButton4);
-            this.groupBox6.Controls.Add(this.radioButton3);
-            this.groupBox6.Controls.Add(this.radioButton1);
+            this.groupBox6.Controls.Add(this.radioWeka6);
+            this.groupBox6.Controls.Add(this.radioWeka5);
+            this.groupBox6.Controls.Add(this.radioWeka4);
+            this.groupBox6.Controls.Add(this.radioWeka3);
+            this.groupBox6.Controls.Add(this.radioWeka2);
+            this.groupBox6.Controls.Add(this.radioWeka1);
             this.groupBox6.Controls.Add(this.radioCombine);
             this.groupBox6.Controls.Add(this.radioSeenLength);
             this.groupBox6.Controls.Add(this.btnRunCombined);
             this.groupBox6.Location = new System.Drawing.Point(6, 20);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(344, 185);
+            this.groupBox6.Size = new System.Drawing.Size(344, 229);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Select Improvement Method";
+            // 
+            // radioWeka8
+            // 
+            this.radioWeka8.AutoSize = true;
+            this.radioWeka8.Location = new System.Drawing.Point(108, 179);
+            this.radioWeka8.Name = "radioWeka8";
+            this.radioWeka8.Size = new System.Drawing.Size(83, 17);
+            this.radioWeka8.TabIndex = 23;
+            this.radioWeka8.TabStop = true;
+            this.radioWeka8.Text = "radioWeka8";
+            this.radioWeka8.UseVisualStyleBackColor = true;
+            // 
+            // btnTrimMoses
+            // 
+            this.btnTrimMoses.Location = new System.Drawing.Point(258, 56);
+            this.btnTrimMoses.Name = "btnTrimMoses";
+            this.btnTrimMoses.Size = new System.Drawing.Size(75, 23);
+            this.btnTrimMoses.TabIndex = 22;
+            this.btnTrimMoses.Text = "Trim moses";
+            this.btnTrimMoses.UseVisualStyleBackColor = true;
+            this.btnTrimMoses.Click += new System.EventHandler(this.btnTrimMoses_Click);
+            // 
+            // radioLongerSure
+            // 
+            this.radioLongerSure.AutoSize = true;
+            this.radioLongerSure.Location = new System.Drawing.Point(197, 156);
+            this.radioLongerSure.Name = "radioLongerSure";
+            this.radioLongerSure.Size = new System.Drawing.Size(122, 17);
+            this.radioLongerSure.TabIndex = 14;
+            this.radioLongerSure.TabStop = true;
+            this.radioLongerSure.Text = "OurTakeLongerSure";
+            this.radioLongerSure.UseVisualStyleBackColor = true;
+            // 
+            // radioWeka7
+            // 
+            this.radioWeka7.AutoSize = true;
+            this.radioWeka7.Location = new System.Drawing.Point(197, 131);
+            this.radioWeka7.Name = "radioWeka7";
+            this.radioWeka7.Size = new System.Drawing.Size(57, 17);
+            this.radioWeka7.TabIndex = 13;
+            this.radioWeka7.TabStop = true;
+            this.radioWeka7.Text = "weka7";
+            this.radioWeka7.UseVisualStyleBackColor = true;
+            // 
+            // txtLimitTest
+            // 
+            this.txtLimitTest.Location = new System.Drawing.Point(278, 206);
+            this.txtLimitTest.Name = "txtLimitTest";
+            this.txtLimitTest.Size = new System.Drawing.Size(55, 20);
+            this.txtLimitTest.TabIndex = 12;
             // 
             // label9
             // 
@@ -310,71 +424,71 @@
             this.txtMosesPath.TabIndex = 10;
             this.txtMosesPath.Text = "MosesTranslated.en";
             // 
-            // radioButton7
+            // radioWeka6
             // 
-            this.radioButton7.AutoSize = true;
-            this.radioButton7.Location = new System.Drawing.Point(197, 133);
-            this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(85, 17);
-            this.radioButton7.TabIndex = 9;
-            this.radioButton7.TabStop = true;
-            this.radioButton7.Text = "radioButton7";
-            this.radioButton7.UseVisualStyleBackColor = true;
+            this.radioWeka6.AutoSize = true;
+            this.radioWeka6.Location = new System.Drawing.Point(197, 108);
+            this.radioWeka6.Name = "radioWeka6";
+            this.radioWeka6.Size = new System.Drawing.Size(129, 17);
+            this.radioWeka6.TabIndex = 9;
+            this.radioWeka6.TabStop = true;
+            this.radioWeka6.Text = "weka6+long combiner";
+            this.radioWeka6.UseVisualStyleBackColor = true;
             // 
-            // radioButton6
+            // radioWeka5
             // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(197, 110);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(85, 17);
-            this.radioButton6.TabIndex = 8;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "radioButton6";
-            this.radioButton6.UseVisualStyleBackColor = true;
+            this.radioWeka5.AutoSize = true;
+            this.radioWeka5.Location = new System.Drawing.Point(197, 85);
+            this.radioWeka5.Name = "radioWeka5";
+            this.radioWeka5.Size = new System.Drawing.Size(57, 17);
+            this.radioWeka5.TabIndex = 8;
+            this.radioWeka5.TabStop = true;
+            this.radioWeka5.Text = "weka5";
+            this.radioWeka5.UseVisualStyleBackColor = true;
             // 
-            // radioButton5
+            // radioWeka4
             // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(197, 87);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(85, 17);
-            this.radioButton5.TabIndex = 7;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "radioButton5";
-            this.radioButton5.UseVisualStyleBackColor = true;
+            this.radioWeka4.AutoSize = true;
+            this.radioWeka4.Location = new System.Drawing.Point(197, 62);
+            this.radioWeka4.Name = "radioWeka4";
+            this.radioWeka4.Size = new System.Drawing.Size(57, 17);
+            this.radioWeka4.TabIndex = 7;
+            this.radioWeka4.TabStop = true;
+            this.radioWeka4.Text = "weka4";
+            this.radioWeka4.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // radioWeka3
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(197, 64);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(85, 17);
-            this.radioButton4.TabIndex = 6;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "radioButton4";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioWeka3.AutoSize = true;
+            this.radioWeka3.Location = new System.Drawing.Point(6, 156);
+            this.radioWeka3.Name = "radioWeka3";
+            this.radioWeka3.Size = new System.Drawing.Size(57, 17);
+            this.radioWeka3.TabIndex = 6;
+            this.radioWeka3.TabStop = true;
+            this.radioWeka3.Text = "weka3";
+            this.radioWeka3.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // radioWeka2
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(7, 133);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(85, 17);
-            this.radioButton3.TabIndex = 5;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "radioButton3";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioWeka2.AutoSize = true;
+            this.radioWeka2.Location = new System.Drawing.Point(7, 133);
+            this.radioWeka2.Name = "radioWeka2";
+            this.radioWeka2.Size = new System.Drawing.Size(57, 17);
+            this.radioWeka2.TabIndex = 5;
+            this.radioWeka2.TabStop = true;
+            this.radioWeka2.Text = "weka2";
+            this.radioWeka2.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // radioWeka1
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(7, 110);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(85, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioWeka1.AutoSize = true;
+            this.radioWeka1.Location = new System.Drawing.Point(7, 110);
+            this.radioWeka1.Name = "radioWeka1";
+            this.radioWeka1.Size = new System.Drawing.Size(57, 17);
+            this.radioWeka1.TabIndex = 4;
+            this.radioWeka1.TabStop = true;
+            this.radioWeka1.Text = "weka1";
+            this.radioWeka1.UseVisualStyleBackColor = true;
             // 
             // radioCombine
             // 
@@ -400,9 +514,9 @@
             // 
             // btnRunCombined
             // 
-            this.btnRunCombined.Location = new System.Drawing.Point(0, 156);
+            this.btnRunCombined.Location = new System.Drawing.Point(6, 206);
             this.btnRunCombined.Name = "btnRunCombined";
-            this.btnRunCombined.Size = new System.Drawing.Size(325, 23);
+            this.btnRunCombined.Size = new System.Drawing.Size(266, 23);
             this.btnRunCombined.TabIndex = 1;
             this.btnRunCombined.Text = "Translate";
             this.btnRunCombined.UseVisualStyleBackColor = true;
@@ -417,12 +531,19 @@
             this.groupBox3.Controls.Add(this.btnEnhance);
             this.groupBox3.Controls.Add(this.btnLoadRedis);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(3, 286);
+            this.groupBox3.Location = new System.Drawing.Point(3, 324);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(356, 218);
+            this.groupBox3.Size = new System.Drawing.Size(356, 247);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Step 1: Load Data";
+            // 
+            // txtLimit
+            // 
+            this.txtLimit.Location = new System.Drawing.Point(239, 29);
+            this.txtLimit.Name = "txtLimit";
+            this.txtLimit.Size = new System.Drawing.Size(100, 20);
+            this.txtLimit.TabIndex = 11;
             // 
             // rtbMemoryStatus
             // 
@@ -479,9 +600,9 @@
             this.groupBox4.Controls.Add(this.groupBox5);
             this.groupBox4.Controls.Add(this.btnSaveForBleu);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(365, 286);
+            this.groupBox4.Location = new System.Drawing.Point(365, 324);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(356, 218);
+            this.groupBox4.Size = new System.Drawing.Size(356, 247);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Step 3: Save translations";
@@ -523,6 +644,7 @@
             this.btnSaveStats.TabIndex = 0;
             this.btnSaveStats.Text = "Save with Stats";
             this.btnSaveStats.UseVisualStyleBackColor = true;
+            this.btnSaveStats.Click += new System.EventHandler(this.btnSaveStats_Click);
             // 
             // btnSaveForBleu
             // 
@@ -541,7 +663,7 @@
             this.groupBox7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox7.Location = new System.Drawing.Point(727, 3);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(358, 277);
+            this.groupBox7.Size = new System.Drawing.Size(358, 315);
             this.groupBox7.TabIndex = 4;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Evaluate";
@@ -565,18 +687,79 @@
             this.btnSignTest.UseVisualStyleBackColor = true;
             this.btnSignTest.Click += new System.EventHandler(this.btnSignTest_Click);
             // 
-            // txtLimit
+            // groupBox8
             // 
-            this.txtLimit.Location = new System.Drawing.Point(239, 29);
-            this.txtLimit.Name = "txtLimit";
-            this.txtLimit.Size = new System.Drawing.Size(100, 20);
-            this.txtLimit.TabIndex = 11;
+            this.groupBox8.Controls.Add(this.txtRefLocation);
+            this.groupBox8.Controls.Add(this.button2);
+            this.groupBox8.Controls.Add(this.label13);
+            this.groupBox8.Controls.Add(this.txtRefNAMES);
+            this.groupBox8.Controls.Add(this.label11);
+            this.groupBox8.Controls.Add(this.btnMakeRefs);
+            this.groupBox8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox8.Location = new System.Drawing.Point(727, 324);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(358, 247);
+            this.groupBox8.TabIndex = 5;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "groupBox8";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 83);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(94, 13);
+            this.label13.TabIndex = 21;
+            this.label13.Text = "Ref output names:";
+            // 
+            // txtRefNAMES
+            // 
+            this.txtRefNAMES.Location = new System.Drawing.Point(106, 80);
+            this.txtRefNAMES.Name = "txtRefNAMES";
+            this.txtRefNAMES.Size = new System.Drawing.Size(100, 20);
+            this.txtRefNAMES.TabIndex = 20;
+            this.txtRefNAMES.Text = "First";
+            // 
+            // btnMakeRefs
+            // 
+            this.btnMakeRefs.Location = new System.Drawing.Point(212, 78);
+            this.btnMakeRefs.Name = "btnMakeRefs";
+            this.btnMakeRefs.Size = new System.Drawing.Size(92, 23);
+            this.btnMakeRefs.TabIndex = 19;
+            this.btnMakeRefs.Text = "Save Refs";
+            this.btnMakeRefs.UseVisualStyleBackColor = true;
+            this.btnMakeRefs.Click += new System.EventHandler(this.btnMakeRefs_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(257, 40);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(92, 23);
+            this.button2.TabIndex = 22;
+            this.button2.Text = "Load Refs";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // txtRefLocation
+            // 
+            this.txtRefLocation.Location = new System.Drawing.Point(9, 42);
+            this.txtRefLocation.Name = "txtRefLocation";
+            this.txtRefLocation.Size = new System.Drawing.Size(197, 20);
+            this.txtRefLocation.TabIndex = 23;
+            this.txtRefLocation.Text = "DownloadedFullRef.en-he.clean";
+            // 
+            // txtMosesGrades
+            // 
+            this.txtMosesGrades.Location = new System.Drawing.Point(13, 199);
+            this.txtMosesGrades.Name = "txtMosesGrades";
+            this.txtMosesGrades.Size = new System.Drawing.Size(100, 20);
+            this.txtMosesGrades.TabIndex = 19;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1088, 507);
+            this.ClientSize = new System.Drawing.Size(1088, 574);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Main";
             this.Text = "Main";
@@ -593,6 +776,8 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox7.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -634,12 +819,12 @@
         private System.Windows.Forms.RadioButton radioCombine;
         private System.Windows.Forms.RadioButton radioSeenLength;
         private System.Windows.Forms.RichTextBox rtbTranslationProcedure;
-        private System.Windows.Forms.RadioButton radioButton7;
-        private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioWeka6;
+        private System.Windows.Forms.RadioButton radioWeka5;
+        private System.Windows.Forms.RadioButton radioWeka4;
+        private System.Windows.Forms.RadioButton radioWeka3;
+        private System.Windows.Forms.RadioButton radioWeka2;
+        private System.Windows.Forms.RadioButton radioWeka1;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.RichTextBox rtbSignTestResults;
         private System.Windows.Forms.Button btnSignTest;
@@ -647,5 +832,22 @@
         private System.Windows.Forms.TextBox txtMosesPath;
         private System.Windows.Forms.TextBox txtOutputToMoses;
         private System.Windows.Forms.TextBox txtLimit;
+        private System.Windows.Forms.TextBox txtLimitTest;
+        private System.Windows.Forms.RadioButton radioWeka7;
+        private System.Windows.Forms.RadioButton radioLongerSure;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button btnMakeRefs;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtRefPath;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox txtRefNAMES;
+        private System.Windows.Forms.Button btnTrimMoses;
+        private System.Windows.Forms.RadioButton radioWeka8;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox txtRefLocation;
+        private System.Windows.Forms.TextBox txtMosesGrades;
     }
 }

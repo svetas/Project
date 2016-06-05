@@ -105,7 +105,11 @@
   <ItemGroup>
     <Compile Include="Combiners\Combiner.cs" />
     <Compile Include="Combiners\CombinerNaive.cs" />
+    <Compile Include="Common\Logger.cs" />
     <Compile Include="Common\PostTranData.cs" />
+    <Compile Include="Common\WekaOutput.cs" />
+    <Compile Include="Common\WekaTrainingRecord.cs" />
+    <Compile Include="Common\WekaRecord.cs" />
     <Compile Include="DataManager\DBManager.cs" />
     <Compile Include="Evaluators\EvaluatorDirect.cs" />
     <Compile Include="Evaluators\EvaluatorProbability.cs" />
@@ -120,6 +124,14 @@
     <Compile Include="ImproveMethods\AposPrefer.cs" />
     <Compile Include="ImproveMethods\ImprovementMethod.cs" />
     <Compile Include="ImproveMethods\LongCombiner.cs" />
+    <Compile Include="ImproveMethods\LongSure.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge7.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge6.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge5.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge4.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge3.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge2.cs" />
+    <Compile Include="ImproveMethods\WekaKnowladge.cs" />
     <Compile Include="ImproveMethods\SureAndLong.cs" />
     <Compile Include="StatisticsCalculators\DistanceStatistics.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />
@@ -138,6 +150,7 @@
     <Compile Include="Common\Word.cs" />
     <EmbeddedResource Include="GUI\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

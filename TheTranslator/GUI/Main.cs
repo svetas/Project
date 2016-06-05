@@ -1,4 +1,5 @@
 ﻿using BLEUevaluator;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,10 +8,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TheTranslator.Common;
+using TheTranslator.DataManager;
 using TheTranslator.Extractors;
 using TheTranslator.ImproveMethods;
 
@@ -20,6 +23,8 @@ namespace TheTranslator.GUI
     {
         Extractor m_extractor;
         ImprovementMethod m_subtitutionLogic;
+        ImprovementMethod m_subtitutionLogic_backup;
+
         List<PostTranData> m_OutputTranslations;
 
         public Main()
@@ -301,18 +306,58 @@ namespace TheTranslator.GUI
             Console.Beep(523, 125);
             Thread.Sleep(625);
         }
+
         private void GenerateTranslations()
         {
+            m_subtitutionLogic = null;
+            m_subtitutionLogic_backup = null;
+            Logger.GetInstance().Open();
             try {
                 if (radioSeenLength.Checked)
                 {
                     m_subtitutionLogic = new SureAndLong();
                 }
-                else if (radioCombine.Checked) 
+                else if (radioCombine.Checked)
                 {
                     m_subtitutionLogic = new LongCombiner(m_extractor);
                 }
-
+                else if (radioWeka1.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge();
+                }
+                else if (radioWeka2.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge2();
+                }
+                else if (radioWeka3.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge3();
+                }
+                else if (radioWeka4.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge4();
+                }
+                else if (radioWeka5.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge5();
+                }
+                else if (radioWeka6.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge5();
+                    m_subtitutionLogic_backup = new LongCombiner(m_extractor);
+                }
+                else if (radioWeka7.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge6();
+                }
+                else if (radioWeka8.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladge7();
+                }
+                else if (radioLongerSure.Checked)
+                {
+                    m_subtitutionLogic = new SureAndLong();
+                }
                 if (m_subtitutionLogic == null)
                 {
                     return;
@@ -344,23 +389,48 @@ namespace TheTranslator.GUI
                     string lineMoses = srM.ReadLine();
                     string lineSource = srHe.ReadLine();
                     string lineReference = srEn.ReadLine();
+                    lineOur = m_extractor.ExtractExactTranslation(lineSource, 0).Trim(' ');
+
+                    if (lineMoses.Trim(' ')!=lineMoses || lineSource.Trim(' ')!= lineSource ||
+                        lineOur.Trim(' ')!= lineOur)
+                    {
+                        lineMoses = lineMoses.Trim(' ');
+                        lineOur = lineOur.Trim(' ');
+                        lineSource = lineSource.Trim(' ');
+                    }
+
                     total++;
 
-                    lineOur = m_extractor.ExtractExactTranslation(lineSource, 0);
+                    
 
                     int selectedMachine;
+                    int selectedMachine2 = 0;
 
                     string chosen = m_subtitutionLogic.ChooseBetter(lineOur, lineMoses,lineSource, out selectedMachine);
+                    string chosen2;
+                    if (m_subtitutionLogic_backup != null)
+                    {
+                        chosen2 = m_subtitutionLogic_backup.ChooseBetter(lineOur, lineMoses, lineSource, out selectedMachine2);
+                        if (selectedMachine2 == 1)
+                        {
+                            selectedMachine = 1;
+                            chosen = chosen2;
+                        }
+                    }
+                    
 
                     if (selectedMachine==1)
                         counter++;
 
                     m_OutputTranslations.Add(new PostTranData(lineSource, lineReference, chosen, lineMoses, selectedMachine));
+                    WekaOutput.Add(lineSource, lineReference, lineMoses,lineOur);
                 }
 
                 srEn.Close();
                 srHe.Close();
                 srM.Close();
+
+                Logger.GetInstance().Close();
 
                 rtbTranslationProcedure.Text = "\r\n Finished loading.";
                 rtbTranslationProcedure.Text += "\r\n We improved " + counter + "/" + total + ", thats " + counter / (double)total + "!";
@@ -371,6 +441,7 @@ namespace TheTranslator.GUI
                 rtbTranslationProcedure.Text = "Failed to Translate";
             }
         }
+
         private void RunSignTest()
         {
             int counter = 0;
@@ -409,6 +480,79 @@ namespace TheTranslator.GUI
             rtbSignTestResults.Text += "Different with confidence of "+SignTest.CalcConfidence((int)firstBetter, counter);
         }
 
+        Dictionary<string, Dictionary<string, int>> memory = new Dictionary<string, Dictionary<string, int>>();
+
+        public void ExtractReferences(string refSource, string refTarget)
+        {
+            StreamReader readerRefFileSource = new StreamReader(refSource);
+            StreamReader readerRefFileTarget = new StreamReader(refTarget);
+            int loaderCounter = 0;
+
+            while (!readerRefFileSource.EndOfStream)
+            {
+
+                string lineSource = readerRefFileSource.ReadLine();
+                string lineTarget = readerRefFileTarget.ReadLine();
+
+                if (!memory.ContainsKey(lineSource))
+                    memory.Add(lineSource, new Dictionary<string, int>());
+
+                if (!memory[lineSource].ContainsKey(lineTarget))
+                    memory[lineSource].Add(lineTarget, 0);
+
+                memory[lineSource][lineTarget] += 1;
+                loaderCounter++;
+                if (loaderCounter % 1000 == 0)
+                    Console.WriteLine(loaderCounter + "/900000");
+            }
+        }
+
+        private void SaveReferences(string sourceTest, string targetTest, string refOutputPath)
+        {
+
+            string[] testSourceLines = File.ReadAllLines(sourceTest);
+            string[] testTargetLines = File.ReadAllLines(targetTest);
+
+            string[] outputRef1 = new string[testSourceLines.Length];
+            string[] outputRef2 = new string[testSourceLines.Length];
+            string[] outputRef3 = new string[testSourceLines.Length];
+
+            for (int index = 0; index < testSourceLines.Length; index++)
+            {
+                string item = testSourceLines[index];
+                string line = item.Trim(' ');
+
+                outputRef1[index] = testTargetLines[index];
+
+                if (memory.ContainsKey(line))
+                {
+                    var bestReferences = (from entry in memory[line] orderby entry.Value descending select entry.Key).Take(2).ToList();
+                    bestReferences.Remove(testTargetLines[index]);
+                    if (bestReferences.Count == 0)
+                    {
+                        outputRef2[index] = testTargetLines[index];
+                        outputRef3[index] = testTargetLines[index];
+                    }
+                    else
+                    {
+                        outputRef2[index] = bestReferences[0];
+
+                        if (bestReferences.Count() == 2)
+                            outputRef3[index] = bestReferences[1];
+                        else
+                            outputRef3[index] = bestReferences[0];
+                    }
+                }
+                else
+                {
+                    outputRef2[index] = testTargetLines[index];
+                    outputRef3[index] = testTargetLines[index];
+                }
+            }
+            File.WriteAllLines(refOutputPath + "ref0.txt", outputRef1);
+            File.WriteAllLines(refOutputPath + "ref1.txt", outputRef2);
+            File.WriteAllLines(refOutputPath + "ref2.txt", outputRef3);
+        }
         private void SaveForBleu()
         {            
             if (m_OutputTranslations!=null && m_OutputTranslations.Count>0 && txtOutputToMoses.Text!="")
@@ -462,6 +606,134 @@ namespace TheTranslator.GUI
             SaveForBleu();
         }
 
+        private void btnSaveStats_Click(object sender, EventArgs e)
+        {
+            WekaOutput.Print(txtExperimentPath.Text + "wekaTests");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadTrainingOptionsToWeka();
+        }
+
+        private void LoadTrainingOptionsToWeka()
+        {
+            string testHePath = txtExperimentPath.Text + txtTestNames.Text + ".he";
+            string testEnPath = txtExperimentPath.Text + txtTestNames.Text + ".en";
+            //string mosesTranslationPath = txtExperimentPath.Text + txtMosesPath.Text;
+            string mosesGrades = txtExperimentPath.Text + txtMosesGrades.Text;
+
+            //         source            target
+            Dictionary<string, Dictionary<string, WekaTrainingRecord>> m_records = new Dictionary<string, Dictionary<string, WekaTrainingRecord>>();
+
+            if (!File.Exists(testHePath) || !File.Exists(testEnPath)/* || !File.Exists(mosesTranslationPath)*/ || !File.Exists(mosesGrades))
+            {
+                rtbMemoryStatus.Text += "Missing files";
+                return;
+            }
+
+            string[] mosesGradesData = File.ReadAllLines(mosesGrades);
+            string[] sourceData = File.ReadAllLines(testHePath);
+            string[] referenceData = File.ReadAllLines(testHePath);
+
+            if (mosesGradesData.Length != sourceData.Length)
+            {
+                rtbMemoryStatus.Text += "Files have different length";
+                return;
+            }
+            //string[] referenceData = File.ReadAllLines(testEnPath);
+            int index = 0;
+            foreach (var sourceLine in sourceData)
+            {
+                double mosesGrade = double.Parse(mosesGradesData[index]);
+
+                Regex rxSpace = new Regex(@"\s\s+");
+                string source = rxSpace.Replace(sourceLine, " ");
+
+                HashEntry[] directResults = DBManager.GetInstance().GetSet(source);
+
+                if (directResults.Length == 0)
+                    continue;
+
+                foreach (HashEntry entry in directResults)
+                {
+                    if ((int)entry.Value <= 1)
+                        continue;
+
+                    string translation = entry.Name.ToString().Substring(1);
+                    double translationBLEU = BLEU.Evaluate(translation, new List<string> { referenceData[index] });
+
+                    bool betterBleu=false;
+                    if (translationBLEU * 0.9 > mosesGrade)
+                    {
+                        betterBleu = true;
+                    }
+
+
+                    if (!m_records.ContainsKey(source))
+                        m_records.Add(source, new Dictionary<string, WekaTrainingRecord>());
+                    if (!m_records[source].ContainsKey(translation))
+                        m_records[source].Add(translation, new WekaTrainingRecord(source, translation));
+
+                    WekaTrainingRecord wr = m_records[source][translation];
+                    
+                    if (betterBleu)
+                    {
+                        wr.AddGood();
+                    } else
+                    {
+                        wr.AddBad();
+                    }
+                }
+                index++;
+                if (index % 100 == 0) Console.WriteLine(index+"/"+ sourceData.Length);
+            }
+        // Finished Learning whats good.
+
+    
+
+        }
+
+
+        private void btnTrimMoses_Click(object sender, EventArgs e)
+        {
+            string mosesTranslationPath = txtExperimentPath.Text + txtMosesPath.Text;
+
+            if (!File.Exists(mosesTranslationPath))
+                return;
+
+            string[] MosesLines = File.ReadAllLines(mosesTranslationPath);
+            for (int i = 0; i < MosesLines.Length; i++)
+            {
+                MosesLines[i] = MosesLines[i].Trim(' ');    
+            }
+            File.WriteAllLines(mosesTranslationPath,MosesLines);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            string refEnPath = txtExperimentPath.Text + txtRefLocation.Text + ".en";
+            string refHePath = txtExperimentPath.Text + txtRefLocation.Text + ".he";
+            if (!File.Exists(refEnPath) || !File.Exists(refHePath))
+            {
+                rtbMemoryStatus.Text += "Missing files";
+                return;
+            }
+            ExtractReferences(refHePath, refEnPath);
+        }
+        private void btnMakeRefs_Click(object sender, EventArgs e)
+        {
+            string testHePath = txtExperimentPath.Text + txtTestNames.Text + ".he";
+            string testEnPath = txtExperimentPath.Text + txtTestNames.Text + ".en";
+            string refNames = txtExperimentPath.Text + txtRefNAMES.Text;
+            if (!File.Exists(testHePath) || !File.Exists(testEnPath))
+            {
+                rtbMemoryStatus.Text += "Missing files";
+                return;
+            }
+            SaveReferences(testHePath, testEnPath, refNames);
+        }
 
     }
 }

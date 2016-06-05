@@ -21,7 +21,7 @@ namespace TheTranslator.ImproveMethods
         public override string ChooseBetter(string ourTrans, string otherTrans, string source, out int selected)
         {
             selected = 0;
-            if (ourTrans == null || ourTrans.Length == 0)
+            if (ourTrans == null || ourTrans.Length == 0 || ourTrans == otherTrans)
             {
                 // try to split the source and translate it apart
                 selected = -1;
@@ -39,14 +39,16 @@ namespace TheTranslator.ImproveMethods
                     HashEntry[] entriesFirst = DBManager.GetInstance().GetSet(CombinedParts[i].Item1);
                     HashEntry[] entriesSecond = DBManager.GetInstance().GetSet(CombinedParts[i].Item2);
 
+                    if (entriesSecond.Length == 0 || entriesFirst.Length == 0) continue;
                     foreach (var item1 in entriesFirst)
                     {
                         string first = item1.Name.ToString().Substring(1);
                         foreach (var item2 in entriesSecond)
                         {
                             string second = item2.Name.ToString().Substring(1);
-
-                            if ((ourTrans == first + " " + second) || (ourTrans == second + " " + first))
+                            string fullLine = first + " " + second;
+                            string fullLineRev = second + " " + first;
+                            if ((ourTrans == fullLine) || (ourTrans == fullLineRev))
                             {
                                 selected = 1;
                                 return ourTrans;
@@ -55,11 +57,11 @@ namespace TheTranslator.ImproveMethods
                     }
                 }
             }
-            if (ourTrans.Split(' ').Length > 3 && (int)DBManager.GetInstance().GetSet(source, ourTrans) > 1)
+            /*if (ourTrans.Split(' ').Length > 3 && (int)DBManager.GetInstance().GetSet(source, ourTrans) > 1)
             {
                 selected = 1;
                 return ourTrans;
-            }
+            }*/
 
             selected = -1;
             return otherTrans;
