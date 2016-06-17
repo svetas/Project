@@ -18,19 +18,11 @@ namespace TheTranslator
         private const int MIN_COMMON_MAKES_SKIP=2;
 
         public DBManager m_sentences;
-        //path of the files.
-        protected string m_dataPath;
 
         public abstract List<List<Sentence>> extractTransParts(string source);
 
         public Dictionary<string,int> m_sourceSentences = new Dictionary<string, int>();
         public Dictionary<string, int> m_targetSentences = new Dictionary<string, int>();
-
-
-        protected Extractor(string path)
-        {
-            m_dataPath = path;
-        }
 
         public void ResetDB()
         {
@@ -297,7 +289,7 @@ namespace TheTranslator
 
         
         public abstract bool TranslationExists(string source);
-        public abstract string ExtractExactTranslation(string source, int minCount);
+        public abstract string[] ExtractExactTranslation(string source, int minCount,int maxRes);
 
         /*private void UpdateLevenshteinSimilarities()
         {

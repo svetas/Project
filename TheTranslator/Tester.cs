@@ -168,7 +168,7 @@ namespace TheTranslator
 
                 total++;
 
-                trans = m_extractor.ExtractExactTranslation(item, 0);
+                trans = m_extractor.ExtractExactTranslation(item, 0,1)[0];
                 int x;
                 string chosen = improveMethod.ChooseBetter(trans, lineM,"",out x);
 
@@ -475,7 +475,7 @@ namespace TheTranslator
                 //List<TranslationOption> transOptions = c.combine(sentences, item);       
                 //trans = EV.GetBestTranslation(transOptions);
 
-                trans = m_extractor.ExtractExactTranslation(item,0);
+                trans = m_extractor.ExtractExactTranslation(item,0,1)[0];
                 if (trans=="")
                 {
                     trans = sc.SeperateTranslate(item, 2);

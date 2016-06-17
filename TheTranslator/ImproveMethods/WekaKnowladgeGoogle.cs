@@ -33,8 +33,8 @@ namespace TheTranslator.ImproveMethods
                 int ourSourceLenDiff = Math.Abs(ourLength - sourceLength);
                 double ourMosesJaccard = CalcJaccard(ourTrans, otherTrans);
 
-                if (ourTrans.Length < otherTrans.Length) takeOur = false;
-                else
+                //if (ourTrans.Length < otherTrans.Length) takeOur = false;
+                //else
                 if (ourLength<=1)
                 {
                     if (mosesLength <= 1) takeOur = false;

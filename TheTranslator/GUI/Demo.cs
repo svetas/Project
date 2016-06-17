@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using TheTranslator.ImproveMethods;
 
 namespace TheTranslator.GUI
 {
@@ -23,12 +24,43 @@ namespace TheTranslator.GUI
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ImprovementMethod m_subtitutionLogic = new WekaKnowladgeGoogle();
+
             if (txtSource.Text == "")
                 return;
             string yandexLine = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20160119T221704Z.84fe7a44b8b13085.e8a5f9bac79f034936320506a54b7606b5a22f51&lang=he-en&text=";
             string googleLine = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=he&tl=en&dt=t&q=";
             txtYandex.Text = GetYandexTranslation(yandexLine + txtSource.Text);
             txtGoogle.Text = GoogleTranslate(txtSource.Text);
+
+            if (Main.m_extractor!= null)
+            {
+                string[] translations = Main.m_extractor.ExtractExactTranslation(txtSource.Text, 0, 10);
+                if (translations.Length <= 0) return;
+                txtMovies.Text = "";
+                foreach (var item in translations)
+                {
+                    txtMovies.Text += item.Trim(' ').Replace(" &apos;", "'")+"\r\n";
+                }
+                string otherTrans="";
+                
+                if (radioButton1.Checked)
+                {
+                    otherTrans = txtGoogle.Text;
+                }
+                else {
+                    otherTrans = txtYandex.Text;
+                }
+                int selectedMachine;
+                m_subtitutionLogic.ChooseBetter(translations[0], otherTrans, txtSource.Text, out selectedMachine);
+                if (selectedMachine == 1)
+                {
+                    txtOutput.Text = translations[0];
+                } else
+                {
+                    txtOutput.Text = otherTrans;
+                }
+            }
         }
 
         private string GetGoogleTranslation(string text)

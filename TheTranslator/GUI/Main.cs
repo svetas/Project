@@ -21,7 +21,7 @@ namespace TheTranslator.GUI
 {
     public partial class Main : Form
     {
-        Extractor m_extractor;
+        public static Extractor m_extractor;
         ImprovementMethod m_subtitutionLogic;
         ImprovementMethod m_subtitutionLogic_backup;
 
@@ -43,7 +43,7 @@ namespace TheTranslator.GUI
                 string trainHePath = txtExperimentPath.Text + txtTrainingNames.Text + ".he";
                 string auxDictionaryPath = txtExperimentPath.Text + txtAuxDic.Text;
 
-                m_extractor = new ExtractorDirect(txtExperimentPath.Text);
+                m_extractor = new ExtractorDirect();
 
                 int limitLearning = txtLimit.Text == "" ? 0 : int.Parse(txtLimit.Text);
 
@@ -76,7 +76,7 @@ namespace TheTranslator.GUI
                 string trainHePath = txtExperimentPath.Text + txtTrainingNames.Text + ".he";
                 string auxDictionaryPath = txtExperimentPath.Text + txtAuxDic.Text;
 
-                m_extractor = new ExtractorDirect(txtExperimentPath.Text);
+                m_extractor = new ExtractorDirect();
 
                 int limitLearning = txtLimit.Text == "" ? 0 : int.Parse(txtLimit.Text);
 
@@ -392,7 +392,7 @@ namespace TheTranslator.GUI
                     string lineMoses = srM.ReadLine();
                     string lineSource = srHe.ReadLine();
                     string lineReference = srEn.ReadLine();
-                    lineOur = m_extractor.ExtractExactTranslation(lineSource, 0).Trim(' ');
+                    lineOur = m_extractor.ExtractExactTranslation(lineSource, 0,1)[0].Trim(' ');
 
                     if (lineMoses.Trim(' ')!=lineMoses || lineSource.Trim(' ')!= lineSource ||
                         lineOur.Trim(' ')!= lineOur)

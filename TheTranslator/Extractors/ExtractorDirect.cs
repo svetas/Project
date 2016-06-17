@@ -12,9 +12,6 @@ namespace TheTranslator.Extractors
     class ExtractorDirect : Extractor
     {
 
-
-        public ExtractorDirect(string path) : base(path) { }
-
         public override List<List<Sentence>> extractTransParts(string source)
         {
             List<List<Sentence>> ans = new List<List<Sentence>>();
@@ -47,7 +44,7 @@ namespace TheTranslator.Extractors
             return DBManager.GetInstance().CheckGet("SourceSentences", source);
         }
 
-        public override string ExtractExactTranslation(string source,int minCount)
+        public override string[] ExtractExactTranslation(string source,int minCount, int maxRes)
         {
             Regex rxSpace = new Regex(@"\s\s+");
             source = rxSpace.Replace(source, " ");
@@ -87,9 +84,9 @@ namespace TheTranslator.Extractors
                 bestCandidates.Add(trans,timesRepeated/(double)sumRepetitions);
             }
 
-            var topN = (from entry in bestCandidates orderby entry.Value descending select entry).Take(1);
+            var topN = (from entry in bestCandidates orderby entry.Value descending select entry.Key).Take(maxRes).ToArray();
 
-            double topItemValue = 0;
+            /*double topItemValue = 0;
             string topItemKey="";
 
             foreach (var item in topN)
@@ -99,8 +96,8 @@ namespace TheTranslator.Extractors
                     topItemKey = item.Key;
                     topItemValue = item.Key.Length;
                 }
-            }
-            return topItemKey;
+            }*/
+            return topN;
 
             /*
             double bestScore = 0;
