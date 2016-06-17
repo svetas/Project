@@ -9,6 +9,6 @@ D:\SourceTree\Project\BLEUevaluator\bin\Debug\DynamicInterop.xml
 D:\SourceTree\Project\BLEUevaluator\bin\Debug\MathNet.Numerics.xml
 D:\SourceTree\Project\BLEUevaluator\bin\Debug\RDotNet.xml
 D:\SourceTree\Project\BLEUevaluator\bin\Debug\RDotNet.NativeLibrary.xml
-D:\SourceTree\Project\BLEUevaluator\obj\Debug\BLEUevaluator.csprojResolveAssemblyReference.cache
 D:\SourceTree\Project\BLEUevaluator\obj\Debug\BLEUevaluator.exe
 D:\SourceTree\Project\BLEUevaluator\obj\Debug\BLEUevaluator.pdb
+D:\SourceTree\Project\BLEUevaluator\obj\Debug\BLEUevaluator.csprojResolveAssemblyReference.cache

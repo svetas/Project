@@ -357,6 +357,9 @@ namespace TheTranslator.GUI
                 else if (radioLongerSure.Checked)
                 {
                     m_subtitutionLogic = new SureAndLong();
+                }else if (radioGoogle.Checked)
+                {
+                    m_subtitutionLogic = new WekaKnowladgeGoogle();
                 }
                 if (m_subtitutionLogic == null)
                 {
@@ -374,7 +377,7 @@ namespace TheTranslator.GUI
                 StreamReader srHe = new StreamReader(testHePath);
                 StreamReader srEn = new StreamReader(testEnPath);
                 StreamReader srM = new StreamReader(mosesTranslationPath);
-
+                StreamWriter srLogger = new StreamWriter(txtExperimentPath.Text+"TranslationLog.txt");
                 m_OutputTranslations = new List<PostTranData>();
 
                 string lineOur;
@@ -735,5 +738,10 @@ namespace TheTranslator.GUI
             SaveReferences(testHePath, testEnPath, refNames);
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Demo d = new Demo();
+            d.ShowDialog();
+        }
     }
 }

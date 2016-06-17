@@ -31,7 +31,8 @@ namespace TheTranslator.Common
 
             double MosesScore = BLEU.Evaluate(lineMoses, new List<string>() { lineReference });
             double currentBleu = BLEU.Evaluate(ourline, new List<string>() { lineReference });
-            char betterSystem = MosesScore > 0.8 * currentBleu ? 'f' : 't';
+            char betterSystem = MosesScore >currentBleu ? 'f' : 't';
+            if (ourline.Length < lineMoses.Length) betterSystem = 'f';
 
             wr.Replace = betterSystem;
 

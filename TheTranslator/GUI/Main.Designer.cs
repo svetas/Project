@@ -30,9 +30,9 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtMosesGrades = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.txtRefPath = new System.Windows.Forms.TextBox();
             this.txtAuxDic = new System.Windows.Forms.TextBox();
@@ -51,6 +51,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.rtbTranslationProcedure = new System.Windows.Forms.RichTextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.radioGoogle = new System.Windows.Forms.RadioButton();
             this.radioWeka8 = new System.Windows.Forms.RadioButton();
             this.btnTrimMoses = new System.Windows.Forms.Button();
             this.radioLongerSure = new System.Windows.Forms.RadioButton();
@@ -84,15 +85,16 @@
             this.rtbSignTestResults = new System.Windows.Forms.RichTextBox();
             this.btnSignTest = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.txtRefLocation = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.txtRefNAMES = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.btnMakeRefs = new System.Windows.Forms.Button();
             this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.saveTranslation = new System.Windows.Forms.SaveFileDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.button2 = new System.Windows.Forms.Button();
-            this.txtRefLocation = new System.Windows.Forms.TextBox();
-            this.txtMosesGrades = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -153,6 +155,13 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Paths";
             // 
+            // txtMosesGrades
+            // 
+            this.txtMosesGrades.Location = new System.Drawing.Point(13, 199);
+            this.txtMosesGrades.Name = "txtMosesGrades";
+            this.txtMosesGrades.Size = new System.Drawing.Size(100, 20);
+            this.txtMosesGrades.TabIndex = 19;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(119, 197);
@@ -171,15 +180,6 @@
             this.label12.Size = new System.Drawing.Size(63, 13);
             this.label12.TabIndex = 18;
             this.label12.Text = "Ref Names:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(209, 45);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(39, 13);
-            this.label11.TabIndex = 18;
-            this.label11.Text = ".en/he";
             // 
             // label8
             // 
@@ -334,6 +334,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.radioGoogle);
             this.groupBox6.Controls.Add(this.radioWeka8);
             this.groupBox6.Controls.Add(this.btnTrimMoses);
             this.groupBox6.Controls.Add(this.radioLongerSure);
@@ -357,10 +358,21 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Select Improvement Method";
             // 
+            // radioGoogle
+            // 
+            this.radioGoogle.AutoSize = true;
+            this.radioGoogle.Location = new System.Drawing.Point(6, 180);
+            this.radioGoogle.Name = "radioGoogle";
+            this.radioGoogle.Size = new System.Drawing.Size(90, 17);
+            this.radioGoogle.TabIndex = 24;
+            this.radioGoogle.TabStop = true;
+            this.radioGoogle.Text = "google-Power";
+            this.radioGoogle.UseVisualStyleBackColor = true;
+            // 
             // radioWeka8
             // 
             this.radioWeka8.AutoSize = true;
-            this.radioWeka8.Location = new System.Drawing.Point(108, 179);
+            this.radioWeka8.Location = new System.Drawing.Point(197, 182);
             this.radioWeka8.Name = "radioWeka8";
             this.radioWeka8.Size = new System.Drawing.Size(83, 17);
             this.radioWeka8.TabIndex = 23;
@@ -689,6 +701,7 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.button3);
             this.groupBox8.Controls.Add(this.txtRefLocation);
             this.groupBox8.Controls.Add(this.button2);
             this.groupBox8.Controls.Add(this.label13);
@@ -702,6 +715,34 @@
             this.groupBox8.TabIndex = 5;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "groupBox8";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(130, 208);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(219, 30);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "Open Demo";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // txtRefLocation
+            // 
+            this.txtRefLocation.Location = new System.Drawing.Point(9, 42);
+            this.txtRefLocation.Name = "txtRefLocation";
+            this.txtRefLocation.Size = new System.Drawing.Size(197, 20);
+            this.txtRefLocation.TabIndex = 23;
+            this.txtRefLocation.Text = "DownloadedFullRef.en-he.clean";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(257, 40);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(92, 23);
+            this.button2.TabIndex = 22;
+            this.button2.Text = "Load Refs";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label13
             // 
@@ -720,6 +761,15 @@
             this.txtRefNAMES.TabIndex = 20;
             this.txtRefNAMES.Text = "First";
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(209, 45);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(39, 13);
+            this.label11.TabIndex = 18;
+            this.label11.Text = ".en/he";
+            // 
             // btnMakeRefs
             // 
             this.btnMakeRefs.Location = new System.Drawing.Point(212, 78);
@@ -729,31 +779,6 @@
             this.btnMakeRefs.Text = "Save Refs";
             this.btnMakeRefs.UseVisualStyleBackColor = true;
             this.btnMakeRefs.Click += new System.EventHandler(this.btnMakeRefs_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(257, 40);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(92, 23);
-            this.button2.TabIndex = 22;
-            this.button2.Text = "Load Refs";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // txtRefLocation
-            // 
-            this.txtRefLocation.Location = new System.Drawing.Point(9, 42);
-            this.txtRefLocation.Name = "txtRefLocation";
-            this.txtRefLocation.Size = new System.Drawing.Size(197, 20);
-            this.txtRefLocation.TabIndex = 23;
-            this.txtRefLocation.Text = "DownloadedFullRef.en-he.clean";
-            // 
-            // txtMosesGrades
-            // 
-            this.txtMosesGrades.Location = new System.Drawing.Point(13, 199);
-            this.txtMosesGrades.Name = "txtMosesGrades";
-            this.txtMosesGrades.Size = new System.Drawing.Size(100, 20);
-            this.txtMosesGrades.TabIndex = 19;
             // 
             // Main
             // 
@@ -849,5 +874,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox txtRefLocation;
         private System.Windows.Forms.TextBox txtMosesGrades;
+        private System.Windows.Forms.RadioButton radioGoogle;
+        private System.Windows.Forms.Button button3;
     }
 }

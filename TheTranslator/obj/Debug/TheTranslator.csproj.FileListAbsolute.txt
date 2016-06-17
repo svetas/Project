@@ -114,3 +114,9 @@ D:\SourceTree\Project\TheTranslator\bin\Debug\StackExchange.Redis.xml
 D:\SourceTree\Project\TheTranslator\bin\Debug\RDotNet.xml
 D:\SourceTree\Project\TheTranslator\bin\Debug\DynamicInterop.xml
 D:\SourceTree\Project\TheTranslator\bin\Debug\RDotNet.NativeLibrary.xml
+D:\SourceTree\Project\TheTranslator\bin\Debug\EntityFramework.dll
+D:\SourceTree\Project\TheTranslator\bin\Debug\EntityFramework.SqlServer.dll
+D:\SourceTree\Project\TheTranslator\bin\Debug\EntityFramework.xml
+D:\SourceTree\Project\TheTranslator\bin\Debug\EntityFramework.SqlServer.xml
+D:\SourceTree\Project\TheTranslator\obj\Debug\TheTranslator.GUI.Demo.resources
+D:\SourceTree\Project\TheTranslator\bin\Debug\Newtonsoft.Json.dll
