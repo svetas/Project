@@ -134,6 +134,7 @@
     <Compile Include="ImproveMethods\ImprovementMethod.cs" />
     <Compile Include="ImproveMethods\LongCombiner.cs" />
     <Compile Include="ImproveMethods\LongSure.cs" />
+    <Compile Include="ImproveMethods\DemoImprover.cs" />
     <Compile Include="ImproveMethods\WekaKnowladgeGoogle.cs" />
     <Compile Include="ImproveMethods\WekaKnowladge7.cs" />
     <Compile Include="ImproveMethods\WekaKnowladge6.cs" />
