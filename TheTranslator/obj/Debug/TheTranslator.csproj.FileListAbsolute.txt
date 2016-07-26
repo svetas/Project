@@ -120,3 +120,9 @@ D:\SourceTree\Project\TheTranslator\bin\Debug\EntityFramework.xml
 D:\SourceTree\Project\TheTranslator\bin\Debug\EntityFramework.SqlServer.xml
 D:\SourceTree\Project\TheTranslator\obj\Debug\TheTranslator.GUI.Demo.resources
 D:\SourceTree\Project\TheTranslator\bin\Debug\Newtonsoft.Json.dll
+D:\SourceTree\Project - Copy\TheTranslator\bin\Debug\TheTranslator.exe.config
+D:\SourceTree\Project - Copy\TheTranslator\obj\Debug\TheTranslator.exe
+D:\SourceTree\Project - Copy\TheTranslator\obj\Debug\TheTranslator.pdb
+D:\SourceTree\Project - Final\TheTranslator\bin\Debug\TheTranslator.exe.config
+D:\SourceTree\Project - Final\TheTranslator\obj\Debug\TheTranslator.exe
+D:\SourceTree\Project - Final\TheTranslator\obj\Debug\TheTranslator.pdb

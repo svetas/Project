@@ -15,6 +15,7 @@ namespace TheTranslator
 {
     public abstract class Extractor
     { 
+        // good
         private const int MIN_COMMON_MAKES_SKIP=2;
 
         public DBManager m_sentences;
