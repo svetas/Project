@@ -97,7 +97,12 @@ namespace TheTranslator.Extractors
                     topItemValue = item.Key.Length;
                 }
             }*/
-            return topN;
+            List<string> result = topN.ToList();
+            if (result.Count == 0)
+            {
+                result.Add("");
+            }
+            return result.ToArray();
 
             /*
             double bestScore = 0;

@@ -42,13 +42,13 @@ namespace TransltrProject
                 case 'a':
                     string[] paths = { @"D:\chromeDownloads\Sorted" , @"D:\data\sdarot", @"D:\DB" };
                     ex = new Extractor(paths, @"D:\AlignedSentencesDB", 1);
-                    ex.ExtractAsSrt();
+                    ex.ExtractFromSyncronized();
                     Logger.Flush();
                     break;
                 case 'b':
                     string[] paths2 = { @"D:\chromeDownloads\SortedSynced" };
                     ex = new Extractor(paths2, @"D:\AlignedSentencesReferences", 1);
-                    ex.ExtractAsSrt();
+                    ex.ExtractFromSyncronized();
                     Logger.Flush();
                     break;
                 default:

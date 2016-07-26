@@ -95,6 +95,8 @@
             this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.saveTranslation = new System.Windows.Forms.SaveFileDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.button4 = new System.Windows.Forms.Button();
+            this.txtOutputReplacements = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -608,6 +610,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.txtOutputReplacements);
+            this.groupBox4.Controls.Add(this.button4);
             this.groupBox4.Controls.Add(this.txtOutputToMoses);
             this.groupBox4.Controls.Add(this.groupBox5);
             this.groupBox4.Controls.Add(this.btnSaveForBleu);
@@ -631,9 +635,9 @@
             // 
             this.groupBox5.Controls.Add(this.chkSign);
             this.groupBox5.Controls.Add(this.btnSaveStats);
-            this.groupBox5.Location = new System.Drawing.Point(6, 57);
+            this.groupBox5.Location = new System.Drawing.Point(6, 127);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(344, 152);
+            this.groupBox5.Size = new System.Drawing.Size(344, 82);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Save with stats";
@@ -650,7 +654,7 @@
             // 
             // btnSaveStats
             // 
-            this.btnSaveStats.Location = new System.Drawing.Point(7, 123);
+            this.btnSaveStats.Location = new System.Drawing.Point(7, 52);
             this.btnSaveStats.Name = "btnSaveStats";
             this.btnSaveStats.Size = new System.Drawing.Size(123, 23);
             this.btnSaveStats.TabIndex = 0;
@@ -780,6 +784,24 @@
             this.btnMakeRefs.UseVisualStyleBackColor = true;
             this.btnMakeRefs.Click += new System.EventHandler(this.btnMakeRefs_Click);
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(203, 57);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(130, 23);
+            this.button4.TabIndex = 3;
+            this.button4.Text = "Save replacements";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // txtOutputReplacements
+            // 
+            this.txtOutputReplacements.Location = new System.Drawing.Point(12, 59);
+            this.txtOutputReplacements.Name = "txtOutputReplacements";
+            this.txtOutputReplacements.Size = new System.Drawing.Size(184, 20);
+            this.txtOutputReplacements.TabIndex = 4;
+            this.txtOutputReplacements.Text = "Replacements.html";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -876,5 +898,7 @@
         private System.Windows.Forms.TextBox txtMosesGrades;
         private System.Windows.Forms.RadioButton radioGoogle;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox txtOutputReplacements;
+        private System.Windows.Forms.Button button4;
     }
 }

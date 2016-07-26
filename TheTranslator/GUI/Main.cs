@@ -359,7 +359,7 @@ namespace TheTranslator.GUI
                     m_subtitutionLogic = new SureAndLong();
                 }else if (radioGoogle.Checked)
                 {
-                    m_subtitutionLogic = new WekaKnowladgeGoogle();
+                    m_subtitutionLogic = new WekaKnowladgeGoogle2();
                 }
                 if (m_subtitutionLogic == null)
                 {
@@ -377,7 +377,7 @@ namespace TheTranslator.GUI
                 StreamReader srHe = new StreamReader(testHePath);
                 StreamReader srEn = new StreamReader(testEnPath);
                 StreamReader srM = new StreamReader(mosesTranslationPath);
-                StreamWriter srLogger = new StreamWriter(txtExperimentPath.Text+"TranslationLog.txt");
+                //StreamWriter srLogger = new StreamWriter(txtExperimentPath.Text+"TranslationLog.txt");
                 m_OutputTranslations = new List<PostTranData>();
 
                 string lineOur;
@@ -425,7 +425,7 @@ namespace TheTranslator.GUI
                     if (selectedMachine==1)
                         counter++;
 
-                    m_OutputTranslations.Add(new PostTranData(lineSource, lineReference, chosen, lineMoses, selectedMachine));
+                    m_OutputTranslations.Add(new PostTranData(lineSource, lineReference, chosen, lineMoses,lineOur, selectedMachine));
                     WekaOutput.Add(lineSource, lineReference, lineMoses,lineOur);
                 }
 
@@ -561,7 +561,6 @@ namespace TheTranslator.GUI
             if (m_OutputTranslations!=null && m_OutputTranslations.Count>0 && txtOutputToMoses.Text!="")
             {
                 string translationPath = txtExperimentPath.Text + txtOutputToMoses.Text;
-
                 StreamWriter swToBleu= new StreamWriter(translationPath);
                 foreach (var item in m_OutputTranslations)
                 {
@@ -742,6 +741,30 @@ namespace TheTranslator.GUI
         {
             Demo d = new Demo();
             d.ShowDialog();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SaveReplacements();
+        }
+
+        private void SaveReplacements()
+        {
+            if (m_OutputTranslations != null && m_OutputTranslations.Count > 0 && txtOutputReplacements.Text != "")
+            {
+                string replacementsPath = txtExperimentPath.Text + txtOutputReplacements.Text;
+                StreamWriter swToHtml = new StreamWriter(replacementsPath);
+                swToHtml.WriteLine("<html><body><body><table><tr><td>Source</td><td>Base System</td><td>Examples</td><td>Selected</td><td>Human Translation</td></tr>");
+                foreach (var item in m_OutputTranslations)
+                {
+                    if (item.SelectedTranslation==1) 
+                        swToHtml.WriteLine("<tr><td>" + item.Source + "</td><td>" + item.OtherMachineOutput+ "</td><td><b>"+item.ExamplesOutput+ "</b></td><td>"+item.Hypo+ "</td><td>" + item.Reference + "</td></tr>");
+                    else
+                        swToHtml.WriteLine("<tr><td>" + item.Source + "</td><td><b>" + item.OtherMachineOutput + "</b></td><td>" + item.ExamplesOutput + "</td><td>" + item.Hypo + "</td><td>" + item.Reference + "</td></tr>");
+                }
+                swToHtml.WriteLine("</table></body></html>");
+                swToHtml.Close();
+            }
         }
     }
 }

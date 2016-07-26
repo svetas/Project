@@ -26,7 +26,7 @@ namespace TransltrProject
             ExtractionAmount = amount;
         }
 
-        public void ExtractAsSrt()
+        public void ExtractFromSyncronized()
         {
             translator = new Translation();
           
